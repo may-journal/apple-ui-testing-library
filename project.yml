@@ -13,7 +13,9 @@ settings:
   base:
     SWIFT_VERSION: '6.0'
     SWIFT_STRICT_CONCURRENCY: complete
-    # Local hosts only: ad-hoc signing needs no team, on the simulator or on this Mac.
+    # Local hosts only: the macOS targets sign ad hoc, which needs no team. The iOS targets
+    # run on this Mac as Designed for iPad, and the iOS 27 SDK refuses ad-hoc signing, so
+    # they use a development team (see targets below).
     CODE_SIGN_IDENTITY: '-'
     CODE_SIGN_STYLE: Manual
     DEVELOPMENT_TEAM: ''
@@ -33,6 +35,9 @@ targetTemplates:
         # One module name, so both bundles write `@testable import TestHost`.
         PRODUCT_MODULE_NAME: TestHost
         GENERATE_INFOPLIST_FILE: YES
+        # Installing as Designed for iPad requires both version keys.
+        CURRENT_PROJECT_VERSION: '1'
+        MARKETING_VERSION: '1.0'
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
   # Shared by both bundles: the package, and a generated Info.plist.
@@ -48,12 +53,19 @@ targets:
   TestHost:
     templates: [Host]
     platform: iOS
+    settings:
+      base: &iosSigning
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: Apple Development
+        DEVELOPMENT_TEAM: AMPJZXR538
   TestHostMac:
     templates: [Host]
     platform: macOS
   UITestingLibraryTests:
     templates: [HostedTests]
     platform: iOS
+    settings:
+      base: *iosSigning
     sources:
       - path: Tests/Shared
       - path: Tests/UITestingLibraryTests
