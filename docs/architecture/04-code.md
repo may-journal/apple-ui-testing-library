@@ -65,7 +65,7 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 
 ## Platforms
 
-One Swift package, iOS 17 and later, Swift 6 with complete strict concurrency, built with Xcode 26.
+One Swift package, iOS 26 and later, Swift 6 with complete strict concurrency, built with Xcode 27.
 
 | Platform | How it runs |
 | -------- | ----------- |

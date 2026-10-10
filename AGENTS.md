@@ -4,7 +4,7 @@ relatedConfigurations: ['.fitnessrc.json']
 
 # apple-ui-testing-library
 
-A Swift package, module `UITestingLibrary`, that tests SwiftUI and UIKit apps through the accessibility tree. It brings Testing Library's guiding principles to iOS 17 and later, in Swift 6. See [README.md](README.md) for the pitch.
+A Swift package, module `UITestingLibrary`, that tests SwiftUI and UIKit apps through the accessibility tree. It brings Testing Library's guiding principles to Apple platforms; see [Platforms](docs/architecture/04-code.md#platforms). See [README.md](README.md) for the pitch.
 
 ## Rules
 
