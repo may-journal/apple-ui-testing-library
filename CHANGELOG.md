@@ -6,6 +6,14 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.1404
+
+- Docs: `docs/usage.md` guides setup with XcodeGen and a checked-in project, on iOS and macOS
+- Docs: the guide shows every query, action and wait with an example from the real API
+- Docs: it states the serialized-suite rule, what a failure looks like, and the system-menu gap
+- Docs: the README links to the guide and its Setup, and no longer restates it
+- Docs: the workflows README says the `requirements` check is already on
+
 ### 2026.10.10.1310
 
 - Feat: `make requirements-coverage` runs both bundles with coverage on and prints line coverage of `Sources/UITestingLibrary/` for iOS, macOS and both

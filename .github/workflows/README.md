@@ -23,3 +23,7 @@ The synced `close-check.yml` reopens an issue closed with unchecked checklist it
 A plan issue (see the [plan issue template](../ISSUE_TEMPLATE/plan.md)) needs a blockquote pitch, a `## Background` section, and a `## What needs to happen` checklist. It has no other sections.
 
 A pull request description needs a blockquote summary, a `## Background` section, and a `## Changelog` section with at least one bullet. The org `PR check (reusable)` workflow enforces it.
+
+## requirements
+
+Fitness's `requirements` check is on. It passes only when every acceptance has a test, so no setting changed.
