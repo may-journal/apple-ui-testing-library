@@ -13,6 +13,7 @@ Keep plans in GitHub issues and comments. Never commit plan documents, screensho
 - Work from a plan. Non-trivial work follows a `Plan`-labeled [GitHub Issue](https://github.com/may-journal/apple-ui-testing-library/issues?q=label%3APlan).
 - Ground changes in the design. Read the [architecture docs](docs/architecture/) and the relevant [ADR](docs/architecture/adr/) first.
 - Keep the docs current. A change to the design updates the docs and adds an ADR. Add a CHANGELOG entry for each change.
+- Never name an app in this public library. The `flagWords` in [cspell.json](cspell.json) make fitness fail any file that does.
 - Query the way a person perceives the screen: role and label first, visible text next, identifier last ([ADR 0002](docs/architecture/adr/0002-query-priority.md)).
 - Wait on a condition with a deadline; never sleep ([ADR 0003](docs/architecture/adr/0003-condition-waits.md)).
 - Consumers add the package to test targets only, through XcodeGen `packages:` with `majorVersion: 1`.

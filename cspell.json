@@ -1,6 +1,18 @@
 {
   "useGitignore": true,
   "version": "0.2",
+  "flagWords": [
+    "Bottom Line",
+    "MayCalendar",
+    "MayJournals",
+    "MayPhotos",
+    "May Calendar",
+    "May Journals",
+    "May Photos",
+    "Photo Portal",
+    "Secret Gifts",
+    "Totalist"
+  ],
   "words": [
     "dlsym",
     "Dodds",
@@ -8,6 +20,7 @@
     "jasonvanderslice",
     "mayjournal",
     "swiftpm",
+    "Totalist",
     "xcodebuild",
     "xcodegen",
     "XcodeGen",
