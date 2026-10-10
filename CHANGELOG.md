@@ -8,6 +8,12 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ### 2026.10.10.0949
 
+- Docs: add five requirement docs, from showing the app to reading a failure, with 24 acceptances
+- Docs: each requirement names Plan issue 1 as its measurement source until tests land
+- Docs: the requirements check stays off until tests prove each acceptance
+
+### 2026.10.10.0949
+
 - Docs: drop `TestClock` from the components, code, journey, and ADR 0003; each app owns its clock
 - Docs: a settle polls until two reads of the tree match, with animations off, under a deadline
 - Docs: renumber the component callouts to match the table
