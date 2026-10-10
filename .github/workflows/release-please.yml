@@ -39,6 +39,7 @@ jobs:
       # has no compare link, and bold scopes. Demote the headings below the
       # header and strip the bold, as fitness-runner's release-pr step does.
       - name: Shape the release PR notes
+        id: shape
         if: ${{ steps.release.outputs.pr != '' }}
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -54,10 +55,12 @@ jobs:
             $0 == "## Changelog" { after = 1; first = 1 }')"
           if [ "$shaped" != "$body" ]; then
             gh pr edit "$PR" --body "$shaped"
+            echo "edited=true" >> "$GITHUB_OUTPUT"
           fi
       # pr-check needs every PR to close an issue, so the release PR closes
       # one tracking issue, found by title on each rewrite.
       - name: Link the release PR to its tracking issue
+        id: link
         if: ${{ steps.release.outputs.pr != '' }}
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -76,8 +79,21 @@ jobs:
             *"Closes #$issue."*) ;;
             *) gh pr edit "$PR" --body "$body
 
-          Closes #$issue." ;;
+          Closes #$issue."
+               echo "edited=true" >> "$GITHUB_OUTPUT" ;;
           esac
+      # pr-check runs when a PR opens or reopens but not when its body is
+      # edited, so it judged the body Release Please first wrote. Reopen the PR
+      # after a rewrite so the check reads the shaped body.
+      - name: Rerun pr-check on the shaped body
+        if: ${{ steps.shape.outputs.edited == 'true' || steps.link.outputs.edited == 'true' }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_REPO: ${{ github.repository }}
+          PR: ${{ fromJSON(steps.release.outputs.pr).number }}
+        run: |
+          gh pr close "$PR"
+          gh pr reopen "$PR"
       - name: Move the major version tag
         if: ${{ steps.release.outputs.release_created == 'true' }}
         env:
