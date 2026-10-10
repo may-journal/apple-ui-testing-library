@@ -6,7 +6,7 @@ relatedConfigurations: ['../../../.fitnessrc.json']
 
 ## Context
 
-XCUITest pays an app launch per test, and ViewInspector skips rendering. May Calendar's in-process harness ran at 0.06 to 1.8 s per test ([hub#54](https://github.com/may-journal/hub/issues/54)).
+XCUITest pays an app launch per test, and ViewInspector skips rendering. An existing in-process harness ran at 0.06 to 1.8 s per test ([hub#54](https://github.com/may-journal/hub/issues/54)).
 
 ## Decision
 

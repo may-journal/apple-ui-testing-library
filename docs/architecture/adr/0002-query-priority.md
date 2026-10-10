@@ -6,7 +6,7 @@ relatedConfigurations: ['../../../.fitnessrc.json']
 
 ## Context
 
-Testing Library ranks queries by how a person finds things, and people cannot see an identifier. May Calendar's taps could land on static text that shared a button's label.
+Testing Library ranks queries by how a person finds things, and people cannot see an identifier. In an existing harness, taps could land on static text that shared a button's label.
 
 ## Decision
 
