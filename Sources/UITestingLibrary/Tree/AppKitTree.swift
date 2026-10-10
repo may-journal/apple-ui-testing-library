@@ -31,12 +31,15 @@ extension Backend {
         for child in children { collect(child, into: &found) }
     }
 
-    /// Whether the object is a group with nothing in it and nothing to say, such as a
-    /// hosting view whose root exposes nothing. VoiceOver never stops on one.
+    /// Whether the object is a group with nothing in it, nothing to say and nothing to offer,
+    /// such as a hosting view whose root exposes nothing. VoiceOver never stops on one.
     private static func isEmptyGroup(_ object: AnyObject) -> Bool {
         text(of: object, "accessibilityRole") == NSAccessibility.Role.group.rawValue
             && text(of: object, "accessibilityLabel") == nil
             && text(of: object, "accessibilityTitle") == nil
+            && attribute(of: object, "accessibilityValue") == nil
+            && text(of: object, "accessibilityIdentifier") == nil
+            && (object.accessibilityCustomActions?() ?? []).isEmpty
     }
 
     private static func element(of object: AnyObject, in window: NSWindow) -> Element {

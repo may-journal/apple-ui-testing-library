@@ -6,12 +6,12 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
-### 2026.10.10.1454
+### 2026.10.10.1458
 
 - Test: both bundles compile `Tests/Shared/`, so 22 acceptances run on iOS and macOS; only the layout ones stay per platform
 - Fix: the Mac tree reads attributes untyped, so a scroller's number no longer traps, and static text reads as its label
-- Fix: the Mac tree reads an attached sheet alone, maps headings, and skips an empty hosting view
-- Fix: `goesBack()` passes only once what is read changes, since SwiftUI's Mac nodes answer cancel with nothing to close
+- Fix: the Mac tree reads an attached sheet alone, maps headings, and skips a group with nothing to say or offer
+- Fix: `goesBack()` passes only once the settled screen changes, since SwiftUI's Mac nodes answer cancel with nothing to close
 - Chore: a settle pauses once before its first compare; macOS line coverage rises from 43.5% to 93.1%
 
 ### 2026.10.10.1404
