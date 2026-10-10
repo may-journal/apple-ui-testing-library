@@ -6,9 +6,15 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.0949
+
+- Docs: drop `TestClock` from the components, code, journey, and ADR 0003; each app owns its clock
+- Docs: a settle polls until two reads of the tree match, with animations off, under a deadline
+- Docs: renumber the component callouts to match the table
+
 ### 2026.10.10.0946
 
-- Docs: a settle moves the test clock once, then waits with it still, so ticking labels settle
+- Docs: a settle polls until two reads of the tree match, under a deadline
 - Docs: taps reach toggles, tabs, and fields; Swift Testing suites share one serialized parent
 - Docs: the code layers show waits reading the tree and reports, and the journey ends in a pass
 

@@ -40,7 +40,7 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 | 1   | `Actions/`: `User.swift`, `UserActs.swift`, `UserSees.swift`. | The public verbs a test reads in. |
 | 2   | `Screen/`: `Screen.swift`, `HostWindow.swift`. | Drawing stays apart from reading. |
 | 3   | `Queries/`: `Role.swift`, `Query.swift`, `Match.swift`. | Matching rules live in one place. |
-| 4   | `Waits/`: `Wait.swift`, `TestClock.swift`. | Every wait shares one deadline rule. |
+| 4   | `Waits/`: `Wait.swift`. | Every wait shares one deadline rule. |
 | 5   | `Reports/`: `ScreenReport.swift`, `Canary.swift`. | Failures read the same everywhere. |
 | 6   | `Tree/`: `Automation.swift`, `AccessibilityTree.swift`, `Element.swift`. | The only code that touches accessibility objects. |
 | 7   | Actions resolve queries. | An act needs a found element. |
@@ -83,7 +83,7 @@ apple-ui-testing-library/
 │       ├── Actions/        # User, UserActs, UserSees
 │       ├── Screen/         # Screen, HostWindow
 │       ├── Queries/        # Role, Query, Match
-│       ├── Waits/          # Wait, TestClock
+│       ├── Waits/          # Wait
 │       ├── Reports/        # ScreenReport, Canary
 │       └── Tree/           # Automation, AccessibilityTree, Element
 ├── TestHost/               # TestHostApp.swift and fixture screens

@@ -8,7 +8,7 @@ This decomposes the `UITestingLibrary` container in [02-containers.md](02-contai
 
 ```mermaid
 flowchart TB
-    test["14 Test case"]:::outside
+    test["13 Test case"]:::outside
 
     subgraph screen["Screen"]
         scr["1 Screen"]:::part
@@ -32,30 +32,28 @@ flowchart TB
 
     subgraph waits["Waits"]
         wait["9 Wait"]:::part
-        clock["10 TestClock"]:::part
     end
 
     subgraph reports["Reports"]
-        report["11 ScreenReport"]:::part
-        canary["12 Canary"]:::part
+        report["10 ScreenReport"]:::part
+        canary["11 Canary"]:::part
     end
 
-    ax["13 libAccessibility"]:::outside
+    ax["12 libAccessibility"]:::outside
 
-    test -->|15| scr
-    test -->|16| user
-    scr -->|17| win
-    user -->|18| query
-    query -->|19| walk
-    walk -->|20| auto
-    auto -->|21| ax
-    walk -->|22| elem
-    query -->|23| role
-    user -->|24| wait
-    wait -->|25| clock
-    user -->|26| report
-    scr -->|27| canary
-    canary -->|28| walk
+    test -->|14| scr
+    test -->|15| user
+    scr -->|16| win
+    user -->|17| query
+    query -->|18| walk
+    walk -->|19| auto
+    auto -->|20| ax
+    walk -->|21| elem
+    query -->|22| role
+    user -->|23| wait
+    user -->|24| report
+    scr -->|25| canary
+    canary -->|26| walk
 
     classDef part fill:none,stroke:gray
     classDef outside fill:none,stroke:gray,stroke-dasharray:4
@@ -74,22 +72,20 @@ Numbers match the callout table. Containers: [02-containers.md](02-containers.md
 | 7   | Matches elements by role and label, by text, or by identifier. | One priority keeps tests on what a person perceives. |
 | 8   | Acts as a person does: taps, holds a custom action, scrolls, goes back, types, adjusts. Each act needs an actionable element. | Every act is a VoiceOver entry point, so an unreachable control fails. |
 | 9   | Polls a condition until it holds or the deadline passes. After an act, it waits until two reads match. | No sleeps; a slow machine only takes longer ([ADR 0003](adr/0003-condition-waits.md)). |
-| 10  | A `Clock` the app's own waits can run on, moved only by `Wait`. | App timers fire on demand, with no real waiting. |
-| 11  | Prints what VoiceOver reads on screen, then what is drawn off screen. | A failure shows the screen as a person hears it. |
-| 12  | Fails a test that never read a non-empty tree. | An OS change that empties the tree cannot pass silently. |
-| 13  | Apple's accessibility library, holding the private automation switch. | The only way in-process tests get SwiftUI's tree. |
-| 14  | A consumer's XCTest or Swift Testing case, on the main actor. | The library is driven from tests only. |
-| 15  | The test renders its app root. | One screen per test ([ADR 0005](adr/0005-one-window-per-process.md)). |
-| 16  | The test acts and looks through a `User`. | Tests read as a person's steps. |
-| 17  | The screen draws into its window. | Window setup stays in one place. |
-| 18  | Each act or look resolves a query first. | An act lands on what a person would find. |
-| 19  | Queries read the current tree. | The tree is read fresh on each poll. |
-| 20  | The first read turns automation on. | Turned on lazily, once per process. |
-| 21  | Automation reaches the private symbol. | A missing symbol is reported by the canary. |
-| 22  | The walk yields `Element` values. | Matching never touches view types. |
-| 23  | A role query checks traits. | Role first, as Testing Library ranks it. |
-| 24  | Every act and look waits on a condition. | Animations are off, so the settled tree is final. |
-| 25  | A look moves the test clock each poll; an act moves it once, then settles with it still. | A ticking label cannot keep the tree from settling. |
-| 26  | A failed look or act hands the screen to the report. | One failure format everywhere. |
-| 27  | Closing a screen runs the canary. | Every test gets the check for free. |
-| 28  | The canary asks whether any read found elements. | It needs no test code. |
+| 10  | Prints what VoiceOver reads on screen, then what is drawn off screen. | A failure shows the screen as a person hears it. |
+| 11  | Fails a test that never read a non-empty tree. | An OS change that empties the tree cannot pass silently. |
+| 12  | Apple's accessibility library, holding the private automation switch. | The only way in-process tests get SwiftUI's tree. |
+| 13  | A consumer's XCTest or Swift Testing case, on the main actor. | The library is driven from tests only. |
+| 14  | The test renders its app root. | One screen per test ([ADR 0005](adr/0005-one-window-per-process.md)). |
+| 15  | The test acts and looks through a `User`. | Tests read as a person's steps. |
+| 16  | The screen draws into its window. | Window setup stays in one place. |
+| 17  | Each act or look resolves a query first. | An act lands on what a person would find. |
+| 18  | Queries read the current tree. | The tree is read fresh on each poll. |
+| 19  | The first read turns automation on. | Turned on lazily, once per process. |
+| 20  | Automation reaches the private symbol. | A missing symbol is reported by the canary. |
+| 21  | The walk yields `Element` values. | Matching never touches view types. |
+| 22  | A role query checks traits. | Role first, as Testing Library ranks it. |
+| 23  | Every act and look waits on a condition. | Animations are off, so the settled tree is final. |
+| 24  | A failed look or act hands the screen to the report. | One failure format everywhere. |
+| 25  | Closing a screen runs the canary. | Every test gets the check for free. |
+| 26  | The canary asks whether any read found elements. | It needs no test code. |
