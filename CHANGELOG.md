@@ -6,6 +6,12 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.0955
+
+- Docs: add a requirements template, so fitness fails any requirement doc whose sections drift
+- Chore: add the org pull request template, since the private org copy is no default here
+- Docs: the requirements template guides IDs, Given, When, Then, and one owning test per acceptance
+
 ### 2026.10.10.0953
 
 - Docs: add the org ADR template, with a short context, numbered decisions, and numbered consequences
