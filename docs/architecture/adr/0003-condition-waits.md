@@ -2,13 +2,11 @@
 relatedConfigurations: ['../../../.fitnessrc.json']
 ---
 
-# ADR 0003 — Waits poll a condition up to a deadline
-
-Status: accepted
+# 0003 — Waits poll a condition up to a deadline
 
 ## Context
 
-May Calendar's harness slept after every action and scaled real time by a process-wide pace. Under load, waits raced the poll and transitions left elements mid-flight. Apple's own advice is a condition with a deadline, as `XCTWaiter` does.
+May Calendar's harness slept after every action, so under load its waits raced and transitions left elements mid-flight. Apple advises a condition with a deadline.
 
 ## Decision
 
@@ -19,6 +17,6 @@ May Calendar's harness slept after every action and scaled real time by a proces
 
 ## Consequences
 
-- A fast machine finishes at once; a slow one takes longer and still passes.
-- A deadline that passes fails with the screen report.
-- Each app owns its own clock; the library ships none.
+1. A fast machine finishes at once; a slow one takes longer and still passes.
+2. A deadline that passes fails with the screen report.
+3. Each app owns its own clock; the library ships none.

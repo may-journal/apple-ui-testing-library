@@ -6,6 +6,12 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.0953
+
+- Docs: add the org ADR template, with a short context, numbered decisions, and numbered consequences
+- Docs: title the five ADRs by number alone and drop their status lines
+- Docs: cut each ADR's context to tweet length and number its consequences
+
 ### 2026.10.10.0949
 
 - Docs: add five requirement docs, from showing the app to reading a failure, with 24 acceptances

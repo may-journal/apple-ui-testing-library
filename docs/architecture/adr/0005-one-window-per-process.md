@@ -2,13 +2,11 @@
 relatedConfigurations: ['../../../.fitnessrc.json']
 ---
 
-# ADR 0005 — Tests run serialized, one key window per process
-
-Status: accepted
+# 0005 — Tests run serialized, one key window per process
 
 ## Context
 
-UIKit has one key window per scene, and the tree a test reads is that window's. Swift Testing runs tests in parallel by default. May Calendar's harness also shares process-wide state, such as the time zone and `UserDefaults.standard`.
+A test reads its scene's one key window, but Swift Testing runs in parallel by default. May Calendar's harness also shares process-wide state.
 
 ## Decision
 
@@ -19,6 +17,6 @@ UIKit has one key window per scene, and the tree a test reads is that window's. 
 
 ## Consequences
 
-- Tests cannot share a window or leak one into the next.
-- Parallel speed comes from runner clones, each its own process.
-- Per-test state, such as stores and defaults, stays the consumer's job.
+1. Tests cannot share a window or leak one into the next.
+2. Parallel speed comes from runner clones, each its own process.
+3. Per-test state, such as stores and defaults, stays the consumer's job.

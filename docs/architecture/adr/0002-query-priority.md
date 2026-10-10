@@ -2,13 +2,11 @@
 relatedConfigurations: ['../../../.fitnessrc.json']
 ---
 
-# ADR 0002 — Queries go by role and label first
-
-Status: accepted
+# 0002 — Queries go by role and label first
 
 ## Context
 
-Testing Library ranks queries by how a person finds things: role and name, then text, then test IDs. People cannot see or hear an `accessibilityIdentifier`. May Calendar's harness checked a trait only in `sees(button:)`, so a tap could land on static text that shared a label.
+Testing Library ranks queries by how a person finds things, and people cannot see an identifier. May Calendar's taps could land on static text that shared a button's label.
 
 ## Decision
 
@@ -20,6 +18,6 @@ Testing Library ranks queries by how a person finds things: role and name, then 
 
 ## Consequences
 
-- A test fails when VoiceOver reads the wrong label, even if an identifier still matches.
-- Ambiguous screens fail loudly, which pushes apps toward distinct labels.
-- Docs and examples lead with role queries.
+1. A test fails when VoiceOver reads the wrong label, even if an identifier still matches.
+2. Ambiguous screens fail loudly, which pushes apps toward distinct labels.
+3. Docs and examples lead with role queries.

@@ -2,13 +2,11 @@
 relatedConfigurations: ['../../../.fitnessrc.json']
 ---
 
-# ADR 0001 — Tests read the accessibility tree in-process
-
-Status: accepted
+# 0001 — Tests read the accessibility tree in-process
 
 ## Context
 
-XCUITest drives the app from a separate process. It covers launch, scenes, and system UI, but every test pays a launch. ViewInspector reflects over view structs, which checks structure and skips rendering. May Calendar's harness drew its real root in-process and read it through accessibility, at 0.06 to 1.8 s per test ([hub#54](https://github.com/may-journal/hub/issues/54)).
+XCUITest pays an app launch per test, and ViewInspector skips rendering. May Calendar's in-process harness ran at 0.06 to 1.8 s per test ([hub#54](https://github.com/may-journal/hub/issues/54)).
 
 ## Decision
 
@@ -19,6 +17,6 @@ XCUITest drives the app from a separate process. It covers launch, scenes, and s
 
 ## Consequences
 
-- No launch per test, so a wide integration suite stays fast.
-- The `@main` App, its `WindowGroup`, and real permission prompts are left to a consumer's own XCUITest smoke test.
-- An element VoiceOver cannot reach cannot be tested, which surfaces accessibility bugs early.
+1. No launch per test, so a wide integration suite stays fast.
+2. The `@main` App, its `WindowGroup`, and real permission prompts are left to a consumer's own XCUITest smoke test.
+3. An element VoiceOver cannot reach cannot be tested, which surfaces accessibility bugs early.

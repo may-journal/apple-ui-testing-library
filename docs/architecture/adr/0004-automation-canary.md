@@ -2,13 +2,11 @@
 relatedConfigurations: ['../../../.fitnessrc.json']
 ---
 
-# ADR 0004 — Private SPI turns automation on, and a canary guards it
-
-Status: accepted
+# 0004 — Private SPI turns automation on, and a canary guards it
 
 ## Context
 
-SwiftUI builds its accessibility tree only while an assistive technology asks. In a hosted test nothing asks, so the tree comes back empty. Xcode's UI tests turn automation on through `_AXSSetAutomationEnabled` in `libAccessibility`, which is private.
+SwiftUI builds its accessibility tree only while assistive technology asks, so a hosted test reads nothing. Xcode turns automation on through a private call.
 
 ## Decision
 
@@ -19,6 +17,6 @@ SwiftUI builds its accessibility tree only while an assistive technology asks. I
 
 ## Consequences
 
-- An OS update that empties the tree fails every test loudly on its first run.
-- App Store review never sees the private symbol.
-- A test that reads nothing at all also fails, since it proved nothing.
+1. An OS update that empties the tree fails every test loudly on its first run.
+2. App Store review never sees the private symbol.
+3. A test that reads nothing at all also fails, since it proved nothing.
