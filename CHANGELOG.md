@@ -6,6 +6,19 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+## 1.0.0 (2026-10-10)
+
+
+### Features
+
+* **guard:** flag app names with cspell flagWords ([#17](https://github.com/may-journal/apple-ui-testing-library/issues/17)) ([2b82575](https://github.com/may-journal/apple-ui-testing-library/commit/2b82575cab1e4ecb09ba205c6d7b75f0a8d6db8e))
+* **library:** one API over UIKit and AppKit, with tests for every acceptance ([#18](https://github.com/may-journal/apple-ui-testing-library/issues/18)) ([f29742f](https://github.com/may-journal/apple-ui-testing-library/commit/f29742f2d84ad814a52ed740b6cf5177d58478fd))
+
+
+### Bug Fixes
+
+* **tree:** read and press alerts and confirmation dialogs as Designed for iPad ([#32](https://github.com/may-journal/apple-ui-testing-library/issues/32)) ([6bd667f](https://github.com/may-journal/apple-ui-testing-library/commit/6bd667f25334b943f08f3f35b06eb0ab3792c5c8))
+
 ### 2026.10.10.1606
 
 - Feat: as Designed for iPad, the iOS backend reads alerts and confirmation dialogs from UIKit's hidden copy
