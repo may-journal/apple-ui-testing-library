@@ -8,6 +8,14 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ### 2026.10.10.1239
 
+- Fix: a tap that opens nothing fails saying a system menu needs a touch tool
+- Docs: the README states the gap for system menus and pairs an XCUITest smoke test with it
+- Chore: `make requirements` collects no simulator diagnostics, which took minutes after a failure
+
+### 2026.10.10.1228
+
+### 2026.10.10.1239
+
 - Feat: `Screen.render` draws a root in a key window on iOS and macOS, and `User` reads it as VoiceOver does
 - Feat: `User` finds by role and label, text, then identifier, and taps, chooses, types, scrolls and goes back
 - Feat: every look and act waits on a condition up to a deadline, and fails with a `Failure` naming the test's line
@@ -21,6 +29,7 @@ relatedConfigurations: ['.fitnessrc.json']
 - Feat: `Package.swift` ships the `UITestingLibrary` product for iOS and macOS with a Swift 6 skeleton of the public types
 - Feat: `project.yml` generates an iOS and a macOS SwiftUI test host, each with a hosted test bundle on the package
 - Feat: `make requirements` builds and runs both bundles from one DerivedData path, and SwiftLint runs through fitness
+
 ### 2026.10.10.1212
 
 - Feat: `cspell.json` lists the org's app names as `flagWords`, so fitness fails any file that uses one

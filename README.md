@@ -25,6 +25,10 @@ Add the package to a test target hosted by your app, then render your root and a
 
 A failed look or act throws a `Failure` naming the test's line and listing what VoiceOver reads. This repo's own hosts are built the same way: `make requirements` generates the Xcode project from `project.yml` and runs the iOS and Mac bundles.
 
+## System menus
+
+Some controls open system UI that no accessibility action reaches in-process, such as a share sheet or a `Menu`. Tapping one fails saying so. Cover that screen with one XCUITest smoke test, which drives the app by touch. Keep the rest of the suite in-process.
+
 ## Docs
 
 - [docs/architecture/](docs/architecture/) — the design ([kickoff questions](docs/architecture/00-kickoff-questions.md))

@@ -8,7 +8,10 @@ extension User {
     ) async throws {
         let node = try await actionable(query, SourceLocation(file: file, line: line))
         guard Backend.activate(node, in: screen.window) else {
-            throw failure("Tapping \(query) did nothing", SourceLocation(file: file, line: line))
+            throw failure(
+                "Tapping \(query) did nothing: a system menu accessibility cannot open "
+                    + "needs a touch tool, as the README shows",
+                SourceLocation(file: file, line: line))
         }
         _ = await wait.settle(screen)
     }
