@@ -6,10 +6,10 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
-### 2026.10.10.1603
+### 2026.10.10.1606
 
 - Feat: as Designed for iPad, the iOS backend reads alerts and confirmation dialogs from UIKit's hidden copy
-- Feat: tapping one of that alert's buttons runs its handler through the alert, as a click on the Mac's alert does
+- Feat: tapping one of that alert's enabled buttons runs its handler through the alert, as a click on the Mac's alert does
 - Fix: the Mac backend counts a press that closes an alert sheet, since its button answers false
 - Docs: 0003.6 states the acceptance, and the code doc's Platforms table names the alert copy
 

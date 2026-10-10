@@ -42,7 +42,7 @@ extension Backend {
         // A modal view hides what lies behind it, not what lies in front: a sheet's dimming
         // view is modal, and the sheet sits above it.
         if let index = view.subviews.lastIndex(where: {
-            $0.accessibilityViewIsModal && !$0.isHidden
+            $0.accessibilityViewIsModal && !isHidden($0)
         }) {
             return Array(view.subviews[index...])
         }

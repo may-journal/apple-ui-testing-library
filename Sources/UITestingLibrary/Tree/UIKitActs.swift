@@ -15,13 +15,16 @@ extension Backend {
 
     /// Presses the alert button the element shows, as a click on the Mac's native alert
     /// does. A Mac running the iOS app draws the alert itself, so UIKit's hidden copy answers
-    /// no activation; the alert runs the button's handler as it closes.
+    /// no activation; the alert runs the button's handler as it closes. A disabled button
+    /// presses nothing, as for a person.
     private static func pressesAlertButton(_ object: NSObject) -> Bool {
         var responder = object as? UIResponder
         while let current = responder, !(current is UIAlertController) { responder = current.next }
         let dismiss = NSSelectorFromString("_dismissWithAction:")
         guard let alert = responder as? UIAlertController, alert.responds(to: dismiss),
-            let action = alert.actions.first(where: { $0.title == object.accessibilityLabel })
+            let action = alert.actions.first(where: {
+                $0.isEnabled && $0.title == object.accessibilityLabel
+            })
         else { return false }
         alert.perform(dismiss, with: action)
         return true
