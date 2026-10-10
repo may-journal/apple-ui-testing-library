@@ -1,12 +1,12 @@
 # Repo tasks. Run: make fitness, make requirements, make requirements-coverage
 #
 # requirements: generates the Xcode project from project.yml, then builds and runs both
-# hosted test bundles, iOS on the simulator named in SIMULATOR and macOS natively. Each
-# platform runs build-for-testing and then test-without-building, so a build failure
-# reads apart from a test failure, and no simulator diagnostics are collected, since
-# collecting them after a failure takes minutes. All output goes to DERIVED_DATA inside this checkout,
-# so parallel checkouts never share build state. Check `xcrun simctl list devices booted`
-# first; the target shuts its simulator down when it finishes, even after a failure.
+# hosted test bundles, both natively on this Mac: the iOS one as Designed for iPad, never
+# on a simulator, and the macOS one as an AppKit app. Each platform runs
+# build-for-testing and then test-without-building, so a build failure reads apart from a
+# test failure, and no diagnostics are collected, since collecting them after a failure
+# takes minutes. All output goes to DERIVED_DATA inside this checkout, so parallel
+# checkouts never share build state.
 #
 # requirements-coverage: runs both platforms as requirements does, with code coverage on,
 # then prints line coverage of Sources/UITestingLibrary/ per platform and for both together.
@@ -18,10 +18,7 @@
 FITNESS_INSTALL = $(HOME)/.local/share/may-journal/fitness/fitness-install
 PROJECT = UITestingLibrary.xcodeproj
 DERIVED_DATA = .build/DerivedData
-SIMULATOR ?= iPhone 17
-# The one device of that name on the newest runtime, so the shutdown is never ambiguous.
-SIMULATOR_UDID = ${shell xcrun simctl list devices available | grep -F '$(SIMULATOR) (' | tail -1 | sed -E 's/.*[(]([0-9A-F-]+)[)].*/\1/'}
-IOS_DESTINATION = platform=iOS Simulator,id=$(SIMULATOR_UDID)
+IOS_DESTINATION = platform=macOS,variant=Designed for iPad
 MAC_DESTINATION = platform=macOS
 XCODEBUILD = xcodebuild -project $(PROJECT) -derivedDataPath $(DERIVED_DATA)
 # YES only under requirements-coverage, which reads PROFILE_DATA after each platform's run.
@@ -29,7 +26,7 @@ CODE_COVERAGE ?= NO
 PROFILE_DATA = $(DERIVED_DATA)/Build/ProfileData
 COVERAGE_DIR = .build/coverage
 LIBRARY_SOURCES = Sources/UITestingLibrary
-IOS_TEST_BINARY = $(DERIVED_DATA)/Build/Products/Debug-iphonesimulator/TestHost.app/PlugIns/UITestingLibraryTests.xctest/UITestingLibraryTests
+IOS_TEST_BINARY = $(DERIVED_DATA)/Build/Products/Debug-iphoneos/TestHost.app/PlugIns/UITestingLibraryTests.xctest/UITestingLibraryTests
 MAC_TEST_BINARY = $(DERIVED_DATA)/Build/Products/Debug/TestHostMac.app/Contents/PlugIns/UITestingLibraryTestsMac.xctest/Contents/MacOS/UITestingLibraryTestsMac
 
 # $(call run-hosted-tests,scheme,destination): build the scheme for testing, then run it.
@@ -73,9 +70,10 @@ generate:
 # Build and run the hosted test bundles on both platforms.
 requirements: requirements-ios requirements-mac
 
+# Only the iOS targets sign with a team, so only this run may update provisioning.
+requirements-ios: XCODEBUILD += -allowProvisioningUpdates
 requirements-ios: generate
-	$(call run-hosted-tests,TestHost,$(IOS_DESTINATION)); status=$$?; \
-		xcrun simctl shutdown "$(SIMULATOR_UDID)"; exit $$status
+	$(call run-hosted-tests,TestHost,$(IOS_DESTINATION))
 
 requirements-mac: generate
 	$(call run-hosted-tests,TestHostMac,$(MAC_DESTINATION))

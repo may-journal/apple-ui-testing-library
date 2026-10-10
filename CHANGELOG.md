@@ -6,6 +6,14 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.1542
+
+- Test: the iOS bundle runs natively as Designed for iPad, and the Makefile drops its simulator lookup and shutdown
+- Chore: the iOS hosts sign with a development team, since the iOS 27 SDK refuses ad hoc
+- Fix: only the iOS run may update provisioning, so the macOS build never contacts the developer portal
+- Fix: both hosts carry version keys, which installing as Designed for iPad requires
+- Docs: the code doc's Platforms and Tests tables describe the native iOS run; 0001.1 keeps its compact phone layout
+
 ### 2026.10.10.1458
 
 - Test: both bundles compile `Tests/Shared/`, so 22 acceptances run on iOS and macOS; only the layout ones stay per platform

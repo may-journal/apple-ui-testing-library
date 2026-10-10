@@ -72,7 +72,7 @@ One Swift package, iOS 26 and macOS 26 and later, Swift 6 with complete strict c
 
 | Platform | How it runs |
 | -------- | ----------- |
-| iPhone simulator | Hosted tests in the simulator's app process, through the UIKit backend. |
+| iOS, Designed for iPad | Hosted tests in the iOS app's process, running natively on this Mac through the UIKit backend, with no simulator boot. |
 | Mac | Hosted tests in a Mac app's process, through the AppKit backend, with no simulator boot. |
 
 ## Repo tree (outline)
@@ -107,7 +107,7 @@ apple-ui-testing-library/
 | Concern | Rule |
 | ------- | ---- |
 | Proof | Each acceptance in `docs/requirements/` is proven by one test named for it, against a real fixture screen in `TestHost`. |
-| Run | `make requirements` builds both bundles, then runs them serialized, one test at a time, each under a time limit. |
+| Run | `make requirements` builds both bundles, then runs them serialized, one test at a time, each under a time limit. The iOS bundle runs natively on this Mac as Designed for iPad and never boots a simulator. 0001.1 keeps its phone layout, since the host controller sets a compact size class. |
 | Coverage | `make requirements-coverage` runs both bundles with coverage on and prints line coverage of `Sources/UITestingLibrary/` per platform and combined. |
 | Never | Tests never read view types, view models, or private state. |
 | Flip | Before a test lands, its Given is flipped once, and the failure must name the Then. |
