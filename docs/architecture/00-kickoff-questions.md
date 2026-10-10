@@ -22,5 +22,5 @@ May Calendar is the first consumer. It adds the package to its test targets thro
 
 - "The more your tests resemble the way your software is used, the more confidence they can give you." ([Testing Library](https://testing-library.com/docs/guiding-principles/))
 - The accessibility tree is the DOM. Queries read labels, values, and traits; view types and view models stay unseen.
-- Apple frameworks only: UIKit, SwiftUI, XCTest, and Swift Testing. iOS 17 and later, Swift 6, Xcode 26.
+- Apple frameworks only: UIKit, SwiftUI, XCTest, and Swift Testing, on the versions in [Platforms](04-code.md#platforms).
 - A failure says what VoiceOver reads on screen, so the fix starts from what a person sees.

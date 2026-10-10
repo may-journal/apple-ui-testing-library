@@ -6,6 +6,12 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.1045
+
+- Docs: support iOS 26 and later, built with Xcode 27, so Secret Gifts can adopt the library too
+- Docs: the code doc's Platforms section is the one place that states supported versions
+- Docs: the README, AGENTS.md, and the kickoff doc link to Platforms instead of restating it
+
 ### 2026.10.10.1041
 
 - Docs: add five architecture templates in docs/architecture/templates, one per doc shape

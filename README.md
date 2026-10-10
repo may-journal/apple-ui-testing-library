@@ -4,7 +4,7 @@ relatedConfigurations: ['.fitnessrc.json']
 
 # Apple UI Testing Library
 
-A Swift package for testing SwiftUI and UIKit apps the way people use them. Its module is `UITestingLibrary`, for iOS 17 and later.
+A Swift package for testing SwiftUI and UIKit apps the way people use them. Its module is `UITestingLibrary`; see [Platforms](docs/architecture/04-code.md#platforms) for supported versions.
 
 It ports [Testing Library](https://testing-library.com/)'s [guiding principles](https://testing-library.com/docs/guiding-principles/) to Apple platforms, credited to Kent C. Dodds and its maintainers. Tests read the screen as VoiceOver does and act through what VoiceOver offers.
 
