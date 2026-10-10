@@ -6,7 +6,7 @@ relatedConfigurations: ['../../../.fitnessrc.json']
 
 ## Context
 
-May Calendar's harness slept after every action, so under load its waits raced and transitions left elements mid-flight. Apple advises a condition with a deadline.
+An existing harness slept after every action, so under load its waits raced and transitions left elements mid-flight. Apple advises a condition with a deadline.
 
 ## Decision
 

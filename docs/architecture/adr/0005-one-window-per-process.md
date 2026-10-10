@@ -6,7 +6,7 @@ relatedConfigurations: ['../../../.fitnessrc.json']
 
 ## Context
 
-A test reads its scene's one key window, but Swift Testing runs in parallel by default. May Calendar's harness also shares process-wide state.
+A test reads its scene's one key window, but Swift Testing runs in parallel by default. An app's own harness may also share process-wide state.
 
 ## Decision
 

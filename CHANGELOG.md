@@ -6,9 +6,15 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.1056
+
+- Docs: the architecture docs and ADRs describe consumers generically, with no app names
+- Docs: the hub research link stays only where it is cited as a source
+- Docs: an earlier entry about platform support no longer names an app
+
 ### 2026.10.10.1045
 
-- Docs: support iOS 26 and later, built with Xcode 27, so Secret Gifts can adopt the library too
+- Docs: support iOS 26 and later, built with Xcode 27, so apps on those versions can adopt the library
 - Docs: the code doc's Platforms section is the one place that states supported versions
 - Docs: the README, AGENTS.md, and the kickoff doc link to Platforms instead of restating it
 
