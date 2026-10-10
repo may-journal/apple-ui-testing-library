@@ -6,6 +6,37 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.1310
+
+- Feat: `make requirements-coverage` runs both bundles with coverage on and prints line coverage of `Sources/UITestingLibrary/` for iOS, macOS and both
+- Fix: coverage comes from each run's profile through `llvm-cov`, since Xcode leaves the package's static code out of `.xcresult` coverage
+- Chore: a line counts once across platforms, and fixtures and tests are left out
+- Docs: the code doc's Tests table names the coverage target
+
+### 2026.10.10.1244
+
+- Fix: a tap that opens nothing fails saying a system menu needs a touch tool
+- Docs: the README states the gap for system menus and pairs an XCUITest smoke test with it
+- Chore: `make requirements` collects no simulator diagnostics, and shuts its simulator down by UDID
+- Fix: a tap on many matches says how many match, and a pressed control counts only when something listens
+- Docs: AGENTS.md drops consumer setup, which the kickoff doc already states
+
+### 2026.10.10.1239
+
+- Feat: `Screen.render` draws a root in a key window on iOS and macOS, and `User` reads it as VoiceOver does
+- Feat: `User` finds by role and label, text, then identifier, and taps, chooses, types, scrolls and goes back
+- Feat: every look and act waits on a condition up to a deadline, and fails with a `Failure` naming the test's line
+- Feat: automation turns on once per process on each platform, and the canary fails a screen that read nothing
+- Docs: ADRs 0004, 0005 and 0006 record the Mac switch, closing on a second render, and thrown failures
+
+### 2026.10.10.1238
+
+- Docs: ADR 0006 puts one API over two backends, UIKit on iOS and AppKit on macOS; the C4 docs show both hosts
+- Docs: Platforms states iOS 26 and macOS 26 and later, and requirement 0001 gains a Mac acceptance
+- Feat: `Package.swift` ships the `UITestingLibrary` product for iOS and macOS with a Swift 6 skeleton of the public types
+- Feat: `project.yml` generates an iOS and a macOS SwiftUI test host, each with a hosted test bundle on the package
+- Feat: `make requirements` builds and runs both bundles from one DerivedData path, and SwiftLint runs through fitness
+
 ### 2026.10.10.1212
 
 - Feat: `cspell.json` lists the org's app names as `flagWords`, so fitness fails any file that uses one

@@ -1,0 +1,85 @@
+# XcodeGen spec for the package's own test hosts: one iOS app and one macOS app, each
+# running a hosted test bundle that depends on the package (docs/architecture/02-containers.md).
+# Run: make generate. The generated UITestingLibrary.xcodeproj is ignored, never hand-edited.
+name: UITestingLibrary
+options:
+  bundleIdPrefix: org.may-journal.ui-testing-library
+  deploymentTarget:
+    iOS: '26.0'
+    macOS: '26.0'
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: '6.0'
+    SWIFT_STRICT_CONCURRENCY: complete
+    # Local hosts only: ad-hoc signing needs no team, on the simulator or on this Mac.
+    CODE_SIGN_IDENTITY: '-'
+    CODE_SIGN_STYLE: Manual
+    DEVELOPMENT_TEAM: ''
+
+packages:
+  UITestingLibrary:
+    path: .
+
+targetTemplates:
+  # Shared by both hosts: one SwiftUI source folder and a generated Info.plist.
+  Host:
+    type: application
+    sources:
+      - path: TestHost
+    settings:
+      base:
+        # One module name, so both bundles write `@testable import TestHost`.
+        PRODUCT_MODULE_NAME: TestHost
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+  # Shared by both bundles: the package, and a generated Info.plist.
+  HostedTests:
+    type: bundle.unit-test
+    dependencies:
+      - package: UITestingLibrary
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+
+targets:
+  TestHost:
+    templates: [Host]
+    platform: iOS
+  TestHostMac:
+    templates: [Host]
+    platform: macOS
+  UITestingLibraryTests:
+    templates: [HostedTests]
+    platform: iOS
+    sources:
+      - path: Tests/UITestingLibraryTests
+    dependencies:
+      - target: TestHost
+  UITestingLibraryTestsMac:
+    templates: [HostedTests]
+    platform: macOS
+    sources:
+      - path: Tests/UITestingLibraryMacTests
+    dependencies:
+      - target: TestHostMac
+
+schemes:
+  TestHost:
+    build:
+      targets:
+        TestHost: all
+        UITestingLibraryTests: [test]
+    test:
+      targets:
+        - UITestingLibraryTests
+  TestHostMac:
+    build:
+      targets:
+        TestHostMac: all
+        UITestingLibraryTestsMac: [test]
+    test:
+      targets:
+        - UITestingLibraryTestsMac

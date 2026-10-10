@@ -14,17 +14,31 @@
     "Totalist"
   ],
   "words": [
+    "discardable",
     "dlsym",
     "Dodds",
     "fitnessrc",
+    "INFOPLIST",
+    "iphonesimulator",
     "jasonvanderslice",
     "mayjournal",
+    "profdata",
+    "simctl",
+    "Subrole",
+    "subviews",
+    "superview",
+    "swiftlint",
     "swiftpm",
     "Totalist",
+    "typealias",
+    "UDID",
     "xcodebuild",
-    "xcodegen",
     "XcodeGen",
+    "xcodegen",
     "xcodeproj",
+    "xcresult",
+    "xcrun",
+    "xctest",
     "XCUI"
   ]
 }

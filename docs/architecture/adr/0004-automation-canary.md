@@ -6,14 +6,15 @@ relatedConfigurations: ['../../../.fitnessrc.json']
 
 ## Context
 
-SwiftUI builds its accessibility tree only while assistive technology asks, so a hosted test reads nothing. Xcode turns automation on through a private call.
+SwiftUI builds its accessibility tree only while assistive technology asks, so a hosted test reads nothing. Xcode and VoiceOver each turn it on through a call apps never make.
 
 ## Decision
 
-1. `Automation` opens `/usr/lib/libAccessibility.dylib` with `dlopen` and calls `_AXSSetAutomationEnabled(1)` once per process.
-2. A missing symbol is recorded, and the tree is read anyway.
-3. `Canary` fails any test whose reads never found an element, saying automation is off.
-4. The library ships in test targets only, so the app never links the private call.
+1. On iOS, `Automation` opens `/usr/lib/libAccessibility.dylib` with `dlopen` and calls `_AXSSetAutomationEnabled(1)` once per process.
+2. On macOS, it sets `AXEnhancedUserInterface` on the app, as VoiceOver does when it starts reading one.
+3. A missing symbol is recorded, and the tree is read anyway.
+4. `Canary` fails any screen closed before a read found an element, and a look for something gone that only read empty.
+5. The library ships in test targets only, so the app never links the private call.
 
 ## Consequences
 

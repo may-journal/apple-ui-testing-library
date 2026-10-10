@@ -38,3 +38,7 @@ Source: #1
     - Given a shown root view
         - When I show a second one
             - Then nothing from the first is read
+- 0001.6
+    - Given a root view
+        - When I show it in a Mac app
+            - Then I read what a person at a Mac sees

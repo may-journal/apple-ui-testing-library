@@ -4,7 +4,7 @@ relatedConfigurations: ['.fitnessrc.json']
 
 # apple-ui-testing-library
 
-A Swift package, module `UITestingLibrary`, that tests SwiftUI and UIKit apps through the accessibility tree. It brings Testing Library's guiding principles to Apple platforms; see [Platforms](docs/architecture/04-code.md#platforms). See [README.md](README.md) for the pitch.
+A Swift package, module `UITestingLibrary`, that tests SwiftUI, UIKit and AppKit apps through the accessibility tree, on iOS and macOS. It brings Testing Library's guiding principles to Apple platforms; see [Platforms](docs/architecture/04-code.md#platforms). See [README.md](README.md) for the pitch.
 
 ## Rules
 
@@ -16,4 +16,5 @@ Keep plans in GitHub issues and comments. Never commit plan documents, screensho
 - Never name an app in this public library. The `flagWords` in [cspell.json](cspell.json) make fitness fail any file that does.
 - Query the way a person perceives the screen: role and label first, visible text next, identifier last ([ADR 0002](docs/architecture/adr/0002-query-priority.md)).
 - Wait on a condition with a deadline; never sleep ([ADR 0003](docs/architecture/adr/0003-condition-waits.md)).
-- Consumers add the package to test targets only, through XcodeGen `packages:` with `majorVersion: 1`.
+- One API, two backends: nothing outside `Screen/` and `Tree/` branches on platform ([ADR 0006](docs/architecture/adr/0006-one-api-two-backends.md)).
+- Run `make requirements` before a push; it builds and runs both hosted bundles.
