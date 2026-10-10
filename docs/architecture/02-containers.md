@@ -50,9 +50,9 @@ Numbers on nodes and arrows match the callout table.
 | 1   | Writes tests in a consumer app or in this repo. | Same actor as [01-system-context.md](01-system-context.md). |
 | 2   | `Sources/UITestingLibrary/`, the one library product in `Package.swift`. | One import gives a test everything it needs. |
 | 3   | `TestHost`, the iOS app target in `project.yml`, built from `TestHost/`. | Hosted tests need a running app with a window scene. |
-| 4   | `UITestingLibraryTests`, the iOS bundle built from `Tests/UITestingLibraryTests/`. | The UIKit backend is proven against real SwiftUI screens. |
+| 4   | `UITestingLibraryTests`, the iOS bundle built from `Tests/Shared/` and `Tests/UITestingLibraryTests/`. | The UIKit backend is proven against real SwiftUI screens. |
 | 5   | `TestHostMac`, the macOS app target, built from the same `TestHost/` sources. | A Mac app's tests need a real AppKit window ([ADR 0006](adr/0006-one-api-two-backends.md)). |
-| 6   | `UITestingLibraryTestsMac`, the macOS bundle built from `Tests/UITestingLibraryMacTests/`. | The AppKit backend is proven against the same fixtures. |
+| 6   | `UITestingLibraryTestsMac`, the macOS bundle built from `Tests/Shared/` and `Tests/UITestingLibraryMacTests/`. | The AppKit backend is proven by the same tests, against the same fixtures. |
 | 7   | A consumer's hosted test bundle. | Consumers add the package through XcodeGen `packages:` with `majorVersion: 1`. |
 | 8   | Windows, hosting controllers, and the views under test. | The library draws through public UIKit and AppKit API. |
 | 9   | `/usr/lib/libAccessibility.dylib`, reached with `dlopen`. | Its private `_AXSSetAutomationEnabled` makes SwiftUI build its tree ([ADR 0004](adr/0004-automation-canary.md)). |

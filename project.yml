@@ -55,6 +55,7 @@ targets:
     templates: [HostedTests]
     platform: iOS
     sources:
+      - path: Tests/Shared
       - path: Tests/UITestingLibraryTests
     dependencies:
       - target: TestHost
@@ -62,6 +63,7 @@ targets:
     templates: [HostedTests]
     platform: macOS
     sources:
+      - path: Tests/Shared
       - path: Tests/UITestingLibraryMacTests
     dependencies:
       - target: TestHostMac

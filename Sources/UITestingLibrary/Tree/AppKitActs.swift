@@ -21,14 +21,17 @@ extension Backend {
 
     /// Types into the field being edited; whether one was.
     static func type(_ text: String, in window: HostWindow) -> Bool {
-        guard let field = window.window.firstResponder as? NSTextInputClient else { return false }
+        guard let field = frontWindow(of: window.window).firstResponder as? NSTextInputClient else {
+            return false
+        }
         field.insertText(text, replacementRange: NSRange(location: NSNotFound, length: 0))
         return true
     }
 
     /// Scrolls the front scroll view by most of its height; whether one was there.
     static func scroll(_ direction: ScrollDirection, nodes: [Node], in window: HostWindow) -> Bool {
-        guard let root = window.window.contentView, let page = scrollView(in: root) else {
+        guard let root = frontWindow(of: window.window).contentView, let page = scrollView(in: root)
+        else {
             return false
         }
         let height = page.contentView.bounds.height
