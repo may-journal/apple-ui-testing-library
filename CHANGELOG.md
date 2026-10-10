@@ -6,6 +6,12 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.0946
+
+- Docs: a settle moves the test clock once, then waits with it still, so ticking labels settle
+- Docs: taps reach toggles, tabs, and fields; Swift Testing suites share one serialized parent
+- Docs: the code layers show waits reading the tree and reports, and the journey ends in a pass
+
 ### 2026.10.10.0944
 
 - Chore: scaffold the repo with a Plan issue template, a Makefile, and a commented .gitignore

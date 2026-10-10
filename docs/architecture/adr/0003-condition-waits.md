@@ -13,10 +13,10 @@ May Calendar's harness slept after every action and scaled real time by a proces
 ## Decision
 
 1. Every look and act waits on a condition, up to a deadline of five seconds by default.
-2. After each act, `Wait` polls until the tree stops changing between two reads.
+2. After each act, `Wait` moves `TestClock` once, then polls with the clock still until two reads match.
 3. No API sleeps for a fixed time.
 4. `Screen` turns animations off, with `UIView.setAnimationsEnabled(false)` and a root transaction that disables them.
-5. `TestClock` moves the app's own waits only while a test polls.
+5. `TestClock` moves only on a look's poll and once per act, so a ticking label still settles.
 
 ## Consequences
 

@@ -27,6 +27,8 @@ flowchart TB
     screen -->|10| reports
     queries -->|11| tree
     reports -->|12| tree
+    waits -->|13| tree
+    waits -->|14| reports
 
     classDef layer fill:none,stroke:gray
 ```
@@ -47,6 +49,8 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 | 10  | `Screen.close()` calls `Canary.check(_:)`. | No test can skip the check. |
 | 11  | Queries read the tree. | Matching works on `Element` values. |
 | 12  | Reports read the tree. | A report shows what VoiceOver reads now. |
+| 13  | Waits read the tree to see it settle. | Two matching reads end a settle. |
+| 14  | A timed-out wait hands the screen to the report. | A timeout shows what was on screen. |
 
 ## States
 

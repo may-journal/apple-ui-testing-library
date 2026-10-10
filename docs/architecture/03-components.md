@@ -73,7 +73,7 @@ Numbers match the callout table. Containers: [02-containers.md](02-containers.md
 | 6   | The roles a query names, each mapped to accessibility traits. | `.button` never matches static text that shares its label ([ADR 0002](adr/0002-query-priority.md)). |
 | 7   | Matches elements by role and label, by text, or by identifier. | One priority keeps tests on what a person perceives. |
 | 8   | Acts as a person does: taps, holds a custom action, scrolls, goes back, types, adjusts. Each act needs an actionable element. | Every act is a VoiceOver entry point, so an unreachable control fails. |
-| 9   | Polls a condition until it holds or the deadline passes, then waits for the tree to settle. | No sleeps; a slow machine only takes longer ([ADR 0003](adr/0003-condition-waits.md)). |
+| 9   | Polls a condition until it holds or the deadline passes. After an act, it waits until two reads match. | No sleeps; a slow machine only takes longer ([ADR 0003](adr/0003-condition-waits.md)). |
 | 10  | A `Clock` the app's own waits can run on, moved only by `Wait`. | App timers fire on demand, with no real waiting. |
 | 11  | Prints what VoiceOver reads on screen, then what is drawn off screen. | A failure shows the screen as a person hears it. |
 | 12  | Fails a test that never read a non-empty tree. | An OS change that empties the tree cannot pass silently. |
@@ -89,7 +89,7 @@ Numbers match the callout table. Containers: [02-containers.md](02-containers.md
 | 22  | The walk yields `Element` values. | Matching never touches view types. |
 | 23  | A role query checks traits. | Role first, as Testing Library ranks it. |
 | 24  | Every act and look waits on a condition. | Animations are off, so the settled tree is final. |
-| 25  | A wait moves the test clock each poll. | App time moves only while the test looks. |
+| 25  | A look moves the test clock each poll; an act moves it once, then settles with it still. | A ticking label cannot keep the tree from settling. |
 | 26  | A failed look or act hands the screen to the report. | One failure format everywhere. |
 | 27  | Closing a screen runs the canary. | Every test gets the check for free. |
 | 28  | The canary asks whether any read found elements. | It needs no test code. |

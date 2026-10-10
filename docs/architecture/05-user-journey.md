@@ -21,6 +21,7 @@ flowchart TB
     settle[(9 Wait until settled)]:::system
     sees(10 Sees the result):::action
     close[11 Close the screen]:::step
+    passes[12 Passes]:::step
 
     dev --> render
     render --> find
@@ -33,6 +34,7 @@ flowchart TB
     sees --> close
     close --> canary
     canary -->|nothing| empty
+    canary -->|elements| passes
 
     classDef persona fill:none,stroke:gray
     classDef step fill:none,stroke:gray
@@ -54,6 +56,7 @@ Numbers match the callout table. See [03-components.md](03-components.md) and [0
 | 6   | How many match? | One, none, or many, polled up to the deadline. | An ambiguous match is a failure, as in Testing Library. |
 | 7   | Fails with the screen report | Names the query, then lists what is on and off screen. | The fix starts from what a person hears. |
 | 8   | Tap, hold, scroll, go back, type | Acts through activation, custom actions, scrolling, escape, or the keyboard. | VoiceOver's own entry points. |
-| 9   | Wait until settled | Polls until the tree stops changing, with animations off. | No sleeps ([ADR 0003](adr/0003-condition-waits.md)). |
+| 9   | Wait until settled | Moves the test clock once, then polls until two reads match, with animations off. | No sleeps ([ADR 0003](adr/0003-condition-waits.md)). |
 | 10  | Sees the result | Waits until the expected element shows, or stays gone. | The claim is about the screen. |
 | 11  | Close the screen | Hides the window and releases the root. | The next test gets a fresh window ([ADR 0005](adr/0005-one-window-per-process.md)). |
+| 12  | Passes | The test ends green once its tree was read. | Only a test that read the screen proves anything. |
