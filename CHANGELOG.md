@@ -6,10 +6,10 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
-### 2026.10.10.1211
+### 2026.10.10.1212
 
 - Feat: `cspell.json` lists the org's app names as `flagWords`, so fitness fails any file that uses one
-- Feat: single-word forms such as `MayPhotos` are listed too
+- Feat: the one-word spellings of those names are listed too
 - Docs: AGENTS.md links to the rule instead of restating the names
 
 ### 2026.10.10.1056
