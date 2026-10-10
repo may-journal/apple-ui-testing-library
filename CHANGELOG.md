@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.1310
+
+- Feat: `make requirements-coverage` runs both bundles with coverage on and prints line coverage of `Sources/UITestingLibrary/` for iOS, macOS and both
+- Fix: coverage comes from each run's profile through `llvm-cov`, since Xcode leaves the package's static code out of `.xcresult` coverage
+- Chore: a line counts once across platforms, and fixtures and tests are left out
+- Docs: the code doc's Tests table names the coverage target
+
 ### 2026.10.10.1244
 
 - Fix: a tap that opens nothing fails saying a system menu needs a touch tool

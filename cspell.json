@@ -19,8 +19,10 @@
     "Dodds",
     "fitnessrc",
     "INFOPLIST",
+    "iphonesimulator",
     "jasonvanderslice",
     "mayjournal",
+    "profdata",
     "simctl",
     "Subrole",
     "subviews",
@@ -34,7 +36,9 @@
     "XcodeGen",
     "xcodegen",
     "xcodeproj",
+    "xcresult",
     "xcrun",
+    "xctest",
     "XCUI"
   ]
 }

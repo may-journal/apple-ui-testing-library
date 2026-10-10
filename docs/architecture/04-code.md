@@ -107,5 +107,6 @@ apple-ui-testing-library/
 | ------- | ---- |
 | Proof | Each acceptance in `docs/requirements/` is proven by one test named for it, against a real fixture screen in `TestHost`. |
 | Run | `make requirements` builds both bundles, then runs them serialized, one test at a time, each under a time limit. |
+| Coverage | `make requirements-coverage` runs both bundles with coverage on and prints line coverage of `Sources/UITestingLibrary/` per platform and combined. |
 | Never | Tests never read view types, view models, or private state. |
 | Flip | Before a test lands, its Given is flipped once, and the failure must name the Then. |
