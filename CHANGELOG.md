@@ -6,6 +6,12 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.1041
+
+- Docs: add five architecture templates in docs/architecture/templates, one per doc shape
+- Docs: the C4 diagram levels share one template; code, journey, kickoff, and README each have their own
+- Docs: fitness 1.4.0 fails any architecture doc whose sections match none of the templates
+
 ### 2026.10.10.0955
 
 - Docs: add a requirements template, so fitness fails any requirement doc whose sections drift
