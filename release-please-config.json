@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bootstrap-sha": "f29742f2d84ad814a52ed740b6cf5177d58478fd",
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "initial-version": "1.0.0",
+      "version-file": "version.txt",
+      "include-component-in-tag": false,
+      "pull-request-header": "> Prepare a reviewed release of the library.\n\n## Background\n\nRelease Please groups merged changes for the next release.\n\n## Changelog",
+      "pull-request-footer": "Agent: Release Please.",
+      "skip-changelog": false,
+      "force-tag-creation": true
+    }
+  }
+}

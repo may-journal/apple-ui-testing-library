@@ -6,6 +6,17 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+## 0.0.0
+
+- Chore: no release yet; Release Please adds each release section above this one
+
+### 2026.10.10.1355
+
+- Chore: `release.yml` runs Release Please on `main`, with `simple` type and `version.txt` starting at 0.0.0, so the first release is 1.0.0
+- Chore: each release moves the `v<major>` tag, such as `v1`
+- Docs: the workflows README says the `requirements` check is already on
+- Docs: the README links to the usage guide's Setup and no longer restates it
+
 ### 2026.10.10.1339
 
 - Docs: `docs/usage.md` guides setup with XcodeGen and a checked-in project, on iOS and macOS

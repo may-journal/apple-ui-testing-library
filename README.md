@@ -10,7 +10,7 @@ It ports [Testing Library](https://testing-library.com/)'s [guiding principles](
 
 ## Use
 
-Add the package to a test target hosted by your app, then render your root and act as a person would:
+After the [setup](docs/usage.md#setup), render your root and act as a person would:
 
 ```swift
 @MainActor @Test func testSaving() async throws {
@@ -23,7 +23,7 @@ Add the package to a test target hosted by your app, then render your root and a
 }
 ```
 
-The [usage guide](docs/usage.md) covers setup, every query, action and wait, and failures. A failed look or act throws a `Failure` naming the test's line and listing what VoiceOver reads. This repo's own hosts are built the same way: `make requirements` generates the Xcode project from `project.yml` and runs the iOS and Mac bundles.
+The [usage guide](docs/usage.md) covers every query, action and wait, and failures. A failed look or act throws a `Failure` naming the test's line and listing what VoiceOver reads. This repo's own hosts are built the same way: `make requirements` generates the Xcode project from `project.yml` and runs the iOS and Mac bundles.
 
 ## System menus
 

@@ -23,3 +23,11 @@ The synced `close-check.yml` reopens an issue closed with unchecked checklist it
 A plan issue (see the [plan issue template](../ISSUE_TEMPLATE/plan.md)) needs a blockquote pitch, a `## Background` section, and a `## What needs to happen` checklist. It has no other sections.
 
 A pull request description needs a blockquote summary, a `## Background` section, and a `## Changelog` section with at least one bullet. The org `PR check (reusable)` workflow enforces it.
+
+## release
+
+`release.yml` runs Release Please on every push to `main`. It opens a release PR that bumps `version.txt`, starting at 0.0.0 so the first release is 1.0.0. Merging that PR tags `vX.Y.Z` and moves the `v<major>` tag, such as `v1`, to it. The job mints its token from the `AUTOMATION_APP_ID` and `AUTOMATION_APP_KEY` secrets, as fitness-runner does.
+
+## requirements
+
+Fitness's `requirements` check is on. It passes only when every acceptance has a test, so no setting changed.
