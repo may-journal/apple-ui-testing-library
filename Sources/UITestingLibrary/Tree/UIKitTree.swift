@@ -12,13 +12,25 @@ extension Backend {
     }
 
     private static func collect(_ object: NSObject, into found: inout [NSObject]) {
-        if let view = object as? UIView, view.isHidden || view.alpha < 0.01 { return }
-        if object.accessibilityElementsHidden { return }
+        if isHidden(object) { return }
         if object.isAccessibilityElement {
             found.append(object)
             return
         }
         for child in children(of: object) { collect(child, into: &found) }
+    }
+
+    /// Whether VoiceOver skips the object and all it holds. A Mac running the iOS app draws
+    /// an alert natively, and UIKit hides its own copy then; the copy still holds the title
+    /// and buttons VoiceOver reads and presses, so it counts.
+    private static func isHidden(_ object: NSObject) -> Bool {
+        if let view = object as? UIView {
+            if ProcessInfo.processInfo.isiOSAppOnMac, view.next is UIAlertController {
+                return false
+            }
+            if view.isHidden || view.alpha < 0.01 { return true }
+        }
+        return object.accessibilityElementsHidden
     }
 
     /// An element's children as VoiceOver walks them; a modal child hides its siblings.
