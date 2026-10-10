@@ -6,6 +6,12 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.0944
+
+- Chore: scaffold the repo with a Plan issue template, a Makefile, and a commented .gitignore
+- Docs: add AGENTS.md, with CLAUDE.md linked to it, and a README crediting Testing Library
+- Docs: describe the org-synced workflows and the PR and plan formats in a workflows README
+
 ### 2026.10.10.0943
 
 - Docs: add C4 architecture docs for the planned `UITestingLibrary` module
