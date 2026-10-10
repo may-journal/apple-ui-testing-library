@@ -20,7 +20,7 @@ PROJECT = UITestingLibrary.xcodeproj
 DERIVED_DATA = .build/DerivedData
 IOS_DESTINATION = platform=macOS,variant=Designed for iPad
 MAC_DESTINATION = platform=macOS
-XCODEBUILD = xcodebuild -project $(PROJECT) -derivedDataPath $(DERIVED_DATA) -allowProvisioningUpdates
+XCODEBUILD = xcodebuild -project $(PROJECT) -derivedDataPath $(DERIVED_DATA)
 # YES only under requirements-coverage, which reads PROFILE_DATA after each platform's run.
 CODE_COVERAGE ?= NO
 PROFILE_DATA = $(DERIVED_DATA)/Build/ProfileData
@@ -70,6 +70,8 @@ generate:
 # Build and run the hosted test bundles on both platforms.
 requirements: requirements-ios requirements-mac
 
+# Only the iOS targets sign with a team, so only this run may update provisioning.
+requirements-ios: XCODEBUILD += -allowProvisioningUpdates
 requirements-ios: generate
 	$(call run-hosted-tests,TestHost,$(IOS_DESTINATION))
 
