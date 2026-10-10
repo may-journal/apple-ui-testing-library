@@ -9,8 +9,8 @@ extension User {
         let node = try await actionable(query, SourceLocation(file: file, line: line))
         guard Backend.activate(node, in: screen.window) else {
             throw failure(
-                "Tapping \(query) did nothing: a system menu accessibility cannot open "
-                    + "needs a touch tool, as the README shows",
+                "Tapping \(query) did nothing. A control that opens system UI needs a touch tool; "
+                    + "see the README",
                 SourceLocation(file: file, line: line))
         }
         _ = await wait.settle(screen)
@@ -25,13 +25,18 @@ extension User {
     {
         guard let node = await find(query) else {
             throw failure(
-                "Expected to hold \(query), and nothing on screen matches",
+                "Expected to hold \(query), and \(found(query))",
                 SourceLocation(file: file, line: line))
         }
         let offered = node.element.actions
-        guard offered.contains(action), Backend.perform(action, on: node) else {
+        guard offered.contains(action) else {
             throw failure(
                 "\(query) offers \(offered), not \"\(action)\"",
+                SourceLocation(file: file, line: line))
+        }
+        guard Backend.perform(action, on: node) else {
+            throw failure(
+                "Choosing \"\(action)\" on \(query) did nothing",
                 SourceLocation(file: file, line: line))
         }
         _ = await wait.settle(screen)
@@ -83,7 +88,7 @@ extension User {
     private func actionable(_ query: Query, _ location: SourceLocation) async throws -> Node {
         guard let node = await find(query) else {
             throw failure(
-                "Nothing tappable has the label \(query): nothing on screen matches",
+                "Nothing tappable has the label \(query): \(found(query))",
                 location)
         }
         guard node.element.isActionable else {

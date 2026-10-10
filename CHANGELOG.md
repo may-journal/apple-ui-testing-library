@@ -6,13 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
-### 2026.10.10.1239
+### 2026.10.10.1241
 
 - Fix: a tap that opens nothing fails saying a system menu needs a touch tool
 - Docs: the README states the gap for system menus and pairs an XCUITest smoke test with it
-- Chore: `make requirements` collects no simulator diagnostics, which took minutes after a failure
-
-### 2026.10.10.1228
+- Chore: `make requirements` collects no simulator diagnostics, and shuts its simulator down by UDID
+- Fix: a tap or hold on many matching elements says how many match, not that none do
+- Fix: a pressed control counts as tapped only when something listens to it
 
 ### 2026.10.10.1239
 
@@ -22,7 +22,7 @@ relatedConfigurations: ['.fitnessrc.json']
 - Feat: automation turns on once per process on each platform, and the canary fails a screen that read nothing
 - Docs: ADRs 0004, 0005 and 0006 record the Mac switch, closing on a second render, and thrown failures
 
-### 2026.10.10.1228
+### 2026.10.10.1238
 
 - Docs: ADR 0006 puts one API over two backends, UIKit on iOS and AppKit on macOS; the C4 docs show both hosts
 - Docs: Platforms states iOS 26 and macOS 26 and later, and requirement 0001 gains a Mac acceptance

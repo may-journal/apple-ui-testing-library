@@ -12,7 +12,9 @@ FITNESS_INSTALL = $(HOME)/.local/share/may-journal/fitness/fitness-install
 PROJECT = UITestingLibrary.xcodeproj
 DERIVED_DATA = .build/DerivedData
 SIMULATOR ?= iPhone 17
-IOS_DESTINATION = platform=iOS Simulator,name=$(SIMULATOR)
+# The one device of that name on the newest runtime, so the shutdown is never ambiguous.
+SIMULATOR_UDID = ${shell xcrun simctl list devices available | grep -F '$(SIMULATOR) (' | tail -1 | sed -E 's/.*[(]([0-9A-F-]+)[)].*/\1/'}
+IOS_DESTINATION = platform=iOS Simulator,id=$(SIMULATOR_UDID)
 MAC_DESTINATION = platform=macOS
 XCODEBUILD = xcodebuild -project $(PROJECT) -derivedDataPath $(DERIVED_DATA)
 
@@ -44,7 +46,7 @@ requirements: requirements-ios requirements-mac
 
 requirements-ios: generate
 	$(call run-hosted-tests,TestHost,$(IOS_DESTINATION)); status=$$?; \
-		xcrun simctl shutdown "$(SIMULATOR)" >/dev/null 2>&1; exit $$status
+		xcrun simctl shutdown "$(SIMULATOR_UDID)"; exit $$status
 
 requirements-mac: generate
 	$(call run-hosted-tests,TestHostMac,$(MAC_DESTINATION))

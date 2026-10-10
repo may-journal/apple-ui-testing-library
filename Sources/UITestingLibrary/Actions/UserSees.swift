@@ -37,7 +37,7 @@ extension User {
     }
 
     /// How many elements match now, in words.
-    private func found(_ query: Query) -> String {
+    func found(_ query: Query) -> String {
         switch Match(query, in: AccessibilityTree.read(screen)) {
         case .none: return "nothing on screen matches"
         case .one: return "one matches"

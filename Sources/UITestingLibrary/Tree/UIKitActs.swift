@@ -16,7 +16,7 @@ extension Backend {
         let point = window.convert(object.accessibilityActivationPoint, from: nil)
         var view = window.hitTest(point, with: nil)
         while let current = view, !(current is UIControl) { view = current.superview }
-        guard let control = view as? UIControl else { return false }
+        guard let control = view as? UIControl, !control.allTargets.isEmpty else { return false }
         control.sendActions(for: .touchUpInside)
         control.sendActions(for: .primaryActionTriggered)
         return true
