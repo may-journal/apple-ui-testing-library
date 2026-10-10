@@ -3,22 +3,10 @@ import UITestingLibrary
 
 @testable import TestHost
 
-/// Requirement 0001: showing the app and reading its screen.
+/// Requirement 0001: reading a shown screen, the same on iOS and macOS.
 extension UITestingLibraryTests {
     @MainActor
     @Suite struct Showing {
-        @Test func test0001_1() async throws {
-            let screen = try Screen.render { LayoutScreen() }
-            try await User(screen).sees(.text("Phone layout"))
-            try screen.close()
-        }
-
-        @Test func test0001_2() async throws {
-            let screen = try Screen.render(size: .pad) { LayoutScreen() }
-            try await User(screen).sees(.text("Pad layout"))
-            try screen.close()
-        }
-
         @Test func test0001_3() async throws {
             let screen = try Screen.render { GroceriesScreen() }
             let read = await User(screen).reads()

@@ -78,6 +78,8 @@ try await user.scrolls(.down)                    // or .up
 try await user.goesBack()                        // as a two-finger scrub does
 ```
 
+`goesBack()` passes only once what is read on screen changes. On the Mac, SwiftUI drops a focus set in `onAppear`, so set it one main-queue turn later.
+
 ## Waits
 
 Every look and act polls until its condition holds or the deadline passes ([ADR 0003](architecture/adr/0003-condition-waits.md)). The default deadline is five seconds. Set one per user:

@@ -50,8 +50,9 @@ public final class HostWindow {
         window.contentView?.layoutSubtreeIfNeeded()
     }
 
-    /// Closes the window and drops its root.
+    /// Ends any sheet, then closes the window and drops its root.
     func close() {
+        if let sheet = window.attachedSheet { window.endSheet(sheet) }
         window.contentView = nil
         window.orderOut(nil)
     }

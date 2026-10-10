@@ -17,7 +17,7 @@ The owner chose iOS and macOS from the start. UIKit and AppKit expose the tree t
 5. Each backend lives in `Tree/` and `Screen/` behind `#if canImport(UIKit)` and `#if canImport(AppKit)`; nothing else branches on platform.
 6. A look or act fails by throwing a `Failure` carrying the test's own file and line.
 7. The repo keeps one host app and one hosted test bundle per platform, and `make requirements` runs both.
-8. The iOS bundle proves every acceptance; the Mac bundle proves the Mac one.
+8. Both bundles compile `Tests/Shared/`; only the phone, iPad and Mac layout tests stay on one platform.
 
 ## Consequences
 

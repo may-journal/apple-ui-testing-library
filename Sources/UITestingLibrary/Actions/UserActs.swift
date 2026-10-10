@@ -75,10 +75,19 @@ extension User {
     public func goesBack(
         file: StaticString = #filePath, line: UInt = #line
     ) async throws {
-        let went = await wait.until {
+        let before = await wait.settle(screen).elements
+        let answered = await wait.until {
             Backend.goBack(from: AccessibilityTree.read(screen).nodes, in: screen.window)
         }
-        guard went else {
+        // SwiftUI's Mac nodes answer cancel even with nothing to close, so going back counts
+        // only once the settled screen changes.
+        var changed = false
+        if answered {
+            changed = await wait.until {
+                AccessibilityTree.read(screen).elements != before
+            }
+        }
+        guard changed else {
             throw failure("Nothing on screen went back", SourceLocation(file: file, line: line))
         }
         _ = await wait.settle(screen)

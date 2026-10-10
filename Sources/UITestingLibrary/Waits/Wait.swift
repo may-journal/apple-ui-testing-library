@@ -20,10 +20,12 @@ public struct Wait: Sendable, Equatable {
         return condition()
     }
 
-    /// Reads the screen until two reads in a row match, then returns the last.
+    /// Reads the screen until two reads a pause apart match, then returns the last. The pause
+    /// lets a change the act queued land first, such as a Mac sheet's window attaching.
     @MainActor
     func settle(_ screen: Screen) async -> AccessibilityTree {
         var last = AccessibilityTree.read(screen)
+        try? await Task.sleep(for: Self.pause)
         _ = await until {
             let now = AccessibilityTree.read(screen)
             defer { last = now }
