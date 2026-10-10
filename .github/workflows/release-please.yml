@@ -34,6 +34,27 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+      # pr-check wants plain bullets under "## Changelog" and no bold scopes.
+      # Release Please writes a "## 1.0.0" heading on a first release, which
+      # has no compare link, and bold scopes. Demote the headings below the
+      # header and strip the bold, as fitness-runner's release-pr step does.
+      - name: Shape the release PR notes
+        if: ${{ steps.release.outputs.pr != '' }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_REPO: ${{ github.repository }}
+          PR: ${{ fromJSON(steps.release.outputs.pr).number }}
+        run: |
+          body="$(gh pr view "$PR" --json body --jq .body)"
+          shaped="$(printf '%s\n' "$body" | awk '
+            after && first { first = 0; if ($0 != "") print "" }
+            { line = $0 }
+            after { sub(/^## /, "### ", line); while (sub(/\*\*/, "", line)) {} }
+            { print line }
+            $0 == "## Changelog" { after = 1; first = 1 }')"
+          if [ "$shaped" != "$body" ]; then
+            gh pr edit "$PR" --body "$shaped"
+          fi
       # pr-check needs every PR to close an issue, so the release PR closes
       # one tracking issue, found by title on each rewrite.
       - name: Link the release PR to its tracking issue

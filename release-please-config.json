@@ -8,7 +8,7 @@
       "include-component-in-tag": false,
       "pull-request-header": "> Release the changes merged since the last version.\n\n## Background\n\nRelease Please groups merged changes for the next release. Merging this PR tags it and moves the major tag.\n\n## Changelog",
       "pull-request-footer": "Agent: Release Please.",
-      "skip-changelog": true
+      "skip-changelog": false
     }
   }
 }
