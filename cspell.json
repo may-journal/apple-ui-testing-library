@@ -1,0 +1,17 @@
+{
+  "useGitignore": true,
+  "version": "0.2",
+  "words": [
+    "dlsym",
+    "Dodds",
+    "fitnessrc",
+    "jasonvanderslice",
+    "mayjournal",
+    "swiftpm",
+    "xcodebuild",
+    "xcodegen",
+    "XcodeGen",
+    "xcodeproj",
+    "XCUI"
+  ]
+}
