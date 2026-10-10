@@ -1,0 +1,72 @@
+# Synced to each repo that opts in through settings/repo-files.json.
+# may-journal/.github holds the source copy in templates/release; edit it there.
+# It is synced whole, since a public repo cannot call a private repo's workflow.
+# Release Please keeps a release PR open from conventional commits on main.
+# Merging it tags vX.Y.Z, publishes the release, and moves vX to it.
+name: Release Please
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-please
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Mint the automation App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.AUTOMATION_APP_ID }}
+          private-key: ${{ secrets.AUTOMATION_APP_KEY }}
+      - name: Prepare or publish the release
+        id: release
+        uses: googleapis/release-please-action@v5
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+      # pr-check needs every PR to close an issue, so the release PR closes
+      # one tracking issue, found by title on each rewrite.
+      - name: Link the release PR to its tracking issue
+        if: ${{ steps.release.outputs.pr != '' }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_REPO: ${{ github.repository }}
+          PR: ${{ fromJSON(steps.release.outputs.pr).number }}
+        run: |
+          title="Publish the release from PR #$PR"
+          issue="$(gh issue list --state all --limit 200 --json number,title |
+            jq -r --arg t "$title" 'map(select(.title == $t))[0].number // empty')"
+          if [ -z "$issue" ]; then
+            url="$(gh issue create --title "$title" --body "Release Please owns the version and notes in #$PR.")"
+            issue="${url##*/}"
+          fi
+          body="$(gh pr view "$PR" --json body --jq .body)"
+          case "$body" in
+            *"Closes #$issue."*) ;;
+            *) gh pr edit "$PR" --body "$body
+
+          Closes #$issue." ;;
+          esac
+      - name: Move the major version tag
+        if: ${{ steps.release.outputs.release_created == 'true' }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          MAJOR: v${{ steps.release.outputs.major }}
+          SHA: ${{ steps.release.outputs.sha }}
+        run: |
+          refs="repos/$GITHUB_REPOSITORY/git/refs"
+          if gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$MAJOR" --silent 2>/dev/null; then
+            gh api -X PATCH "$refs/tags/$MAJOR" -f sha="$SHA" -F force=true --silent
+          else
+            gh api -X POST "$refs" -f ref="refs/tags/$MAJOR" -f sha="$SHA" --silent
+          fi
