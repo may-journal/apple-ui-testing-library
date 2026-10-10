@@ -72,7 +72,7 @@ One Swift package, iOS 26 and macOS 26 and later, Swift 6 with complete strict c
 
 | Platform | How it runs |
 | -------- | ----------- |
-| iOS, Designed for iPad | Hosted tests in the iOS app's process, running natively on this Mac through the UIKit backend, with no simulator boot. |
+| iOS, Designed for iPad | Hosted tests in the iOS app's process, running natively on this Mac through the UIKit backend, with no simulator boot. The Mac draws an alert natively and hides UIKit's copy, so the backend reads that copy and presses its buttons through the alert. |
 | Mac | Hosted tests in a Mac app's process, through the AppKit backend, with no simulator boot. |
 
 ## Repo tree (outline)

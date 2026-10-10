@@ -79,3 +79,24 @@ struct StackScreen: View {
         }
     }
 }
+
+/// A draft a person deletes through a confirmation dialog, then is told so in an alert.
+struct DeleteScreen: View {
+    @State private var confirms = false
+    @State private var tells = false
+    @State private var deleted = false
+
+    var body: some View {
+        VStack {
+            Text(deleted ? "Deleted" : "Draft")
+            Button("Delete") { confirms = true }
+        }
+        .confirmationDialog("Delete the draft?", isPresented: $confirms, titleVisibility: .visible)
+        {
+            Button("Delete draft", role: .destructive) { tells = true }
+        }
+        .alert("Draft deleted", isPresented: $tells) {
+            Button("Done") { deleted = true }
+        }
+    }
+}

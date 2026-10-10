@@ -38,3 +38,7 @@ Source: #1
     - Given a pushed view
         - When I go back
             - Then the view behind returns
+- 0003.6
+    - Given an alert or a confirmation dialog over the screen
+        - When I read it and tap one of its buttons
+            - Then I hear its title, and that button's action runs

@@ -49,5 +49,17 @@ extension UITestingLibraryTests {
             try await user.sees(.text("Front page"))
             try screen.close()
         }
+
+        @Test func test0003_6() async throws {
+            let screen = try Screen.render { DeleteScreen() }
+            let user = User(screen)
+            try await user.taps(.button("Delete"))
+            try await user.sees(.text("Delete the draft?"))
+            try await user.taps(.button("Delete draft"))
+            try await user.sees(.text("Draft deleted"))
+            try await user.taps(.button("Done"))
+            try await user.sees(.text("Deleted"))
+            try screen.close()
+        }
     }
 }
