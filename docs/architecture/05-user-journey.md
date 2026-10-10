@@ -49,7 +49,7 @@ Numbers match the callout table. See [03-components.md](03-components.md) and [0
 | #   | Node | Description | Why |
 | --- | ---- | ----------- | --- |
 | 1   | Developer | Writes a test in a consumer target. | The one actor of this journey. |
-| 2   | Render the root | `Screen.render` draws the app's real root in a phone-sized key window. | The app's own composition runs. |
+| 2   | Render the root | `Screen.render` draws the app's real root in a fixed-size key window of the iOS or Mac host. | The app's own composition runs ([ADR 0006](adr/0006-one-api-two-backends.md)). |
 | 3   | Tree read? | At teardown the canary asks whether any read found elements. | Catches an empty tree on every test ([ADR 0004](adr/0004-automation-canary.md)). |
 | 4   | Fails: automation off | The test fails saying VoiceOver read nothing. | A silent pass would prove nothing. |
 | 5   | Find by role and label | A query resolves against the current tree. | Role and label first ([ADR 0002](adr/0002-query-priority.md)). |

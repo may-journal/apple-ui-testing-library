@@ -10,7 +10,7 @@ A test reads its scene's one key window, but Swift Testing runs in parallel by d
 
 ## Decision
 
-1. Only one `Screen` is drawn at a time. Rendering a second while one is open fails the test.
+1. Only one `Screen` is drawn at a time. Rendering a second closes the first, so nothing from it is read (requirement 0001.5).
 2. Every API is `@MainActor`.
 3. Swift Testing suites that use the library nest under one `.serialized` parent suite, or run with parallel testing off. XCTest runs serially.
 4. Closing a screen hides its window and drops its root before the next test renders.

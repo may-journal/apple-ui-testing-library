@@ -11,7 +11,7 @@ C4Context
     Person(dev, "1 Developer")
     System(lib, "2 Apple UI Testing Library", "Swift package that tests an app through its accessibility tree.")
     System_Ext(app, "3 App under test")
-    System_Ext(runtime, "4 UIKit and the accessibility runtime")
+    System_Ext(runtime, "4 UIKit, AppKit and the accessibility runtime")
     System_Ext(runner, "5 XCTest and Swift Testing")
 
     Rel(dev, lib, "6")
@@ -35,8 +35,8 @@ Numbers on nodes and arrows match the callout table.
 | --- | --- | --- |
 | 1   | Composes the app root and writes tests that read like a person using it. | Testing Library's second user; the person on screen is the first. |
 | 2   | The `UITestingLibrary` module: render, query, act, wait, and report. | One small surface every consumer shares. |
-| 3   | The consumer's SwiftUI or UIKit root view. | Its real composition runs, with fakes only at its own seams. |
-| 4   | `UIWindow`, `UIHostingController`, and the tree VoiceOver reads. | The same tree a person hears is the one tests read ([ADR 0001](adr/0001-in-process-accessibility-tree.md)). |
+| 3   | The consumer's SwiftUI, UIKit or AppKit root view, on iOS or macOS. | Its real composition runs, with fakes only at its own seams. |
+| 4   | `UIWindow` and `UIHostingController` on iOS, `NSWindow` and `NSHostingController` on macOS, and the tree VoiceOver reads. | The same tree a person hears is the one tests read ([ADR 0001](adr/0001-in-process-accessibility-tree.md), [ADR 0006](adr/0006-one-api-two-backends.md)). |
 | 5   | Apple's test runners, run in the app's process with `xcodebuild`. | Hosted tests share the app's main thread and scene. |
 | 6   | Imports the package in test targets only. | The app ships without it. |
 | 7   | Draws the root view in a key window of the host app. | No second process and no launch per test. |

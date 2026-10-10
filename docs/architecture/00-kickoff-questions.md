@@ -22,5 +22,5 @@ A consumer adds the package to its test targets through XcodeGen `packages:` wit
 
 - "The more your tests resemble the way your software is used, the more confidence they can give you." ([Testing Library](https://testing-library.com/docs/guiding-principles/))
 - The accessibility tree is the DOM. Queries read labels, values, and traits; view types and view models stay unseen.
-- Apple frameworks only: UIKit, SwiftUI, XCTest, and Swift Testing, on the versions in [Platforms](04-code.md#platforms).
+- Apple frameworks only: UIKit, AppKit, SwiftUI, XCTest, and Swift Testing, on the versions in [Platforms](04-code.md#platforms).
 - A failure says what VoiceOver reads on screen, so the fix starts from what a person sees.

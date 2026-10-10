@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.1239
+
+- Docs: ADR 0006 puts one API over two backends, UIKit on iOS and AppKit on macOS; the C4 docs show both hosts
+- Docs: Platforms states iOS 26 and macOS 26 and later, and requirement 0001 gains a Mac acceptance
+- Feat: `Package.swift` ships the `UITestingLibrary` product for iOS and macOS with a Swift 6 skeleton of the public types
+- Feat: `project.yml` generates an iOS and a macOS SwiftUI test host, each with a hosted test bundle on the package
+- Feat: `make requirements` builds and runs both bundles from one DerivedData path, and SwiftLint runs through fitness
 ### 2026.10.10.1212
 
 - Feat: `cspell.json` lists the org's app names as `flagWords`, so fitness fails any file that uses one

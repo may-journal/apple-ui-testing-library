@@ -4,7 +4,7 @@ relatedConfigurations: ['../../.fitnessrc.json']
 
 # Architecture
 
-Product and system design for apple-ui-testing-library. The C4 docs below are the planned design; no Swift source has landed yet.
+Product and system design for apple-ui-testing-library. The C4 docs below describe the package as built; each acceptance in [docs/requirements](../requirements/) has its test.
 
 ## Principles
 
@@ -13,6 +13,7 @@ Product and system design for apple-ui-testing-library. The C4 docs below are th
 1. Queries follow one priority: role and label, then visible text, then identifier ([ADR 0002](adr/0002-query-priority.md)).
 1. Every wait is a condition with a deadline, and nothing animates ([ADR 0003](adr/0003-condition-waits.md)).
 1. A test that reads an empty tree fails loudly ([ADR 0004](adr/0004-automation-canary.md)).
+1. One API runs over two backends, UIKit on iOS and AppKit on macOS ([ADR 0006](adr/0006-one-api-two-backends.md)).
 
 ## Start here
 
@@ -39,3 +40,4 @@ Architecture decision records live in [adr/](adr/). A record is rewritten in pla
 | [0003](adr/0003-condition-waits.md) | Waits poll a condition up to a deadline; nothing sleeps and nothing animates. |
 | [0004](adr/0004-automation-canary.md) | Private SPI turns automation on, and a canary fails any test that read nothing. |
 | [0005](adr/0005-one-window-per-process.md) | Tests run serialized, one key window per process. |
+| [0006](adr/0006-one-api-two-backends.md) | One API over two backends: UIKit on iOS, AppKit on macOS, each reading its own tree. |
