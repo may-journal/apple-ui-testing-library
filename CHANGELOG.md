@@ -6,13 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
-### 2026.10.10.1241
+### 2026.10.10.1244
 
 - Fix: a tap that opens nothing fails saying a system menu needs a touch tool
 - Docs: the README states the gap for system menus and pairs an XCUITest smoke test with it
 - Chore: `make requirements` collects no simulator diagnostics, and shuts its simulator down by UDID
-- Fix: a tap or hold on many matching elements says how many match, not that none do
-- Fix: a pressed control counts as tapped only when something listens to it
+- Fix: a tap on many matches says how many match, and a pressed control counts only when something listens
+- Docs: AGENTS.md drops consumer setup, which the kickoff doc already states
 
 ### 2026.10.10.1239
 
