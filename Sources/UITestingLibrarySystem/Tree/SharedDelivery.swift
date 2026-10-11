@@ -23,14 +23,25 @@ public struct SharedDelivery: Sendable {
         message: String, containing: [String], excluding: [String],
         file: StaticString = #filePath, line: UInt = #line
     ) throws {
-        let text = try visibleText().joined(separator: "\n")
+        let text: String
+        do {
+            text = try visibleText().joined(separator: "\n")
+        } catch {
+            throw Failure(
+                "Cannot read shared image: \(error). Images: \(images.count). "
+                    + "Messages: \(messages)",
+                report: ScreenReport(onScreen: [], offScreen: []),
+                location: SourceLocation(file: file, line: line))
+        }
         let missing = containing.filter { !text.localizedCaseInsensitiveContains($0) }
         let unexpected = excluding.filter { text.localizedCaseInsensitiveContains($0) }
         guard messages == [message], images.count == 1, missing.isEmpty, unexpected.isEmpty else {
             throw Failure(
                 "Shared delivery differs. Messages: \(messages). Images: \(images.count). "
                     + "Missing: \(missing). Unexpected: \(unexpected). OCR: \(text)",
-                report: ScreenReport(onScreen: [], offScreen: []),
+                report: ScreenReport(
+                    onScreen: [Element(label: "Received image text", value: text)],
+                    offScreen: []),
                 location: SourceLocation(file: file, line: line))
         }
     }
@@ -46,7 +57,11 @@ extension SystemSession {
     public func receivesShare(
         file: StaticString = #filePath, line: UInt = #line
     ) throws -> SharedDelivery {
-        try taps(.button("Local Test Destination"), file: file, line: line)
+        let activities = application.staticTexts.matching(
+            NSPredicate(format: "label == %@", "Local Test Destination"))
+        let activity = try finds(
+            activities, description: "local share activity", file: file, line: line)
+        activity.tap()
         let receipt = try sees(
             .identifier("UITestingLibrary.sharedReceipt"), file: file, line: line)
         struct Payload: Decodable {
