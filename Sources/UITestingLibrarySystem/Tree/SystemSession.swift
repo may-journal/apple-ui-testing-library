@@ -51,8 +51,9 @@ public final class SystemSession {
     public func reads() -> [String] { elements().map(\.spoken).filter { !$0.isEmpty } }
 
     public func failure(_ message: String, file: StaticString, line: UInt) -> Failure {
-        Failure(message, report: ScreenReport(onScreen: elements(), offScreen: []),
-                location: SourceLocation(file: file, line: line))
+        Failure(
+            message, report: ScreenReport(onScreen: elements(), offScreen: []),
+            location: SourceLocation(file: file, line: line))
     }
 
     private func elements() -> [Element] {
@@ -61,20 +62,17 @@ public final class SystemSession {
     }
 
     private func read(_ item: XCUIElement) -> Element {
-        let role: Role? = switch item.elementType {
-        case .button: .button
-        case .link: .link
-        case .image: .image
-        case .staticText: .text
-        case .textField, .secureTextField, .textView: .textField
-        case .searchField: .searchField
-        case .slider: .adjustable
-        case .switch: .toggle
-        default: nil
-        }
+        let role = Self.roles[item.elementType]
         var roles: Set<Role> = role.map { [$0] } ?? []
         if item.isSelected { roles.insert(.selected) }
-        return Element(label: item.label, value: item.value as? String,
-                       identifier: item.identifier, roles: roles, frame: item.frame)
+        return Element(
+            label: item.label, value: item.value as? String,
+            identifier: item.identifier, roles: roles, frame: item.frame)
     }
+
+    private static let roles: [XCUIElement.ElementType: Role] = [
+        .button: .button, .link: .link, .image: .image, .staticText: .text,
+        .textField: .textField, .secureTextField: .textField, .textView: .textField,
+        .searchField: .searchField, .slider: .adjustable, .switch: .toggle,
+    ]
 }
