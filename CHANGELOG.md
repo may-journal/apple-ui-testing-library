@@ -6,6 +6,12 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.11.1013
+
+- Fix: preserve Siri's last nonempty transcript when its UI dismisses before timeout
+- Test: a built-in Siri question proves real reads and keeps the answer on a wrong expectation
+- Docs: require English for the built-in system test and distinguish it from app intent proof
+
 ### 2026.10.11.0955
 
 - Fix: system elements and tap failures preserve the native disabled state

@@ -16,6 +16,7 @@ An intent handler test misses phrase routing and the answer Siri presents. Hoste
 4. Empty text is a setup failure. Unexpected nonempty text is indeterminate; its source could be setup, service, routing, or the app.
 5. An iOS UI test bundle runs requests. Other platforms throw a setup error. Tests leave Siri and account setup to the owner.
 6. Forbidden text in a verified answer is a response failure. Each failure names the phrase, observed text and caller's line.
+7. Keep the last nonempty transcript if Siri dismisses itself before the deadline. Positive assertions still require two equal current reads.
 
 ## Consequences
 

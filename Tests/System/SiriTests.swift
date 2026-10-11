@@ -36,4 +36,20 @@ final class SiriTests: XCTestCase {
             XCTAssertEqual(failure.location.line, line)
         }
     }
+
+    func test0007_4() throws {
+        let session = SystemSession(
+            bundleIdentifier: "org.may-journal.ui-testing-library.TestHost", timeout: 20)
+        session.launch()
+        defer { session.close() }
+        let question = "What is two plus two?"
+        do {
+            _ = try session.askSiri(question, expecting: "A deliberately wrong answer")
+            XCTFail("The wrong answer passed")
+        } catch let failure as SiriFailure {
+            XCTAssertEqual(failure.kind, .indeterminate)
+            XCTAssertTrue(failure.observed.contains("4"))
+            XCTAssertEqual(failure.phrase, question)
+        }
+    }
 }
