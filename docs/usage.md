@@ -192,6 +192,7 @@ UIKit delivers resolved items to the activity; the driver decodes its received P
 
 | Concern | Support |
 | ------- | ------- |
+| Roles | XCTest exposes the listed control roles and selected state; it does not expose heading traits. |
 | Items | `UIImage`, image `Data`, and `String`; other types and installed destinations need their own receiver. |
 | Receipt | `dismissShare()` finishes it. |
 | Cancel | Pass the sheet's visible close query, such as `.button("Close")`, and verify the source screen returns. |
