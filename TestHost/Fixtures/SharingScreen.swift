@@ -47,8 +47,11 @@ private struct ShareSheet: UIViewControllerRepresentable {
                 ])
         }
         let message = arguments.contains("--wrong-message") ? "Morgan's card" : "Alex's card"
+        var items: [Any] = [image, message]
+        if arguments.contains("--missing-image") { items = [message] }
+        if arguments.contains("--malformed-image") { items = [Data("broken image".utf8), message] }
         return UIActivityViewController(
-            activityItems: [image, message],
+            activityItems: items,
             applicationActivities: [LocalShareDestination()])
     }
 

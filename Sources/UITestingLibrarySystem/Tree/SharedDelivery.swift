@@ -29,7 +29,7 @@ public struct SharedDelivery: Sendable {
         } catch {
             throw Failure(
                 "Cannot read shared image: \(error). Images: \(images.count). "
-                    + "Messages: \(messages)",
+                    + "Messages: \(messages.joined(separator: " | "))",
                 report: ScreenReport(onScreen: [], offScreen: []),
                 location: SourceLocation(file: file, line: line))
         }
@@ -37,7 +37,8 @@ public struct SharedDelivery: Sendable {
         let unexpected = excluding.filter { text.localizedCaseInsensitiveContains($0) }
         guard messages == [message], images.count == 1, missing.isEmpty, unexpected.isEmpty else {
             throw Failure(
-                "Shared delivery differs. Messages: \(messages). Images: \(images.count). "
+                "Shared delivery differs. Messages: \(messages.joined(separator: " | ")). "
+                    + "Images: \(images.count). "
                     + "Missing: \(missing). Unexpected: \(unexpected). OCR: \(text)",
                 report: ScreenReport(
                     onScreen: [Element(label: "Received image text", value: text)],

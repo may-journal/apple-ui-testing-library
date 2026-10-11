@@ -192,7 +192,7 @@ UIKit delivers resolved items to the activity; the driver decodes its received P
 
 | Concern | Support |
 | ------- | ------- |
-| Items | `UIImage` and `String`; other types and installed destinations need their own receiver. |
+| Items | `UIImage`, image `Data`, and `String`; other types and installed destinations need their own receiver. |
 | Receipt | `dismissShare()` finishes it. |
 | Cancel | Pass the sheet's visible close query, such as `.button("Close")`, and verify the source screen returns. |
 | Session | `close()` terminates only its app. |
