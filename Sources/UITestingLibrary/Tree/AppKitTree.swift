@@ -58,7 +58,8 @@ extension Backend {
             label: label ?? "", value: value,
             identifier: text(of: object, "accessibilityIdentifier"), roles: roles,
             actions: object.accessibilityCustomActions?()?.map(\.name) ?? [],
-            frame: frame, isOnScreen: !frame.isEmpty && inside)
+            frame: frame, isOnScreen: !frame.isEmpty && inside,
+            isEnabled: object.isAccessibilityEnabled?() ?? true)
     }
 
     /// An attribute as the node answers it, untyped. A typed dynamic call can pick a

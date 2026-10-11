@@ -57,7 +57,9 @@ extension Backend {
             identifier: identifier(of: object),
             roles: roles(of: object),
             actions: object.accessibilityCustomActions?.map(\.name) ?? [], frame: frame,
-            isOnScreen: !frame.isEmpty && window.bounds.contains(middle))
+            isOnScreen: !frame.isEmpty && window.bounds.contains(middle),
+            isEnabled: (object as? UIControl)?.isEnabled != false
+                && !object.accessibilityTraits.contains(.notEnabled))
     }
 
     /// The identifier, which SwiftUI's elements answer without adopting the protocol for it.
