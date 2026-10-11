@@ -8,6 +8,19 @@ struct SharingScreen: View {
     @State private var confirming = false
 
     var body: some View {
+        if ProcessInfo.processInfo.arguments.contains("--scroll-share") {
+            ScrollView {
+                VStack {
+                    ForEach(0..<30) { number in Text("Item \(number)").frame(height: 50) }
+                    shareButton
+                }
+            }
+        } else {
+            shareButton
+        }
+    }
+
+    private var shareButton: some View {
         Button("Share Alex") { confirming = true }
             .confirmationDialog(
                 "Share Alex's card?", isPresented: $confirming, titleVisibility: .visible

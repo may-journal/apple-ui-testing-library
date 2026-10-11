@@ -6,7 +6,7 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
-### 2026.10.11.0944
+### 2026.10.11.0946
 
 - Test: the Siri fixture can return the wrong person's match through its shipped intent
 - Test: the wrong-answer proof keeps the caller's correct match as its expected answer
@@ -20,7 +20,7 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ### 2026.10.11.0932
 
-- Feat: optional system sessions drive a real share sheet and read a local destination's received image and message
+- Feat: optional system sessions read and scroll app UI, drive real shares, and inspect local destination images and messages
 - Test: simulator shares prove wrong images, messages, and extra matches fail checks of delivered bytes
 - Docs: describe the test destination seam, image evidence, and simulator cleanup
 - Chore: add the opt-in simulator runner with ownership checks and shutdown on failure

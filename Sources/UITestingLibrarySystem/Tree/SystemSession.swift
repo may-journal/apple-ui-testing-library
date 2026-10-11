@@ -24,18 +24,23 @@ public final class SystemSession {
     public func sees(
         _ query: Query, file: StaticString = #filePath, line: UInt = #line
     ) throws -> XCUIElement {
+        try finds(candidates(for: query), description: "\(query)", file: file, line: line)
+    }
+
+    func finds(
+        _ candidates: XCUIElementQuery, description: String, file: StaticString, line: UInt
+    ) throws -> XCUIElement {
         var matches: [XCUIElement] = []
         let condition = XCTNSPredicateExpectation(
-            predicate: NSPredicate { [self] _, _ in
-                matches = application.descendants(matching: .any).allElementsBoundByIndex.filter {
-                    $0.exists && !$0.frame.isEmpty && query.matches(read($0))
-                }
+            predicate: NSPredicate { _, _ in
+                matches = candidates.allElementsBoundByIndex.filter { !$0.frame.isEmpty }
                 return matches.count == 1
             }, object: nil)
         guard XCTWaiter.wait(for: [condition], timeout: timeout) == .completed,
             let match = matches.first
         else {
-            throw failure("Expected one \(query); found \(matches.count)", file: file, line: line)
+            throw failure(
+                "Expected one \(description); found \(matches.count)", file: file, line: line)
         }
         return match
     }
@@ -50,15 +55,44 @@ public final class SystemSession {
 
     public func reads() -> [String] { elements().map(\.spoken).filter { !$0.isEmpty } }
 
+    /// Scrolls the one visible list or scroll view, failing on missing or ambiguous containers.
+    public func scrolls(
+        _ direction: ScrollDirection, file: StaticString = #filePath, line: UInt = #line
+    ) throws {
+        let containers = [XCUIElement.ElementType.scrollView, .collectionView, .table]
+            .flatMap { application.descendants(matching: $0).allElementsBoundByIndex }
+            .filter(\.isHittable)
+        guard containers.count == 1, let container = containers.first else {
+            throw failure(
+                "Expected one scroll container; found \(containers.count)", file: file, line: line)
+        }
+        if direction == .down { container.swipeUp() } else { container.swipeDown() }
+    }
+
     public func failure(_ message: String, file: StaticString, line: UInt) -> Failure {
         Failure(
             message, report: ScreenReport(onScreen: elements(), offScreen: []),
             location: SourceLocation(file: file, line: line))
     }
 
-    private func elements() -> [Element] {
+    public func elements() -> [Element] {
         application.descendants(matching: .any).allElementsBoundByIndex
             .filter { $0.exists && !$0.frame.isEmpty }.map(read)
+    }
+
+    private func candidates(for query: Query) -> XCUIElementQuery {
+        switch query {
+        case .role(let role, let label):
+            let types = Self.roles.filter { $0.value == role }.map(\.key.rawValue)
+            return application.descendants(matching: .any).matching(
+                NSPredicate(format: "elementType IN %@ AND label == %@", types, label))
+        case .text(let text):
+            return application.descendants(matching: .any).matching(
+                NSPredicate(format: "label == %@ OR value == %@", text, text))
+        case .identifier(let identifier):
+            return application.descendants(matching: .any).matching(
+                NSPredicate(format: "identifier == %@", identifier))
+        }
     }
 
     private func read(_ item: XCUIElement) -> Element {

@@ -46,3 +46,7 @@ Source: #40
     - Given an open share sheet
         - When I cancel
             - Then the source screen returns
+- 0008.8
+    - Given a share button below the screen
+        - When I scroll down
+            - Then I can tap it
