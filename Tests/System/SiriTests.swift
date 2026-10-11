@@ -23,14 +23,16 @@ final class SiriTests: XCTestCase {
         defer { session.close() }
         // First prove setup works; unavailable Siri cannot satisfy this negative proof.
         _ = try session.askSiri(phrase, expecting: "Morgan drew Riley.")
+        session.close()
+        session.launch(arguments: ["--wrong-siri-answer"])
         let line = UInt(#line) + 2
         do {
-            _ = try session.askSiri(phrase, expecting: "Morgan drew Casey.")
-            XCTFail("A wrong expected answer passed")
+            _ = try session.askSiri(phrase, expecting: "Morgan drew Riley.")
+            XCTFail("A wrong app answer passed")
         } catch let failure as SiriFailure {
             XCTAssertEqual(failure.kind, .response)
             XCTAssertEqual(failure.phrase, phrase)
-            XCTAssertTrue(failure.observed.contains("Morgan drew Riley."))
+            XCTAssertTrue(failure.observed.contains("Morgan drew Casey."))
             XCTAssertEqual(failure.location.line, line)
         }
     }

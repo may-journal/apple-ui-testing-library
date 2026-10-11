@@ -156,3 +156,31 @@ try answer.excludes("Casey drew Morgan")
 The service submits recognized speech, runs system phrase routing, and reads Siri's visible transcript without recording audio. Empty text throws a setup failure; different text throws a response failure. Both carry the phrase, observed text and test line. Apple's activation call can also fail the UI test before a response can be read.
 
 Run Siri tests only on a prepared iOS device. Run them serially, since Siri is shared system UI. Shut down each simulator you boot after the run, even after failure. See [ADR 0008](architecture/adr/0008-siri-system-requests.md).
+## Share through the system
+
+Hosted tests cannot drive a system share sheet. Add `UITestingLibrarySystem` to a separate iOS UI-test target and use `SystemSession`. It accepts the same queries and preserves source locations in failures.
+
+```swift
+let session = SystemSession(bundleIdentifier: "org.example.App", timeout: 10)
+session.launch(arguments: ["--test-share-destination"])
+defer { session.close() }
+try session.taps(.button("Share"))
+let delivery = try session.receivesShare()
+try delivery.check(message: "Alex's card", containing: ["Taylor"], excluding: ["Morgan"])
+try session.dismissShare()
+```
+
+The app's test build must link the UIKit-only `UITestingLibraryShareDestination` product and add `LocalShareDestination()` to `UIActivityViewController`'s `applicationActivities`. Inject that destination at the share sheet seam; keep the app's real share action and rendering. Release builds omit the local destination.
+
+UIKit delivers resolved items to the activity; the driver decodes its received PNG bytes and strings after a bounded wait. Vision reads those pixels, and `check` requires one image, an exact message, required phrases, and no forbidden phrases. Failures include recognized words; list every other match to prove absence ([ADR 0009](architecture/adr/0009-system-sharing.md)).
+
+| Concern | Support |
+| ------- | ------- |
+| Items | `UIImage` and `String`; other types and installed destinations need their own receiver. |
+| Receipt | `dismissShare()` finishes it. |
+| Cancel | Pass the sheet's visible close query, such as `.button("Close")`, and verify the source screen returns. |
+| Session | `close()` terminates only its app. |
+| Simulator run | `make requirements-e2e SIMULATOR_ID=<udid>` boots your shut-down simulator, runs `SystemTests` in series, and shuts it down on failure too. |
+| Runner inputs | Simulator UDID and Xcode project; refuses an already booted device. |
+| Runner outputs | Build logs and test results in `.build/SystemDerivedData`. |
+| Default run | `make requirements` stays native; consumers own their runner and device cleanup. |

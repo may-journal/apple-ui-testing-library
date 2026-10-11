@@ -49,7 +49,7 @@ print-coverage = awk -F'[:,]' '/^SF:/ { file = $$2 } /^DA:/ { line = file ":" $$
 	printf "%-9s %d lines, %d missed, %.2f%% covered\n", "$(1)", lines, lines - covered, 100 * covered / lines }' $(2)
 
 .PHONY: hooks fitness format generate requirements requirements-ios requirements-mac \
-	requirements-coverage
+	requirements-coverage requirements-e2e
 
 # Use the org-synced hooks in .fitness-hooks (see .github/fitness-setup.md once synced).
 hooks:
@@ -77,6 +77,21 @@ requirements-ios: generate
 
 requirements-mac: generate
 	$(call run-hosted-tests,TestHostMac,$(MAC_DESTINATION))
+
+# Opt-in system tests. Supply the UDID of a shut-down simulator that you own.
+# Inputs: SIMULATOR_ID; output: .build/SystemDerivedData and XCTest results there.
+# Refuse an already booted device; only a successful boot grants this target cleanup ownership.
+requirements-e2e: generate
+	@test -n "$(SIMULATOR_ID)" || { echo 'Set SIMULATOR_ID to your shut-down simulator UDID'; exit 1; }
+	@xcrun simctl boot "$(SIMULATOR_ID)" || exit 1; \
+	trap 'xcrun simctl shutdown "$(SIMULATOR_ID)"' EXIT HUP INT TERM; \
+	xcrun simctl bootstatus "$(SIMULATOR_ID)" -b && \
+	xcodebuild -project $(PROJECT) -derivedDataPath .build/SystemDerivedData \
+	build-for-testing -scheme SystemTests -destination 'platform=iOS Simulator,id=$(SIMULATOR_ID)' \
+	CODE_SIGNING_ALLOWED=NO && \
+	xcodebuild -project $(PROJECT) -derivedDataPath .build/SystemDerivedData \
+	test-without-building -scheme SystemTests -destination 'platform=iOS Simulator,id=$(SIMULATOR_ID)' \
+	-parallel-testing-enabled NO -collect-test-diagnostics never CODE_SIGNING_ALLOWED=NO
 
 # Run both platforms with coverage on, then print the library's line coverage.
 requirements-coverage:
