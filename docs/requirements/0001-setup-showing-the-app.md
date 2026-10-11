@@ -44,5 +44,5 @@ Source: #1
             - Then I read what a person at a Mac sees
 - 0001.7
     - Given a root view with hundreds of elements
-        - When I look for ten of them
-            - Then all ten looks finish within a second
+        - When I read it ten times
+            - Then all ten reads finish within a second

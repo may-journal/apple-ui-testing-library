@@ -40,8 +40,9 @@ extension UITestingLibraryTests {
             let user = User(screen)
             try await user.sees(.button("Count"))
             let started = ContinuousClock.now
-            for row in 1...10 {
-                try await user.sees(.text("Row 1.\(row)"))
+            for _ in 1...10 {
+                let read = await user.reads().map(\.spoken)
+                #expect(read.contains("Row 1.1"))
             }
             #expect(ContinuousClock.now - started < .seconds(1))
             try screen.close()

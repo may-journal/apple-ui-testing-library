@@ -80,7 +80,7 @@ Numbers match the callout table. Containers: [02-containers.md](02-containers.md
 | 15  | The test acts and looks through a `User`. | Tests read as a person's steps. |
 | 16  | The screen draws into its window. | Window setup stays in one place. |
 | 17  | Each act or look resolves a query first. | An act lands on what a person would find. |
-| 18  | Queries read the current tree. | The tree is read fresh on each poll. |
+| 18  | Queries read the current tree. | A poll reuses the last read only while nothing else has run on the main thread. |
 | 19  | The first read turns automation on. | Turned on lazily, once per process. |
 | 20  | Automation reaches the private symbol. | A missing symbol is reported by the canary. |
 | 21  | The walk yields `Element` values. | Matching never touches view types. |

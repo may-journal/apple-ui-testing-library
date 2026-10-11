@@ -28,7 +28,7 @@ public struct User {
     func find(_ query: Query) async -> Node? {
         var match = Match.none
         _ = await wait.until {
-            match = Match(query, in: AccessibilityTree.read(screen))
+            match = Match(query, in: AccessibilityTree.current(screen))
             return match.node != nil
         }
         return match.node

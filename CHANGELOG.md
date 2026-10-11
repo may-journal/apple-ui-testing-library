@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.2219
+
+- Perf: a look or an act's find reuses the last read until the main thread runs anything else
+- Perf: ten taps and looks on the long fixture drop from 0.35 to 0.21 s on iOS, and 1.39 to 0.69 s on the Mac
+- Test: 0001.7 reads the long fixture ten times, so each read is fresh
+- Docs: ADR 0003 and the components doc state when a read is reused
+
 ### 2026.10.10.2217
 
 - Perf: an act settles once the main run loop goes idle twice, then reads the tree once

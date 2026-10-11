@@ -70,7 +70,7 @@ extension User {
         try await Timing.measure(.scrolls) {
             let scrolled = await wait.until {
                 Backend.scroll(
-                    direction, nodes: AccessibilityTree.read(screen).nodes, in: screen.window)
+                    direction, nodes: AccessibilityTree.current(screen).nodes, in: screen.window)
             }
             guard scrolled else {
                 throw failure("Nothing on screen scrolls", SourceLocation(file: file, line: line))
@@ -86,7 +86,7 @@ extension User {
         try await Timing.measure(.goesBack) {
             let before = await wait.settle(screen).elements
             let answered = await wait.until {
-                Backend.goBack(from: AccessibilityTree.read(screen).nodes, in: screen.window)
+                Backend.goBack(from: AccessibilityTree.current(screen).nodes, in: screen.window)
             }
             // SwiftUI's Mac nodes answer cancel even with nothing to close, so going back
             // counts only once the settled screen changes.

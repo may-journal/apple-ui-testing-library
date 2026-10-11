@@ -23,9 +23,9 @@ extension User {
         file: StaticString = #filePath, line: UInt = #line
     ) async throws {
         try await Timing.measure(.doesNotSee) {
-            var tree = AccessibilityTree.read(screen)
+            var tree = AccessibilityTree.current(screen)
             let gone = await wait.until {
-                tree = AccessibilityTree.read(screen)
+                tree = AccessibilityTree.current(screen)
                 return !tree.elements.isEmpty && !tree.onScreen.contains(where: query.matches)
             }
             if gone { return }
