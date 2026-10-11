@@ -15,6 +15,7 @@ XCUITest pays an app launch per test, and ViewInspector skips rendering. An exis
 3. Tests read `accessibilityElements` and drive what VoiceOver drives: `accessibilityActivate()`, custom actions, `accessibilityScroll(_:)`, `accessibilityPerformEscape()`, and the keyboard.
 4. A control's menu is driven in-process: UIKit answers its visible menu, and AppKit posts the menu it tracks.
 5. The library never reads view types, view models, or stores.
+6. Optional system sessions use a separate UI-test runner for [Siri](0008-siri-system-requests.md) and [sharing](0009-system-sharing.md).
 
 ## Consequences
 
