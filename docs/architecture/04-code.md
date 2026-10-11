@@ -68,6 +68,10 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 
 ## Platforms
 
+The optional `UITestingLibrarySystem` product runs in an iOS simulator UI-test target through XCTest. `SystemSession` uses the same `Query` and `Failure` types.
+
+The separate UIKit product `UITestingLibraryShareDestination` adds a local activity in test builds. It exports delivered images and messages, which the driver reads and checks with Vision ([ADR 0009](adr/0009-system-sharing.md)).
+
 One Swift package, iOS 26 and macOS 26 and later, Swift 6 with complete strict concurrency, built with Xcode 27.
 
 | Platform | How it runs |

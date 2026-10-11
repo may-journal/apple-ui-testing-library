@@ -58,6 +58,9 @@ targets:
         CODE_SIGN_STYLE: Automatic
         CODE_SIGN_IDENTITY: Apple Development
         DEVELOPMENT_TEAM: AMPJZXR538
+    dependencies:
+      - package: UITestingLibrary
+        product: UITestingLibraryShareDestination
   TestHostMac:
     templates: [Host]
     platform: macOS
@@ -79,6 +82,20 @@ targets:
       - path: Tests/UITestingLibraryMacTests
     dependencies:
       - target: TestHostMac
+  UITestingLibrarySystemTests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: Tests/System
+    settings:
+      base:
+        <<: *iosSigning
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: TestHost
+    dependencies:
+      - target: TestHost
+      - package: UITestingLibrary
+        product: UITestingLibrarySystem
 
 schemes:
   TestHost:
@@ -97,3 +114,11 @@ schemes:
     test:
       targets:
         - UITestingLibraryTestsMac
+  SystemTests:
+    build:
+      targets:
+        TestHost: all
+        UITestingLibrarySystemTests: [test]
+    test:
+      targets:
+        - UITestingLibrarySystemTests
