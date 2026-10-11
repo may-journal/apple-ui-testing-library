@@ -13,7 +13,7 @@ final class SharingTests: XCTestCase {
         try await super.tearDown()
     }
 
-    private func share(_ mutation: String? = nil) throws -> SharedDelivery {
+    func share(_ mutation: String? = nil) throws -> SharedDelivery {
         session = SystemSession(
             bundleIdentifier: "org.may-journal.ui-testing-library.TestHost", timeout: 10)
         session.launch(arguments: ["--system-sharing"] + (mutation.map { [$0] } ?? []))
@@ -50,12 +50,13 @@ final class SharingTests: XCTestCase {
 
     func test0008_4() throws {
         let delivery = try share("--wrong-message")
+        XCTAssertEqual(delivery.messages, ["Morgan's card"])
         XCTAssertTrue(try delivery.visibleText().joined().contains("Taylor"))
         XCTAssertThrowsError(
             try delivery.check(
                 message: "Alex's card", containing: ["Taylor"], excluding: ["Morgan"])
         ) {
-            XCTAssertTrue(String(describing: $0).contains("Morgan's card"))
+            XCTAssertTrue(String(describing: $0).contains("Morgan's card"), String(describing: $0))
         }
     }
 
@@ -102,5 +103,33 @@ final class SharingTests: XCTestCase {
         try session.scrolls(.down)
         try session.taps(.button("Share Alex"))
         _ = try session.sees(.button("Share card"))
+    }
+
+    func test0009_1() throws {
+        let delivery = try share("--missing-image")
+        XCTAssertTrue(delivery.images.isEmpty)
+        try checkFailure(delivery, containing: "Missing image")
+    }
+
+    func test0009_2() throws {
+        let delivery = try share("--malformed-image")
+        XCTAssertEqual(delivery.images, [Data("broken image".utf8)])
+        try checkFailure(delivery, containing: "Cannot read shared image")
+    }
+
+    private func checkFailure(_ delivery: SharedDelivery, containing message: String) throws {
+        XCTAssertThrowsError(
+            try delivery.check(
+                message: "Alex's card", containing: ["Taylor"], excluding: [],
+                file: "DeliveryTests.swift", line: 123)
+        ) {
+            guard let failure = $0 as? Failure else {
+                return XCTFail("Expected located Failure: \($0)")
+            }
+            XCTAssertEqual(failure.location.filePath, "DeliveryTests.swift")
+            XCTAssertEqual(failure.location.line, 123)
+            XCTAssertTrue(failure.description.contains(message), failure.description)
+            XCTAssertTrue(failure.description.contains("Alex's card"), failure.description)
+        }
     }
 }
