@@ -18,16 +18,19 @@ struct LongScreen: View {
     }
 }
 
-/// One section of `LongScreen`: a heading and twenty rows, each a container of its own.
+/// One section of `LongScreen`: a heading and twenty rows, each a container of its own. A
+/// row's text offers Archive, which takes the row away and moves the rest up.
 private struct LongSection: View {
     let number: Int
+    @State private var archived: Set<Int> = []
 
     var body: some View {
         VStack(spacing: 0) {
             Text("Section \(number)").accessibilityAddTraits(.isHeader)
-            ForEach(1...20, id: \.self) { row in
+            ForEach((1...20).filter { !archived.contains($0) }, id: \.self) { row in
                 HStack {
                     Text("Row \(number).\(row)")
+                        .accessibilityAction(named: "Archive") { archived.insert(row) }
                     Button("Open") {}
                 }
                 .frame(height: 44)

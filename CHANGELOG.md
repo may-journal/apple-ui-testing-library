@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.2225
+
+- Test: each row of the long fixture offers Archive, which takes the row away and moves the rest up
+- Test: 0004.5 taps, chooses and looks ten times on the long fixture
+- Perf: `chooses` cost a tap and more, since the old settle chased the rows moving up
+- Perf: with the idle settle, `chooses` takes 6 ms on iOS and 11 ms on the Mac
+
 ### 2026.10.10.2223
 
 - Perf: a read takes each element's frame first, and reads one drawn off screen only on first use

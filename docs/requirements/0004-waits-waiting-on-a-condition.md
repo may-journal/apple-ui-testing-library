@@ -35,6 +35,6 @@ Source: #1
         - When I tap it
             - Then my next look reads the redrawn screen
 - 0004.5
-    - Given a long screen that a tap redraws
-        - When I tap it and look ten times
+    - Given a long screen that each act redraws
+        - When I tap, choose and look ten times
             - Then all ten finish within five seconds
