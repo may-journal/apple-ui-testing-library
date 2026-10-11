@@ -23,6 +23,6 @@ Source: #39
         - When I ask Siri for their match
             - Then only the caller's answer appears
 - 0007.2
-    - Given a working Siri request
-        - When I expect a wrong answer
+    - Given an app returning a wrong match
+        - When I ask Siri for my match
             - Then failure shows phrase, answer and test line

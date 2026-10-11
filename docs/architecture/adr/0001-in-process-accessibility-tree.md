@@ -14,6 +14,7 @@ XCUITest pays an app launch per test, and ViewInspector skips rendering. An exis
 2. `Screen` draws the root view in a `UIHostingController` on a key `UIWindow` of the host's scene.
 3. Tests read `accessibilityElements` and drive what VoiceOver drives: `accessibilityActivate()`, custom actions, `accessibilityScroll(_:)`, `accessibilityPerformEscape()`, and the keyboard.
 4. The library never reads view types, view models, or stores.
+5. Optional system sessions use a separate UI-test runner for [Siri](0008-siri-system-requests.md) and [sharing](0009-system-sharing.md).
 
 ## Consequences
 

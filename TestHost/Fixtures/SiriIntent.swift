@@ -5,7 +5,10 @@ struct FixtureMatchIntent: AppIntent {
     static let title: LocalizedStringResource = "Read my fixture match"
 
     func perform() async throws -> some IntentResult & ProvidesDialog {
-        let matches = ["Morgan": "Riley", "Riley": "Casey", "Casey": "Morgan"]
+        var matches = ["Morgan": "Riley", "Riley": "Casey", "Casey": "Morgan"]
+        if ProcessInfo.processInfo.arguments.contains("--wrong-siri-answer") {
+            matches["Morgan"] = "Casey"
+        }
         let caller = "Morgan"
         guard let recipient = matches[caller] else { throw CocoaError(.coderValueNotFound) }
         return .result(dialog: "\(caller) drew \(recipient).")

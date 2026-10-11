@@ -6,6 +6,12 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.11.0936
+
+- Test: the Siri fixture can return the wrong person's match through its shipped intent
+- Test: the wrong-answer proof keeps the caller's correct match as its expected answer
+- Docs: make the optional system runner exception clear in the architecture
+
 ### 2026.10.11.0934
 
 - Feat: submit Siri phrases through the optional system session and check its visible answer
