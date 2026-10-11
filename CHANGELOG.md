@@ -6,7 +6,7 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
-### 2026.10.11.0930
+### 2026.10.11.0932
 
 - Feat: submit Siri phrases through the optional system session and check its visible answer
 - Test: a shipped fixture shortcut answers for one of three people; a wrong answer must fail
@@ -17,6 +17,13 @@ relatedConfigurations: ['.fitnessrc.json']
 - Feat: optional system sessions drive a real share sheet and read a local destination's received image and message
 - Test: simulator shares prove wrong images, messages, and extra matches fail checks of delivered bytes
 - Docs: describe the test destination seam, image evidence, and simulator cleanup
+
+### 2026.10.11.0928
+
+- Feat: public elements expose enabled state on UIKit and AppKit, and reports show disabled controls
+- Fix: disabled controls refuse taps before native activation
+- Test: three control state acceptances run through real screens on both platforms
+- Docs: show enabled state after typing into a required field
 
 ## 1.0.0 (2026-10-10)
 

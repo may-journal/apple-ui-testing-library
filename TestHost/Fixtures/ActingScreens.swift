@@ -1,5 +1,21 @@
 import SwiftUI
 
+/// A required item enables saving only once the person enters it.
+struct RequiredItemScreen: View {
+    @State private var item = ""
+    @State private var saved = false
+    @FocusState private var editing: Bool
+
+    var body: some View {
+        VStack {
+            TextField("Item", text: $item).focused($editing)
+            Button("Save") { saved = true }.disabled(item.isEmpty)
+            Text(saved ? "Saved" : "Not saved")
+        }
+        .onAppear { DispatchQueue.main.async { editing = true } }
+    }
+}
+
 /// Plain text and a button that share one label.
 struct SharedLabelScreen: View {
     @State private var saved = false

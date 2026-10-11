@@ -59,11 +59,14 @@ try await user.sees(.text("Milk"))
 try await user.sees(.identifier("add-bottom"))
 ```
 
-`sees` returns the `Element` it found, with `label`, `value`, `spoken` and `has(_:)`.
+`sees` returns an `Element` with `label`, `value`, `spoken`, `has(_:)` and `isEnabled`.
+Read state again after entering required input to check that a control becomes enabled.
+A disabled tap fails with the control's state in the message and screen report.
 
 ```swift
 let save = try await user.sees(.button("Save"))
 #expect(save.has(.button))
+#expect(!save.isEnabled)
 ```
 
 ## Actions
@@ -76,6 +79,14 @@ try await user.types("Milk")                     // types into the field being e
 try await user.chooses("Archive", on: .text("Note"))  // a custom action
 try await user.scrolls(.down)                    // or .up
 try await user.goesBack()                        // as a two-finger scrub does
+```
+
+To check a required field enables saving, read the button after typing:
+
+```swift
+try await user.types("Milk")
+let save = try await user.sees(.button("Save"))
+#expect(save.isEnabled)
 ```
 
 `goesBack()` passes only once what is read on screen changes. On the Mac, SwiftUI drops a focus set in `onAppear`, so set it one main-queue turn later.
