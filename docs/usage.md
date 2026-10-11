@@ -129,3 +129,19 @@ Fix the query or the screen. An empty read fails `close()` too, since it proved 
 ## System menus
 
 A tap on a control that opens system UI fails and says so. See [System menus](../README.md#system-menus) for what to do.
+
+## Ask Siri
+
+Link `UITestingLibrarySystem` to a separate iOS UI test target; other platforms throw a setup error. Enable Siri, use the phrase's language, and launch the app to register its App Shortcuts. Siri may need a network connection and an account.
+
+```swift
+let session = SystemSession(bundleIdentifier: "org.example.app", timeout: 20)
+session.launch()
+defer { session.close() }
+let answer = try session.askSiri("Who did I draw in Example", expecting: "Morgan drew Riley.")
+try answer.excludes("Casey drew Morgan")
+```
+
+The service submits recognized speech, runs system phrase routing, and reads Siri's visible transcript without recording audio. Empty text throws a setup failure; different text throws a response failure. Both carry the phrase, observed text and test line. Apple's activation call can also fail the UI test before a response can be read.
+
+Run Siri tests only on a prepared iOS device. Run them serially, since Siri is shared system UI. Shut down each simulator you boot after the run, even after failure. See [ADR 0008](architecture/adr/0008-siri-system-requests.md).

@@ -6,6 +6,12 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.11.0930
+
+- Feat: submit Siri phrases through the optional system session and check its visible answer
+- Test: a shipped fixture shortcut answers for one of three people; a wrong answer must fail
+- Docs: record Siri setup, platform limits and errors in ADR 0008
+
 ### 2026.10.11.0929
 
 - Feat: optional system sessions drive a real share sheet and read a local destination's received image and message
@@ -25,7 +31,7 @@ relatedConfigurations: ['.fitnessrc.json']
 
 * **tree:** read and press alerts and confirmation dialogs as Designed for iPad ([#32](https://github.com/may-journal/apple-ui-testing-library/issues/32)) ([6bd667f](https://github.com/may-journal/apple-ui-testing-library/commit/6bd667f25334b943f08f3f35b06eb0ab3792c5c8))
 
-### 2026.10.10.1606
+### 2026.10.11.0926
 
 - Feat: as Designed for iPad, the iOS backend reads alerts and confirmation dialogs from UIKit's hidden copy
 - Feat: tapping one of that alert's enabled buttons runs its handler through the alert, as a click on the Mac's alert does
