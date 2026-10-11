@@ -58,13 +58,7 @@ extension SystemSession {
     public func receivesShare(
         file: StaticString = #filePath, line: UInt = #line
     ) throws -> SharedDelivery {
-        let activities = application.staticTexts.matching(
-            NSPredicate(format: "label == %@", "Local Test Destination"))
-        let activity = try finds(
-            activities, description: "local share activity", file: file, line: line)
-        activity.tap()
-        let receipt = try sees(
-            .identifier("UITestingLibrary.sharedReceipt"), file: file, line: line)
+        let receipt = try receivedReceipt(file: file, line: line)
         struct Payload: Decodable {
             let images: [String]
             let messages: [String]
@@ -80,6 +74,34 @@ extension SystemSession {
             throw failure("Local destination delivered invalid image bytes", file: file, line: line)
         }
         return SharedDelivery(images: images, messages: payload.messages)
+    }
+
+    private func receivedReceipt(file: StaticString, line: UInt) throws -> XCUIElement {
+        let receipts = application.descendants(matching: .any).matching(
+            NSPredicate(format: "identifier == %@", "UITestingLibrary.sharedReceipt"))
+        let activities = application.staticTexts.matching(
+            NSPredicate(format: "label == %@", "Local Test Destination"))
+        var previousFrame: CGRect?
+        var delivered: XCUIElement?
+        let condition = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                if let receipt = receipts.allElementsBoundByIndex.first(where: \.isHittable) {
+                    delivered = receipt
+                    return true
+                }
+                let visible = activities.allElementsBoundByIndex.filter(\.isHittable)
+                guard visible.count == 1, let activity = visible.first else { return false }
+                let frame = activity.frame
+                // System sheets can move titles after becoming hittable on a cold launch.
+                // Act only at a stable frame; retry only this local destination if it stays open.
+                if previousFrame == frame { activity.tap() }
+                previousFrame = frame
+                return false
+            }, object: nil)
+        guard XCTWaiter.wait(for: [condition], timeout: timeout) == .completed,
+            let delivered
+        else { throw failure("Local share did not deliver a receipt", file: file, line: line) }
+        return delivered
     }
 
     /// Dismisses the receipt, or the system sheet's Close button on cancellation.
