@@ -6,13 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
-### 2026.10.11.0938
+### 2026.10.11.0942
 
 - Feat: optional system sessions read and scroll app UI, drive real shares, and inspect local destination images and messages
 - Test: simulator shares prove wrong images, messages, and extra matches fail checks of delivered bytes
 - Docs: describe the test destination seam, image evidence, and simulator cleanup
 - Chore: add the opt-in simulator runner with ownership checks and shutdown on failure
-- Test: verify cancellation returns to the source screen without choosing a destination
+- Test: verify cancellation and located failures for missing or unreadable delivered images
 
 ## 1.0.0 (2026-10-10)
 
