@@ -27,7 +27,7 @@ The [usage guide](docs/usage.md) covers every query, action and wait, and failur
 
 ## System menus
 
-Some controls open system UI that no accessibility action reaches in-process, such as a share sheet or a `Menu`. Tapping one fails saying so. Cover that screen with one XCUITest smoke test, which drives the app by touch. Keep the rest of the suite in-process.
+System UI needs the optional `UITestingLibrarySystem` product in a UI-test target. It drives a real share sheet and reads image bytes and messages delivered to a local test destination. See [System menus](docs/usage.md#system-menus) for setup and cleanup; ordinary tests keep using the hosted API.
 
 ## Docs
 
