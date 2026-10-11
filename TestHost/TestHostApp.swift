@@ -6,7 +6,21 @@ import SwiftUI
 struct TestHostApp: App {
     var body: some Scene {
         WindowGroup {
+            HostRoot()
+        }
+    }
+}
+
+private struct HostRoot: View {
+    var body: some View {
+        #if canImport(UIKit)
+        if ProcessInfo.processInfo.arguments.contains("--system-sharing") {
+            SharingScreen()
+        } else {
             Text("Test host")
         }
+        #else
+        Text("Test host")
+        #endif
     }
 }
