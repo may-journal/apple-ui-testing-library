@@ -45,4 +45,4 @@ Source: #1
 - 0001.7
     - Given a root view with hundreds of elements
         - When I read it ten times
-            - Then all ten reads finish within a second
+            - Then all ten reads finish within half a second

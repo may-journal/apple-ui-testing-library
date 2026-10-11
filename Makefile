@@ -118,7 +118,7 @@ requirements-coverage:
 	@$(call print-coverage,macOS,$(COVERAGE_DIR)/mac.lcov)
 	@$(call print-coverage,Combined,$(COVERAGE_DIR)/ios.lcov $(COVERAGE_DIR)/mac.lcov)
 
-# Run both platforms, then print time per host and phase from the library's signposts.
+# Run both platforms, then print time per host and phase, even after a failing test.
 requirements-timing:
-	start="$$(date '+%Y-%m-%d %H:%M:%S')" && $(MAKE) requirements \
-	&& $(TIMING_LOG) --start "$$start" | $(timing-table)
+	start="$$(date '+%Y-%m-%d %H:%M:%S')"; $(MAKE) -k requirements; status=$$?; \
+	$(TIMING_LOG) --start "$$start" | $(timing-table); exit $$status

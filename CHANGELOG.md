@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.2228
+
+- Test: 0001.7 promises ten reads of the long fixture within half a second
+- Test: 0004.5 promises ten rounds of tap, choose and look within a second
+- Chore: `make requirements-timing` prints its table even after a failing test
+- Docs: ADR 0005 notes that parallel testing gains nothing, since the serialized suite stays in one runner
+
 ### 2026.10.10.2225
 
 - Test: each row of the long fixture offers Archive, which takes the row away and moves the rest up

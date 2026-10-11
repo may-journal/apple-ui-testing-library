@@ -18,5 +18,5 @@ A test reads its scene's one key window, but Swift Testing runs in parallel by d
 ## Consequences
 
 1. Tests cannot share a window or leak one into the next.
-2. Parallel speed comes from runner clones, each its own process.
+2. Parallel testing gains nothing here: xcodebuild keeps the one serialized parent suite in a single runner clone.
 3. Per-test state, such as stores and defaults, stays the consumer's job.

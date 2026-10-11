@@ -55,7 +55,7 @@ extension UITestingLibraryTests {
                 try await user.chooses("Archive", on: .text("Row 1.\(count)"))
                 try await user.doesNotSee(.text("Row 1.\(count)"))
             }
-            #expect(ContinuousClock.now - started < .seconds(5))
+            #expect(ContinuousClock.now - started < .seconds(1))
             try screen.close()
         }
     }

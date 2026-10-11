@@ -37,4 +37,4 @@ Source: #1
 - 0004.5
     - Given a long screen that each act redraws
         - When I tap, choose and look ten times
-            - Then all ten finish within five seconds
+            - Then all ten finish within a second

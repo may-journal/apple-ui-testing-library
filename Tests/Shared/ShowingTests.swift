@@ -44,7 +44,7 @@ extension UITestingLibraryTests {
                 let read = await user.reads().map(\.spoken)
                 #expect(read.contains("Row 1.1"))
             }
-            #expect(ContinuousClock.now - started < .seconds(1))
+            #expect(ContinuousClock.now - started < .milliseconds(500))
             try screen.close()
         }
     }
