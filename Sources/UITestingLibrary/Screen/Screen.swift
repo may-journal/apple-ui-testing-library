@@ -24,7 +24,9 @@ public final class Screen {
         open?.window.close()
         open = nil
         do {
-            let screen = Screen(window: try HostWindow(size: size, content: content()))
+            let screen = try Timing.measure(.render) {
+                Screen(window: try HostWindow(size: size, content: content()))
+            }
             open = screen
             return screen
         } catch {

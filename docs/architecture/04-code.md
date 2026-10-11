@@ -43,7 +43,7 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 | 3   | `Queries/`: `Role.swift`, `Query.swift`, `Match.swift`. | Matching rules live in one place. |
 | 4   | `Waits/`: `Wait.swift`. | Every wait shares one deadline rule. |
 | 5   | `Reports/`: `ScreenReport.swift`, `Failure.swift`, `SourceLocation.swift`, `Canary.swift`. | Failures read the same everywhere, and name the test's line. |
-| 6   | `Tree/`: `Automation.swift`, `AccessibilityTree.swift`, `Element.swift`, then `UIKitTree`, `UIKitActs`, `AppKitTree`, `AppKitActs`. | The only code that touches accessibility objects, one backend per platform. |
+| 6   | `Tree/`: `Automation.swift`, `AccessibilityTree.swift`, `Element.swift`, `Timing.swift`, then `UIKitTree`, `UIKitActs`, `AppKitTree`, `AppKitActs`. | The only code that touches accessibility objects, one backend per platform. `Timing` signposts each phase, since a read is the lowest one. |
 | 7   | Actions resolve queries. | An act needs a found element. |
 | 8   | Actions wait after each act. | The next look sees a settled screen. |
 | 9   | Actions report failures. | One failure format. |
@@ -109,5 +109,6 @@ apple-ui-testing-library/
 | Proof | Each acceptance in `docs/requirements/` is proven by one test named for it, against a real fixture screen in `TestHost`. |
 | Run | `make requirements` builds both bundles, then runs them serialized, one test at a time, each under a time limit. The iOS bundle runs natively on this Mac as Designed for iPad and never boots a simulator. 0001.1 keeps its phone layout, since the host controller sets a compact size class. |
 | Coverage | `make requirements-coverage` runs both bundles with coverage on and prints line coverage of `Sources/UITestingLibrary/` per platform and combined. |
+| Timing | `make requirements-timing` runs both bundles, then prints each phase's count, total and mean time from the library's signposts. |
 | Never | Tests never read view types, view models, or private state. |
 | Flip | Before a test lands, its Given is flipped once, and the failure must name the Then. |

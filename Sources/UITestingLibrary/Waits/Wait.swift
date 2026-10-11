@@ -24,13 +24,15 @@ public struct Wait: Sendable, Equatable {
     /// lets a change the act queued land first, such as a Mac sheet's window attaching.
     @MainActor
     func settle(_ screen: Screen) async -> AccessibilityTree {
-        var last = AccessibilityTree.read(screen)
-        try? await Task.sleep(for: Self.pause)
-        _ = await until {
-            let now = AccessibilityTree.read(screen)
-            defer { last = now }
-            return now.elements == last.elements
+        await Timing.measure(.settle) {
+            var last = AccessibilityTree.read(screen)
+            try? await Task.sleep(for: Self.pause)
+            _ = await until {
+                let now = AccessibilityTree.read(screen)
+                defer { last = now }
+                return now.elements == last.elements
+            }
+            return last
         }
-        return last
     }
 }

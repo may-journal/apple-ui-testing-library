@@ -14,7 +14,7 @@ public struct User {
 
     /// Reads the screen once it settles: every element on screen, in VoiceOver's order.
     public func reads() async -> [Element] {
-        await wait.settle(screen).onScreen
+        await Timing.measure(.reads) { await wait.settle(screen).onScreen }
     }
 
     /// A failure carrying `message` and what VoiceOver reads now.

@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.2213
+
+- Feat: the library signposts each render, act, settle, read and look under Points of Interest
+- Feat: `make requirements-timing` runs both bundles and prints each phase's count, total and mean time
+- Test: a long, nested fixture screen measures read cost, and a test taps it ten times
+- Docs: 0001.7 and 0004.5 state how fast ten looks and ten taps finish
+
 ## 1.0.0 (2026-10-10)
 
 

@@ -15,7 +15,9 @@ public struct AccessibilityTree {
     /// finds anything feeds the canary.
     public static func read(_ screen: Screen) -> AccessibilityTree {
         Automation.turnOn()
-        let tree = AccessibilityTree(nodes: Backend.nodes(in: screen.window))
+        let tree = Timing.measure(.read) {
+            AccessibilityTree(nodes: Backend.nodes(in: screen.window))
+        }
         if !tree.nodes.isEmpty { screen.canary = .readElements }
         return tree
     }
