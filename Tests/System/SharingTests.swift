@@ -105,6 +105,19 @@ final class SharingTests: XCTestCase {
         _ = try session.sees(.button("Share card"))
     }
 
+    func test0006_4() throws {
+        session = SystemSession(
+            bundleIdentifier: "org.may-journal.ui-testing-library.TestHost", timeout: 10)
+        session.launch(arguments: ["--system-sharing", "--disabled-share"])
+        _ = try session.sees(.button("Share Alex"))
+        let button = try XCTUnwrap(session.elements().first { $0.label == "Share Alex" })
+        XCTAssertFalse(button.isEnabled)
+        XCTAssertThrowsError(try session.taps(.button("Share Alex"))) {
+            XCTAssertTrue(String(describing: $0).contains("disabled"))
+        }
+        XCTAssertFalse(session.reads().contains("Share card"))
+    }
+
     func test0009_1() throws {
         let delivery = try share("--missing-image")
         XCTAssertTrue(delivery.images.isEmpty)

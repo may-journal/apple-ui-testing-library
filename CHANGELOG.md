@@ -6,6 +6,12 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.11.0954
+
+- Fix: system elements and tap failures preserve the native disabled state
+- Test: a disabled share control stays closed and reports its actual state
+- Docs: state the external control acceptance alongside the hosted control checks
+
 ### 2026.10.11.0950
 
 - Fix: unexpected Siri text is indeterminate, since service or setup errors can be nonempty

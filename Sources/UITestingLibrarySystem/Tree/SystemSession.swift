@@ -48,7 +48,7 @@ public final class SystemSession {
 
     public func taps(_ query: Query, file: StaticString = #filePath, line: UInt = #line) throws {
         let element = try sees(query, file: file, line: line)
-        guard element.isHittable else {
+        guard element.isHittable && element.isEnabled else {
             throw failure("Cannot tap \(query)", file: file, line: line)
         }
         element.tap()
@@ -118,7 +118,7 @@ public final class SystemSession {
         return Element(
             label: item.label, value: item.value as? String,
             identifier: item.identifier, roles: roles, frame: item.frame,
-            isOnScreen: item.isHittable)
+            isOnScreen: item.isHittable, isEnabled: item.isEnabled)
     }
 
     private static let roles: [XCUIElement.ElementType: Role] = [
