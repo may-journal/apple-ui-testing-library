@@ -13,7 +13,7 @@ public final class LocalShareDestination: UIActivity, @unchecked Sendable {
     private var items: [Any] = []
 
     override public func canPerform(withActivityItems activityItems: [Any]) -> Bool {
-        activityItems.contains { $0 is UIImage }
+        activityItems.contains { $0 is UIImage || $0 is Data || $0 is String }
     }
 
     override public func prepare(withActivityItems activityItems: [Any]) {
@@ -45,7 +45,10 @@ private final class ReceiptController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        let images = items.compactMap { ($0 as? UIImage)?.pngData()?.base64EncodedString() }
+        let images = items.compactMap { item -> String? in
+            let bytes = (item as? UIImage)?.pngData() ?? (item as? Data)
+            return bytes?.base64EncodedString()
+        }
         let messages = items.compactMap { $0 as? String }
         let receipt: [String: Any] = ["images": images, "messages": messages]
         let payload = (try? JSONSerialization.data(withJSONObject: receipt)) ?? Data()

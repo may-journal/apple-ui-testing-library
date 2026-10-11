@@ -33,7 +33,7 @@ public final class SystemSession {
         var matches: [XCUIElement] = []
         let condition = XCTNSPredicateExpectation(
             predicate: NSPredicate { _, _ in
-                matches = candidates.allElementsBoundByIndex.filter { !$0.frame.isEmpty }
+                matches = candidates.allElementsBoundByIndex.filter(\.isHittable)
                 return matches.count == 1
             }, object: nil)
         guard XCTWaiter.wait(for: [condition], timeout: timeout) == .completed,

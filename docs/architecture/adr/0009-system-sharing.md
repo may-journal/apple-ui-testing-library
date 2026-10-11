@@ -21,6 +21,6 @@ Hosted accessibility actions cannot drive system shares. A renderer input cannot
 
 1. Consumers drive system UI through the library from a separate UI-test target.
 2. A local destination seam is required in the app's test build. No message goes to a contact.
-3. Image evidence covers UIKit image and string items. File URLs, movies, and arbitrary item providers are outside this destination's scope.
+3. Image evidence covers UIKit images, image data, and strings. File URLs, movies, and arbitrary item providers are outside this destination's scope.
 4. OCR runs once over received bytes after the bounded delivery wait. Recognition quality depends on the image; failures include the recognized words.
 5. The default in-process API keeps its hosted lifecycle and platform support.
