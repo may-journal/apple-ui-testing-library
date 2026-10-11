@@ -30,7 +30,8 @@ public final class SystemSession {
     func finds(
         _ candidates: XCUIElementQuery, description: String, file: StaticString, line: UInt
     ) throws -> XCUIElement {
-        var matches: [XCUIElement] = []
+        var matches = candidates.allElementsBoundByIndex.filter(\.isHittable)
+        if matches.count == 1, let match = matches.first { return match }
         let condition = XCTNSPredicateExpectation(
             predicate: NSPredicate { _, _ in
                 matches = candidates.allElementsBoundByIndex.filter(\.isHittable)
@@ -53,7 +54,9 @@ public final class SystemSession {
         element.tap()
     }
 
-    public func reads() -> [String] { elements().map(\.spoken).filter { !$0.isEmpty } }
+    public func reads() -> [String] {
+        elements().filter(\.isOnScreen).map(\.spoken).filter { !$0.isEmpty }
+    }
 
     /// Scrolls the one visible list or scroll view, failing on missing or ambiguous containers.
     public func scrolls(
@@ -70,8 +73,12 @@ public final class SystemSession {
     }
 
     public func failure(_ message: String, file: StaticString, line: UInt) -> Failure {
-        Failure(
-            message, report: ScreenReport(onScreen: elements(), offScreen: []),
+        let snapshot = elements()
+        return Failure(
+            message,
+            report: ScreenReport(
+                onScreen: snapshot.filter(\.isOnScreen),
+                offScreen: snapshot.filter { !$0.isOnScreen }),
             location: SourceLocation(file: file, line: line))
     }
 
@@ -83,9 +90,7 @@ public final class SystemSession {
     private func candidates(for query: Query) -> XCUIElementQuery {
         switch query {
         case .role(let role, let label):
-            let types = Self.roles.filter { $0.value == role }.map(\.key.rawValue)
-            return application.descendants(matching: .any).matching(
-                NSPredicate(format: "elementType IN %@ AND label == %@", types, label))
+            return roleCandidates(role, label: label)
         case .text(let text):
             return application.descendants(matching: .any).matching(
                 NSPredicate(format: "label == %@ OR value == %@", text, text))
@@ -95,13 +100,25 @@ public final class SystemSession {
         }
     }
 
+    private func roleCandidates(_ role: Role, label: String) -> XCUIElementQuery {
+        let predicate: NSPredicate
+        if role == .selected {
+            predicate = NSPredicate(format: "selected == true AND label == %@", label)
+        } else {
+            let types = Self.roles.filter { $0.value == role }.map(\.key.rawValue)
+            predicate = NSPredicate(format: "elementType IN %@ AND label == %@", types, label)
+        }
+        return application.descendants(matching: .any).matching(predicate)
+    }
+
     private func read(_ item: XCUIElement) -> Element {
         let role = Self.roles[item.elementType]
         var roles: Set<Role> = role.map { [$0] } ?? []
         if item.isSelected { roles.insert(.selected) }
         return Element(
             label: item.label, value: item.value as? String,
-            identifier: item.identifier, roles: roles, frame: item.frame)
+            identifier: item.identifier, roles: roles, frame: item.frame,
+            isOnScreen: item.isHittable)
     }
 
     private static let roles: [XCUIElement.ElementType: Role] = [
