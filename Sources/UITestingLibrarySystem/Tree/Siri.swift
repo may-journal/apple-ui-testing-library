@@ -86,19 +86,21 @@ extension SystemSession {
         XCUIDevice.shared.press(.home)
         siri.activate(voiceRecognitionText: phrase)
         var observed: [String] = []
+        var lastObserved: [String] = []
         var previous: [String] = []
         let ready = NSPredicate { _, _ in
             previous = observed
             observed = siri.staticTexts.allElementsBoundByIndex
                 .filter { $0.exists && !$0.frame.isEmpty }
                 .map(\.label).filter { !$0.isEmpty }
+            if !observed.isEmpty { lastObserved = observed }
             return observed.contains(answer) && observed == previous
         }
         let result = XCTWaiter.wait(
             for: [XCTNSPredicateExpectation(predicate: ready, object: nil)],
             timeout: timeout)
         guard result == .completed else {
-            throw SiriTranscript(phrase: phrase, observed: observed)
+            throw SiriTranscript(phrase: phrase, observed: lastObserved)
                 .failure(answer, location: location)
         }
         return SiriAnswer(phrase: phrase, observed: observed)

@@ -30,3 +30,7 @@ Source: #39
     - Given nonempty unverified Siri text
         - When I check the captured transcript
             - Then failure keeps its origin indeterminate
+- 0007.4
+    - Given Siri dismisses its answer before timeout
+        - When my expected answer differs
+            - Then failure keeps the last observed answer
