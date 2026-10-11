@@ -12,7 +12,7 @@ extension Backend {
         guard let menu = OpenMenu.shared.menu else { return nil }
         return menu.items.filter { !$0.isHidden && !$0.isSeparatorItem }.map { item in
             Node(object: item, isOnScreen: true) {
-                Element(label: item.title, roles: [.button])
+                Element(label: item.title, roles: [.button], isEnabled: item.isEnabled)
             }
         }
     }

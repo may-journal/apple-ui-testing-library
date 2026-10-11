@@ -67,11 +67,14 @@ try await user.sees(.text("Milk"))
 try await user.sees(.identifier("add-bottom"))
 ```
 
-`sees` returns the `Element` it found, with `label`, `value`, `spoken` and `has(_:)`.
+`sees` returns an `Element` with `label`, `value`, `spoken`, `has(_:)` and `isEnabled`.
+Read state again after entering required input to check that a control becomes enabled.
+A disabled tap fails with the control's state in the message and screen report.
 
 ```swift
 let save = try await user.sees(.button("Save"))
 #expect(save.has(.button))
+#expect(!save.isEnabled)
 ```
 
 ## Actions

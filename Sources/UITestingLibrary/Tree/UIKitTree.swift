@@ -63,7 +63,9 @@ extension Backend {
                 label: object.accessibilityLabel ?? "", value: object.accessibilityValue,
                 identifier: identifier(of: object), roles: roles(of: object),
                 actions: object.accessibilityCustomActions?.map(\.name) ?? [], frame: frame,
-                isOnScreen: isOnScreen)
+                isOnScreen: isOnScreen,
+                isEnabled: (object as? UIControl)?.isEnabled != false
+                    && !object.accessibilityTraits.contains(.notEnabled))
         }
     }
 
