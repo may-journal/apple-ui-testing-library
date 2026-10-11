@@ -50,7 +50,7 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 | 10  | `Screen.close()` calls `Canary.check(_:)`. | No test can skip the check. |
 | 11  | Queries read the tree. | Matching works on `Element` values. |
 | 12  | Reports read the tree. | A report shows what VoiceOver reads now. |
-| 13  | Waits read the tree to see it settle. | Two matching reads a pause apart end a settle. |
+| 13  | Waits read the tree once it settles. | The main run loop goes idle twice, then one read ends a settle. |
 | 14  | A timed-out wait hands the screen to the report. | A timeout shows what was on screen. |
 | 15  | The tree reads the screen's window and feeds its canary. | One window, read through one `HostWindow`. |
 

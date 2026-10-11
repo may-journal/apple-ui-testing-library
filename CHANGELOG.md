@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.2217
+
+- Perf: an act settles once the main run loop goes idle twice, then reads the tree once
+- Perf: the settle no longer sleeps 50 ms or reads until two reads match
+- Perf: a tap's mean drops from 144 to 61 ms as Designed for iPad, and from 209 to 128 ms on the Mac
+- Docs: ADR 0003 and the architecture docs describe the idle settle
+
 ### 2026.10.10.2213
 
 - Feat: the library signposts each render, act, settle, read and look under Points of Interest

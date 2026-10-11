@@ -71,7 +71,7 @@ Numbers match the callout table. Containers: [02-containers.md](02-containers.md
 | 6   | The roles a query names, each mapped to accessibility traits. | `.button` never matches static text that shares its label ([ADR 0002](adr/0002-query-priority.md)). |
 | 7   | Matches elements by role and label, by text, or by identifier. | One priority keeps tests on what a person perceives. |
 | 8   | Acts as a person does: taps, chooses a custom action, scrolls, goes back, types. Each act needs an actionable element. | Every act is a VoiceOver entry point, so an unreachable control fails. |
-| 9   | Polls a condition until it holds or the deadline passes. After an act, it waits until two reads match. | No sleeps; a slow machine only takes longer ([ADR 0003](adr/0003-condition-waits.md)). |
+| 9   | Polls a condition until it holds or the deadline passes. After an act, it lets the main run loop go idle twice, then reads once. | No sleeps; a slow machine only takes longer ([ADR 0003](adr/0003-condition-waits.md)). |
 | 10  | Prints what VoiceOver reads on screen, then what is drawn off screen. | A failure shows the screen as a person hears it. |
 | 11  | Fails a test that never read a non-empty tree. | An OS change that empties the tree cannot pass silently. |
 | 12  | Apple's accessibility library, holding the private automation switch. | The only way in-process tests get SwiftUI's tree. |
