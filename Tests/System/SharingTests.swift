@@ -92,4 +92,15 @@ final class SharingTests: XCTestCase {
         try session.dismissShare(.button("Close"))
         _ = try session.sees(.button("Share Alex"))
     }
+
+    func test0008_8() throws {
+        session = SystemSession(
+            bundleIdentifier: "org.may-journal.ui-testing-library.TestHost", timeout: 10)
+        session.launch(arguments: ["--system-sharing", "--scroll-share"])
+        try session.scrolls(.down)
+        try session.scrolls(.down)
+        try session.scrolls(.down)
+        try session.taps(.button("Share Alex"))
+        _ = try session.sees(.button("Share card"))
+    }
 }
