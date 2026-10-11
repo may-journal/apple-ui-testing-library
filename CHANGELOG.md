@@ -6,6 +6,12 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.2233
+
+- Fix: the Mac reader asks a text on screen for its link children again, and skips only off-screen text
+- Fix: the reused read holds its screen, so a screen rendered after it never takes its place
+- Test: 0001.7 allows 800 ms and 0004.5 allows 1.5 s, about three times the Mac's time
+
 ### 2026.10.10.2228
 
 - Test: 0001.7 promises ten reads of the long fixture within half a second

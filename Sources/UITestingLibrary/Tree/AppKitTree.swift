@@ -10,7 +10,7 @@ extension Backend {
     static func nodes(in window: HostWindow) -> [Node] {
         let front = frontWindow(of: window.window)
         var found: [AnyObject] = []
-        if let root = front.contentView { collect(root, into: &found) }
+        if let root = front.contentView { collect(root, in: front, into: &found) }
         return found.map { node(of: $0, in: front) }
     }
 
@@ -21,12 +21,13 @@ extension Backend {
         return front
     }
 
-    /// Walks the tree as VoiceOver does. A control or text whose role VoiceOver stops on is
-    /// never asked for its children, since SwiftUI builds a text's link children on request.
-    private static func collect(_ object: AnyObject, into found: inout [AnyObject]) {
+    /// Walks the tree as VoiceOver does, from `object` down.
+    private static func collect(
+        _ object: AnyObject, in window: NSWindow, into found: inout [AnyObject]
+    ) {
         if let view = object as? NSView, view.isHiddenOrHasHiddenAncestor { return }
         let isElement = object.isAccessibilityElement?() == true
-        if isElement, stopsOn(object) {
+        if isElement, stopsOn(object, in: window) {
             found.append(object)
             return
         }
@@ -35,13 +36,17 @@ extension Backend {
             found.append(object)
             return
         }
-        for child in children { collect(child, into: &found) }
+        for child in children { collect(child, in: window, into: &found) }
     }
 
-    /// Whether the object has a role this reader maps, as a control or text does.
-    private static func stopsOn(_ object: AnyObject) -> Bool {
-        guard let role = text(of: object, "accessibilityRole") else { return false }
-        return roleMap[NSAccessibility.Role(rawValue: role)] != nil
+    /// Whether VoiceOver stops on the object without asking what it holds: a control, or a
+    /// text drawn off screen. SwiftUI builds a text's link children on request, and only a
+    /// text on screen needs them, since no look matches off screen.
+    private static func stopsOn(_ object: AnyObject, in window: NSWindow) -> Bool {
+        guard let role = text(of: object, "accessibilityRole"),
+            let roles = roleMap[NSAccessibility.Role(rawValue: role)]
+        else { return false }
+        return !roles.contains(.text) || !isOnScreen(frame(of: object, in: window), in: window)
     }
 
     /// Whether the object is a group with nothing in it, nothing to say and nothing to offer,
@@ -57,13 +62,21 @@ extension Backend {
 
     /// The element, with its frame read first, so one drawn off screen waits to be read.
     private static func node(of object: AnyObject, in window: NSWindow) -> Node {
-        let frame = window.convertFromScreen(object.accessibilityFrame?() ?? .zero)
-        let middle = CGPoint(x: frame.midX, y: frame.midY)
-        let inside = window.contentView?.frame.contains(middle) ?? false
-        let isOnScreen = !frame.isEmpty && inside
+        let frame = Self.frame(of: object, in: window)
+        let isOnScreen = Self.isOnScreen(frame, in: window)
         return Node(object: object, isOnScreen: isOnScreen) {
             element(of: object, frame: frame, isOnScreen: isOnScreen)
         }
+    }
+
+    private static func frame(of object: AnyObject, in window: NSWindow) -> CGRect {
+        window.convertFromScreen(object.accessibilityFrame?() ?? .zero)
+    }
+
+    /// Whether the frame's middle is inside the window's content.
+    private static func isOnScreen(_ frame: CGRect, in window: NSWindow) -> Bool {
+        let middle = CGPoint(x: frame.midX, y: frame.midY)
+        return !frame.isEmpty && (window.contentView?.frame.contains(middle) ?? false)
     }
 
     private static func element(of object: AnyObject, frame: CGRect, isOnScreen: Bool)

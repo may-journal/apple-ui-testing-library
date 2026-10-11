@@ -22,7 +22,7 @@ public struct AccessibilityTree {
             AccessibilityTree(nodes: Backend.nodes(in: screen.window))
         }
         if !tree.nodes.isEmpty { screen.canary = .readElements }
-        latest = (ObjectIdentifier(screen), tree)
+        latest = (screen, tree)
         // The main queue runs this block only once the caller yields, which is the first
         // chance anything else has to change the screen.
         DispatchQueue.main.async { MainActor.assumeIsolated { latest = nil } }
@@ -32,12 +32,13 @@ public struct AccessibilityTree {
     /// The last read of `screen`, while nothing else has run on the main thread since;
     /// otherwise a new read. A look right after an act reuses the act's settled read.
     static func current(_ screen: Screen) -> AccessibilityTree {
-        if let latest, latest.screen == ObjectIdentifier(screen) { return latest.tree }
+        if let latest, latest.screen === screen { return latest.tree }
         return read(screen)
     }
 
-    /// The last read, until the main thread runs anything else.
-    private static var latest: (screen: ObjectIdentifier, tree: AccessibilityTree)?
+    /// The last read, until the main thread runs anything else. It holds its screen, so a
+    /// screen rendered after it never takes its place.
+    private static var latest: (screen: Screen, tree: AccessibilityTree)?
 
     /// The elements whose middle is inside the window.
     public var onScreen: [Element] { nodes.filter(\.isOnScreen).map(\.element) }
