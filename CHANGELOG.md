@@ -9,6 +9,7 @@ relatedConfigurations: ['.fitnessrc.json']
 - Feat: public elements expose enabled state on UIKit and AppKit, and reports show disabled controls
 - Fix: disabled controls refuse taps before native activation
 - Test: three control state acceptances run through real screens on both platforms
+- Docs: show enabled state after typing into a required field
 
 ## 1.0.0 (2026-10-10)
 
@@ -23,7 +24,7 @@ relatedConfigurations: ['.fitnessrc.json']
 
 * **tree:** read and press alerts and confirmation dialogs as Designed for iPad ([#32](https://github.com/may-journal/apple-ui-testing-library/issues/32)) ([6bd667f](https://github.com/may-journal/apple-ui-testing-library/commit/6bd667f25334b943f08f3f35b06eb0ab3792c5c8))
 
-### 2026.10.11.0926
+### 2026.10.11.0929
 
 - Feat: as Designed for iPad, the iOS backend reads alerts and confirmation dialogs from UIKit's hidden copy
 - Feat: tapping one of that alert's enabled buttons runs its handler through the alert, as a click on the Mac's alert does

@@ -81,6 +81,14 @@ try await user.scrolls(.down)                    // or .up
 try await user.goesBack()                        // as a two-finger scrub does
 ```
 
+To check a required field enables saving, read the button after typing:
+
+```swift
+try await user.types("Milk")
+let save = try await user.sees(.button("Save"))
+#expect(save.isEnabled)
+```
+
 `goesBack()` passes only once what is read on screen changes. On the Mac, SwiftUI drops a focus set in `onAppear`, so set it one main-queue turn later.
 
 ## Waits
