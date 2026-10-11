@@ -30,3 +30,7 @@ Source: #41
     - Given a control disabled until required input is supplied
         - When I supply the input
             - Then its public element reports enabled and I can activate it
+- 0006.4
+    - Given a disabled share button in a system session
+        - When I read it and try to tap it
+            - Then its state and failure report say disabled and no share opens

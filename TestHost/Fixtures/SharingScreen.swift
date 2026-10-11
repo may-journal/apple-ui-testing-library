@@ -22,6 +22,7 @@ struct SharingScreen: View {
 
     private var shareButton: some View {
         Button("Share Alex") { confirming = true }
+            .disabled(ProcessInfo.processInfo.arguments.contains("--disabled-share"))
             .confirmationDialog(
                 "Share Alex's card?", isPresented: $confirming, titleVisibility: .visible
             ) {
