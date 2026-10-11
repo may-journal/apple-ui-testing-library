@@ -68,7 +68,7 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 
 ## Platforms
 
-The optional `UITestingLibrarySystem` product runs in an iOS UI-test target through XCTest. `SystemSession` uses the same `Query` and `Failure` types. Siri requests read the system transcript and throw `SiriFailure` with setup or response status ([ADR 0008](adr/0008-siri-system-requests.md)).
+The optional `UITestingLibrarySystem` product runs in an iOS UI-test target through XCTest. `SystemSession` uses the same `Query` and `Failure` types. Siri failures distinguish setup, indeterminate text, and forbidden text in a verified answer ([ADR 0008](adr/0008-siri-system-requests.md)).
 
 The separate UIKit product `UITestingLibraryShareDestination` adds a local activity in test builds. It exports delivered images and messages, which the driver reads and checks with Vision ([ADR 0009](adr/0009-system-sharing.md)).
 

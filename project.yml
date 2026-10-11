@@ -45,6 +45,8 @@ targetTemplates:
     type: bundle.unit-test
     dependencies:
       - package: UITestingLibrary
+      - package: UITestingLibrary
+        product: UITestingLibrarySystem
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
