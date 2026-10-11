@@ -83,7 +83,7 @@ Numbers match the callout table. Containers: [02-containers.md](02-containers.md
 | 18  | Queries read the current tree. | A poll reuses the last read only while nothing else has run on the main thread. |
 | 19  | The first read turns automation on. | Turned on lazily, once per process. |
 | 20  | Automation reaches the private symbol. | A missing symbol is reported by the canary. |
-| 21  | The walk yields `Element` values. | Matching never touches view types. |
+| 21  | The walk yields `Element` values; one drawn off screen is read on first use. | Matching never touches view types, and no look matches off screen. |
 | 22  | A role query checks traits. | Role first, as Testing Library ranks it. |
 | 23  | Every act and look waits on a condition. | Animations are off, so the settled tree is final. |
 | 24  | A failed look or act hands the screen to the report. | One failure format everywhere. |

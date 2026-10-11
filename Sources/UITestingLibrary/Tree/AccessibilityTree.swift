@@ -4,13 +4,14 @@ import Foundation
 /// backend behind this type (ADR 0006).
 @MainActor
 public struct AccessibilityTree {
-    /// The elements a person can reach, in reading order, on and off screen.
-    public let elements: [Element]
     let nodes: [Node]
+
+    /// The elements a person can reach, in reading order, on and off screen. Those off
+    /// screen are read on first use.
+    public var elements: [Element] { nodes.map(\.element) }
 
     init(nodes: [Node]) {
         self.nodes = nodes
-        elements = nodes.map(\.element)
     }
 
     /// Reads the screen's window now. The first read turns automation on, and a read that
@@ -39,7 +40,7 @@ public struct AccessibilityTree {
     private static var latest: (screen: ObjectIdentifier, tree: AccessibilityTree)?
 
     /// The elements whose middle is inside the window.
-    public var onScreen: [Element] { elements.filter(\.isOnScreen) }
+    public var onScreen: [Element] { nodes.filter(\.isOnScreen).map(\.element) }
 }
 
 /// Which way a person scrolls: down shows what lies below, up what lies above.

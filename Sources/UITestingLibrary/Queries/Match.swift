@@ -6,7 +6,7 @@ enum Match {
     case many([Node])
 
     init(_ query: Query, in tree: AccessibilityTree) {
-        let found = tree.nodes.filter { $0.element.isOnScreen && query.matches($0.element) }
+        let found = tree.nodes.filter { $0.isOnScreen && query.matches($0.element) }
         switch found.count {
         case 0: self = .none
         case 1: self = .one(found[0])

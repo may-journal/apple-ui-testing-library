@@ -8,7 +8,7 @@ extension Backend {
     static func nodes(in window: HostWindow) -> [Node] {
         var found: [NSObject] = []
         collect(window.window, into: &found)
-        return found.map { Node(element: element(of: $0, in: window.window), object: $0) }
+        return found.map { node(of: $0, in: window.window) }
     }
 
     private static func collect(_ object: NSObject, into found: inout [NSObject]) {
@@ -20,12 +20,15 @@ extension Backend {
         for child in children(of: object) { collect(child, into: &found) }
     }
 
+    /// Whether this is an iOS app running on a Mac, asked once, not for every view.
+    private static let isiOSAppOnMac = ProcessInfo.processInfo.isiOSAppOnMac
+
     /// Whether VoiceOver skips the object and all it holds. A Mac running the iOS app draws
     /// an alert natively, and UIKit hides its own copy then; the copy still holds the title
     /// and buttons VoiceOver reads and presses, so it counts.
     private static func isHidden(_ object: NSObject) -> Bool {
         if let view = object as? UIView {
-            if ProcessInfo.processInfo.isiOSAppOnMac, view.next is UIAlertController {
+            if isiOSAppOnMac, view.next is UIAlertController {
                 return false
             }
             if view.isHidden || view.alpha < 0.01 { return true }
@@ -49,15 +52,18 @@ extension Backend {
         return view.subviews
     }
 
-    private static func element(of object: NSObject, in window: UIWindow) -> Element {
+    /// The element, with its frame read first, so one drawn off screen waits to be read.
+    private static func node(of object: NSObject, in window: UIWindow) -> Node {
         let frame = window.convert(object.accessibilityFrame, from: nil)
         let middle = CGPoint(x: frame.midX, y: frame.midY)
-        return Element(
-            label: object.accessibilityLabel ?? "", value: object.accessibilityValue,
-            identifier: identifier(of: object),
-            roles: roles(of: object),
-            actions: object.accessibilityCustomActions?.map(\.name) ?? [], frame: frame,
-            isOnScreen: !frame.isEmpty && window.bounds.contains(middle))
+        let isOnScreen = !frame.isEmpty && window.bounds.contains(middle)
+        return Node(object: object, isOnScreen: isOnScreen) {
+            Element(
+                label: object.accessibilityLabel ?? "", value: object.accessibilityValue,
+                identifier: identifier(of: object), roles: roles(of: object),
+                actions: object.accessibilityCustomActions?.map(\.name) ?? [], frame: frame,
+                isOnScreen: isOnScreen)
+        }
     }
 
     /// The identifier, which SwiftUI's elements answer without adopting the protocol for it.

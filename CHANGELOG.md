@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.10.2223
+
+- Perf: a read takes each element's frame first, and reads one drawn off screen only on first use
+- Perf: the Mac reader never asks a control or text for its children, which SwiftUI builds on request
+- Perf: the iOS reader asks once whether it runs on a Mac, not for every view
+- Perf: ten reads of the long fixture drop from 0.18 to 0.13 s on iOS, and 0.65 to 0.27 s on the Mac
+
 ### 2026.10.10.2219
 
 - Perf: a look or an act's find reuses the last read until the main thread runs anything else

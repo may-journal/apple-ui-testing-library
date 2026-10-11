@@ -26,10 +26,10 @@ extension User {
             var tree = AccessibilityTree.current(screen)
             let gone = await wait.until {
                 tree = AccessibilityTree.current(screen)
-                return !tree.elements.isEmpty && !tree.onScreen.contains(where: query.matches)
+                return !tree.nodes.isEmpty && !tree.onScreen.contains(where: query.matches)
             }
             if gone { return }
-            if tree.elements.isEmpty {
+            if tree.nodes.isEmpty {
                 throw failure(
                     "Expected not to see \(query), but the screen read empty",
                     SourceLocation(file: file, line: line))
