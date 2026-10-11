@@ -9,7 +9,7 @@ Product and system design for apple-ui-testing-library. The C4 docs below descri
 ## Principles
 
 1. Tests resemble the way the app is used. They read what VoiceOver reads and act through what VoiceOver offers.
-1. The app under test runs in-process, built from its real root view ([ADR 0001](adr/0001-in-process-accessibility-tree.md)).
+1. Hosted tests run in-process from the real root view ([ADR 0001](adr/0001-in-process-accessibility-tree.md)); optional system tests launch the app ([ADR 0009](adr/0009-system-sharing.md)).
 1. Queries follow one priority: role and label, then visible text, then identifier ([ADR 0002](adr/0002-query-priority.md)).
 1. Every wait is a condition with a deadline, and nothing animates ([ADR 0003](adr/0003-condition-waits.md)).
 1. A test that reads an empty tree fails loudly ([ADR 0004](adr/0004-automation-canary.md)).
@@ -41,3 +41,4 @@ Architecture decision records live in [adr/](adr/). A record is rewritten in pla
 | [0004](adr/0004-automation-canary.md) | Private SPI turns automation on, and a canary fails any test that read nothing. |
 | [0005](adr/0005-one-window-per-process.md) | Tests run serialized, one key window per process. |
 | [0006](adr/0006-one-api-two-backends.md) | One API over two backends: UIKit on iOS, AppKit on macOS, each reading its own tree. |
+| [0009](adr/0009-system-sharing.md) | Optional system sessions follow real shares into a local destination and check received image bytes. |

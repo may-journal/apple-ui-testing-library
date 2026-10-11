@@ -42,3 +42,7 @@ Source: #40
     - Given an absent control
         - When I wait for it
             - Then failure names my line and screen
+- 0008.7
+    - Given an open share sheet
+        - When I cancel
+            - Then the source screen returns

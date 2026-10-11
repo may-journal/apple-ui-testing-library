@@ -6,12 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
-### 2026.10.11.0932
+### 2026.10.11.0933
 
 - Feat: optional system sessions drive a real share sheet and read a local destination's received image and message
 - Test: simulator shares prove wrong images, messages, and extra matches fail checks of delivered bytes
 - Docs: describe the test destination seam, image evidence, and simulator cleanup
 - Chore: add the opt-in simulator runner with ownership checks and shutdown on failure
+- Test: verify cancellation returns to the source screen without choosing a destination
 
 ## 1.0.0 (2026-10-10)
 

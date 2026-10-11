@@ -82,4 +82,14 @@ final class SharingTests: XCTestCase {
             XCTAssertTrue(failure.description.contains("Share Alex"))
         }
     }
+
+    func test0008_7() throws {
+        session = SystemSession(
+            bundleIdentifier: "org.may-journal.ui-testing-library.TestHost", timeout: 10)
+        session.launch(arguments: ["--system-sharing"])
+        try session.taps(.button("Share Alex"))
+        try session.taps(.button("Share card"))
+        try session.dismissShare(.button("Close"))
+        _ = try session.sees(.button("Share Alex"))
+    }
 }
