@@ -6,7 +6,7 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
-### 2026.10.11.0954
+### 2026.10.11.0955
 
 - Fix: system elements and tap failures preserve the native disabled state
 - Test: a disabled share control stays closed and reports its actual state
@@ -36,7 +36,7 @@ relatedConfigurations: ['.fitnessrc.json']
 - Test: simulator shares prove wrong images, messages, and extra matches fail checks of delivered bytes
 - Docs: describe the test destination seam, image evidence, and simulator cleanup
 - Chore: add the opt-in simulator runner with ownership checks and shutdown on failure
-- Fix: filter system elements by visibility, read matches before waiting, and report selected state and located image failures
+- Fix: wait for stable share activity frames, filter visible elements, and keep immediate matches and image failures at their source
 
 ### 2026.10.11.0928
 
