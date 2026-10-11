@@ -7,10 +7,10 @@ import XCTest
 final class SharingTests: XCTestCase {
     private var session: SystemSession!
 
-    override func tearDown() {
+    override func tearDown() async throws {
         session?.close()
         session = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     private func share(_ mutation: String? = nil) throws -> SharedDelivery {
