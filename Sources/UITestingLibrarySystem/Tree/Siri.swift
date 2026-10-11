@@ -21,7 +21,14 @@ public struct SiriAnswer: Sendable {
 
 /// A setup failure is distinct from an observed answer that fails the app assertion.
 public struct SiriFailure: Error, CustomStringConvertible {
-    public enum Kind: Sendable, Equatable { case setup, response }
+    public enum Kind: Sendable, Equatable {
+        /// Empty transcript or unsupported runner: no answer can be checked.
+        case setup
+        /// Unexpected text whose source could be Siri, setup, routing, or the app.
+        case indeterminate
+        /// Forbidden text in an answer whose expected transcript was already found.
+        case response
+    }
     public let kind: Kind
     public let phrase: String
     public let observed: [String]
@@ -30,6 +37,37 @@ public struct SiriFailure: Error, CustomStringConvertible {
 
     public var description: String {
         "\(message) (\(location))\nPhrase: \(phrase)\nObserved Siri text: \(observed)"
+    }
+}
+
+/// A captured transcript. Validation alone does not prove Siri ran an app intent.
+public struct SiriTranscript: Sendable {
+    public let phrase: String
+    public let observed: [String]
+
+    public init(phrase: String, observed: [String]) {
+        self.phrase = phrase
+        self.observed = observed
+    }
+
+    /// Requires the expected transcript; unexpected nonempty text has unknown provenance.
+    public func expecting(
+        _ answer: String, file: StaticString = #filePath, line: UInt = #line
+    ) throws -> SiriAnswer {
+        guard observed.contains(answer) else {
+            throw failure(answer, location: SourceLocation(file: file, line: line))
+        }
+        return SiriAnswer(phrase: phrase, observed: observed)
+    }
+
+    func failure(_ answer: String, location: SourceLocation) -> SiriFailure {
+        SiriFailure(
+            kind: observed.isEmpty ? .setup : .indeterminate,
+            phrase: phrase, observed: observed,
+            message: observed.isEmpty
+                ? "Siri returned no accessible answer; check Siri and shortcut setup"
+                : "Expected stable Siri answer \"\(answer)\"; check setup, service and routing",
+            location: location)
     }
 }
 
@@ -60,13 +98,8 @@ extension SystemSession {
             for: [XCTNSPredicateExpectation(predicate: ready, object: nil)],
             timeout: timeout)
         guard result == .completed else {
-            throw SiriFailure(
-                kind: observed.isEmpty ? .setup : .response,
-                phrase: phrase, observed: observed,
-                message: observed.isEmpty
-                    ? "Siri returned no accessible answer; check Siri and shortcut setup"
-                    : "Expected Siri answer \"\(answer)\"",
-                location: location)
+            throw SiriTranscript(phrase: phrase, observed: observed)
+                .failure(answer, location: location)
         }
         return SiriAnswer(phrase: phrase, observed: observed)
         #else

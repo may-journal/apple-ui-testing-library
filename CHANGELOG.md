@@ -8,6 +8,12 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ### 2026.10.11.0950
 
+- Fix: unexpected Siri text is indeterminate, since service or setup errors can be nonempty
+- Test: captured transcript policy checks keep nonempty system errors separate from verified app answers
+- Docs: distinguish transcript policy tests from the still-required system routing proof
+
+### 2026.10.11.0944
+
 - Test: the Siri fixture can return the wrong person's match through its shipped intent
 - Test: the wrong-answer proof keeps the caller's correct match as its expected answer
 - Docs: make the optional system runner exception clear in the architecture

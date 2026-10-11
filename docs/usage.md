@@ -153,9 +153,9 @@ let answer = try session.askSiri("Who did I draw in Example", expecting: "Morgan
 try answer.excludes("Casey drew Morgan")
 ```
 
-The service submits recognized speech, runs system phrase routing, and reads Siri's visible transcript without recording audio. Empty text throws a setup failure; different text throws a response failure. Both carry the phrase, observed text and test line. Apple's activation call can also fail the UI test before a response can be read.
+The service submits recognized speech, runs system phrase routing, and reads Siri's visible transcript without recording audio. Empty text throws a setup failure; unexpected nonempty text throws an indeterminate failure. That text may come from setup, network errors, routing, or the app; it proves no intent ran. Each failure carries the phrase, observed text and test line.
 
-Run Siri tests only on a prepared iOS device. Run them serially, since Siri is shared system UI. Shut down each simulator you boot after the run, even after failure. See [ADR 0008](architecture/adr/0008-siri-system-requests.md).
+Run Siri tests serially on a prepared iOS device; activation itself can fail the test before a transcript is read. Shut down each simulator you boot, even after failure. A response failure means forbidden text appeared after the expected answer was verified. `SiriTranscript.expecting` checks captured text only; see [ADR 0008](architecture/adr/0008-siri-system-requests.md).
 ## Share through the system
 
 Hosted tests cannot drive a system share sheet. Add `UITestingLibrarySystem` to a separate iOS UI-test target and use `SystemSession`. It accepts the same queries and preserves source locations in failures.

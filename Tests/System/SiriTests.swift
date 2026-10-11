@@ -30,7 +30,7 @@ final class SiriTests: XCTestCase {
             _ = try session.askSiri(phrase, expecting: "Morgan drew Riley.")
             XCTFail("A wrong app answer passed")
         } catch let failure as SiriFailure {
-            XCTAssertEqual(failure.kind, .response)
+            XCTAssertEqual(failure.kind, .indeterminate)
             XCTAssertEqual(failure.phrase, phrase)
             XCTAssertTrue(failure.observed.contains("Morgan drew Casey."))
             XCTAssertEqual(failure.location.line, line)
