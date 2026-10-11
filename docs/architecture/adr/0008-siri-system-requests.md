@@ -13,8 +13,9 @@ An intent handler test misses phrase routing and the answer Siri presents. Hoste
 1. The optional system session submits recognized speech with Apple's Siri automation service.
 2. It reads static text from that service's tree, rather than an app view or intent result.
 3. Each request first dismisses prior Siri UI. The expected answer must appear before the deadline.
-4. No text is a setup failure. Different text is a response failure. Both print the phrase, observed text and caller's line.
+4. Empty text is a setup failure. Unexpected nonempty text is indeterminate; its source could be setup, service, routing, or the app.
 5. An iOS UI test bundle runs requests. Other platforms throw a setup error. Tests leave Siri and account setup to the owner.
+6. Forbidden text in a verified answer is a response failure. Each failure names the phrase, observed text and caller's line.
 
 ## Consequences
 

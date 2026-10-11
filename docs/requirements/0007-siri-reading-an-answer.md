@@ -26,3 +26,7 @@ Source: #39
     - Given an app returning a wrong match
         - When I ask Siri for my match
             - Then failure shows phrase, answer and test line
+- 0007.3
+    - Given nonempty unverified Siri text
+        - When I check the captured transcript
+            - Then failure keeps its origin indeterminate
