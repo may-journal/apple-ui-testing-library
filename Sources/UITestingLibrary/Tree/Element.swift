@@ -47,9 +47,22 @@ public struct Element: Sendable, Equatable, CustomStringConvertible {
     }
 }
 
-/// One element as read, with the object that acts for it.
+/// One element as read, with the object that acts for it. An element drawn off screen is
+/// read only once something asks for it, since no look or act matches it.
 @MainActor
-struct Node {
-    let element: Element
+final class Node {
     let object: AnyObject
+    /// Whether its middle is inside the window, known before anything else is read.
+    let isOnScreen: Bool
+    private let read: () -> Element
+
+    /// What the element says and offers, read now when it is on screen.
+    lazy var element = read()
+
+    init(object: AnyObject, isOnScreen: Bool, read: @escaping () -> Element) {
+        self.object = object
+        self.isOnScreen = isOnScreen
+        self.read = read
+        if isOnScreen { _ = element }
+    }
 }

@@ -11,9 +11,10 @@ An existing harness slept after every action, so under load its waits raced and 
 ## Decision
 
 1. Every look and act waits on a condition, up to a deadline of five seconds by default.
-2. After each act, `Wait` polls until two reads of the tree match.
-3. No API sleeps for a fixed time.
-4. `Screen` turns animations off, with `UIView.setAnimationsEnabled(false)` and a root transaction that disables them.
+2. After each act, `Wait` lets the main run loop go idle twice, then reads the tree once.
+3. A look reuses the last read until the main thread runs anything else, such as the settled read of the act before it.
+4. No API sleeps for a fixed time.
+5. `Screen` turns animations off, with `UIView.setAnimationsEnabled(false)` and a root transaction that disables them.
 
 ## Consequences
 

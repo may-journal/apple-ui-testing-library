@@ -14,7 +14,7 @@ public struct User {
 
     /// Reads the screen once it settles: every element on screen, in VoiceOver's order.
     public func reads() async -> [Element] {
-        await wait.settle(screen).onScreen
+        await Timing.measure(.reads) { await wait.settle(screen).onScreen }
     }
 
     /// A failure carrying `message` and what VoiceOver reads now.
@@ -28,7 +28,7 @@ public struct User {
     func find(_ query: Query) async -> Node? {
         var match = Match.none
         _ = await wait.until {
-            match = Match(query, in: AccessibilityTree.read(screen))
+            match = Match(query, in: AccessibilityTree.current(screen))
             return match.node != nil
         }
         return match.node

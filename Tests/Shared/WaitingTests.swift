@@ -44,5 +44,19 @@ extension UITestingLibraryTests {
             #expect(!read.contains("Before"))
             try screen.close()
         }
+
+        @Test func test0004_5() async throws {
+            let screen = try Screen.render { LongScreen() }
+            let user = User(screen)
+            let started = ContinuousClock.now
+            for count in 1...10 {
+                try await user.taps(.button("Count"))
+                try await user.sees(.text("Count: \(count)"))
+                try await user.chooses("Archive", on: .text("Row 1.\(count)"))
+                try await user.doesNotSee(.text("Row 1.\(count)"))
+            }
+            #expect(ContinuousClock.now - started < .milliseconds(1500))
+            try screen.close()
+        }
     }
 }

@@ -42,3 +42,7 @@ Source: #1
     - Given a root view
         - When I show it in a Mac app
             - Then I read what a person at a Mac sees
+- 0001.7
+    - Given a root view with hundreds of elements
+        - When I read it ten times
+            - Then all ten reads finish within 800 ms

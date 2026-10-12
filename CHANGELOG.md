@@ -6,6 +6,14 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.12.0845
+
+- Perf: a look or an act reuses the last read, and a read takes frames first and reads off-screen elements late
+- Perf: the Mac reader skips a leaf's children, and the iOS reader asks once whether it runs on a Mac
+- Test: 0001.7 and 0004.5 promise read and act times on a long fixture whose rows offer Archive
+- Chore: `make requirements-timing` prints its table even after a failing test, with phase names in `config/timing-phases.json`
+- Docs: the Makefile's logic moves to `scripts/`, and ADR 0005 notes that parallel testing gains nothing
+
 ## 1.0.0 (2026-10-10)
 
 

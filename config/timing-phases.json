@@ -1,0 +1,16 @@
+{
+  "comment": "Mirrors the codes in Sources/UITestingLibrary/Tree/Timing.swift, which is the source of truth. Change both together.",
+  "phases": {
+    "1": "render",
+    "2": "read",
+    "3": "settle",
+    "4": "look sees",
+    "5": "look doesNotSee",
+    "6": "look reads",
+    "7": "act taps",
+    "8": "act chooses",
+    "9": "act types",
+    "10": "act scrolls",
+    "11": "act goesBack"
+  }
+}

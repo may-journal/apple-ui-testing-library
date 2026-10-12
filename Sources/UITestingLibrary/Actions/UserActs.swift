@@ -6,14 +6,16 @@ extension User {
         _ query: Query,
         file: StaticString = #filePath, line: UInt = #line
     ) async throws {
-        let node = try await actionable(query, SourceLocation(file: file, line: line))
-        guard Backend.activate(node, in: screen.window) else {
-            throw failure(
-                "Tapping \(query) did nothing. A control that opens system UI needs a touch tool; "
-                    + "see the README",
-                SourceLocation(file: file, line: line))
+        try await Timing.measure(.taps) {
+            let node = try await actionable(query, SourceLocation(file: file, line: line))
+            guard Backend.activate(node, in: screen.window) else {
+                throw failure(
+                    "Tapping \(query) did nothing. A control that opens system UI needs a touch "
+                        + "tool; see the README",
+                    SourceLocation(file: file, line: line))
+            }
+            _ = await wait.settle(screen)
         }
-        _ = await wait.settle(screen)
     }
 
     /// Chooses the custom action named `action` on the element `query` finds, as a hold does.
@@ -23,23 +25,25 @@ extension User {
     )
         async throws
     {
-        guard let node = await find(query) else {
-            throw failure(
-                "Expected to hold \(query), and \(found(query))",
-                SourceLocation(file: file, line: line))
+        try await Timing.measure(.chooses) {
+            guard let node = await find(query) else {
+                throw failure(
+                    "Expected to hold \(query), and \(found(query))",
+                    SourceLocation(file: file, line: line))
+            }
+            let offered = node.element.actions
+            guard offered.contains(action) else {
+                throw failure(
+                    "\(query) offers \(offered), not \"\(action)\"",
+                    SourceLocation(file: file, line: line))
+            }
+            guard Backend.perform(action, on: node) else {
+                throw failure(
+                    "Choosing \"\(action)\" on \(query) did nothing",
+                    SourceLocation(file: file, line: line))
+            }
+            _ = await wait.settle(screen)
         }
-        let offered = node.element.actions
-        guard offered.contains(action) else {
-            throw failure(
-                "\(query) offers \(offered), not \"\(action)\"",
-                SourceLocation(file: file, line: line))
-        }
-        guard Backend.perform(action, on: node) else {
-            throw failure(
-                "Choosing \"\(action)\" on \(query) did nothing",
-                SourceLocation(file: file, line: line))
-        }
-        _ = await wait.settle(screen)
     }
 
     /// Types `text` on the keyboard, into the field being edited.
@@ -47,11 +51,13 @@ extension User {
         _ text: String,
         file: StaticString = #filePath, line: UInt = #line
     ) async throws {
-        let typed = await wait.until { Backend.type(text, in: screen.window) }
-        guard typed else {
-            throw failure("No field is being edited", SourceLocation(file: file, line: line))
+        try await Timing.measure(.types) {
+            let typed = await wait.until { Backend.type(text, in: screen.window) }
+            guard typed else {
+                throw failure("No field is being edited", SourceLocation(file: file, line: line))
+            }
+            _ = await wait.settle(screen)
         }
-        _ = await wait.settle(screen)
     }
 
     /// Scrolls the page in front by most of a screen, as a three-finger swipe does.
@@ -61,36 +67,40 @@ extension User {
     )
         async throws
     {
-        let scrolled = await wait.until {
-            Backend.scroll(
-                direction, nodes: AccessibilityTree.read(screen).nodes, in: screen.window)
+        try await Timing.measure(.scrolls) {
+            let scrolled = await wait.until {
+                Backend.scroll(
+                    direction, nodes: AccessibilityTree.current(screen).nodes, in: screen.window)
+            }
+            guard scrolled else {
+                throw failure("Nothing on screen scrolls", SourceLocation(file: file, line: line))
+            }
+            _ = await wait.settle(screen)
         }
-        guard scrolled else {
-            throw failure("Nothing on screen scrolls", SourceLocation(file: file, line: line))
-        }
-        _ = await wait.settle(screen)
     }
 
     /// Goes back a screen, as VoiceOver's two-finger scrub does.
     public func goesBack(
         file: StaticString = #filePath, line: UInt = #line
     ) async throws {
-        let before = await wait.settle(screen).elements
-        let answered = await wait.until {
-            Backend.goBack(from: AccessibilityTree.read(screen).nodes, in: screen.window)
-        }
-        // SwiftUI's Mac nodes answer cancel even with nothing to close, so going back counts
-        // only once the settled screen changes.
-        var changed = false
-        if answered {
-            changed = await wait.until {
-                AccessibilityTree.read(screen).elements != before
+        try await Timing.measure(.goesBack) {
+            let before = await wait.settle(screen).elements
+            let answered = await wait.until {
+                Backend.goBack(from: AccessibilityTree.current(screen).nodes, in: screen.window)
             }
+            // SwiftUI's Mac nodes answer cancel even with nothing to close, so going back
+            // counts only once the settled screen changes.
+            var changed = false
+            if answered {
+                changed = await wait.until {
+                    AccessibilityTree.read(screen).elements != before
+                }
+            }
+            guard changed else {
+                throw failure("Nothing on screen went back", SourceLocation(file: file, line: line))
+            }
+            _ = await wait.settle(screen)
         }
-        guard changed else {
-            throw failure("Nothing on screen went back", SourceLocation(file: file, line: line))
-        }
-        _ = await wait.settle(screen)
     }
 
     /// The one actionable element `query` finds, waiting for it.

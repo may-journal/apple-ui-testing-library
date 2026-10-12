@@ -1,19 +1,8 @@
-# Repo tasks. Run: make fitness, make requirements, make requirements-coverage
+# Repo tasks. Run: make fitness, make requirements, make requirements-coverage,
+# make requirements-timing
 #
-# requirements: generates the Xcode project from project.yml, then builds and runs both
-# hosted test bundles, both natively on this Mac: the iOS one as Designed for iPad, never
-# on a simulator, and the macOS one as an AppKit app. Each platform runs
-# build-for-testing and then test-without-building, so a build failure reads apart from a
-# test failure, and no diagnostics are collected, since collecting them after a failure
-# takes minutes. All output goes to DERIVED_DATA inside this checkout, so parallel
-# checkouts never share build state.
-#
-# requirements-coverage: runs both platforms as requirements does, with code coverage on,
-# then prints line coverage of Sources/UITestingLibrary/ per platform and for both together.
-# Xcode instruments the package but leaves its static code out of .xcresult coverage, so
-# the target reads each run's Coverage.profdata with llvm-cov against the test bundle that
-# links the package. Fixtures and tests are left out. Output: per-line hits as .lcov files
-# in COVERAGE_DIR, then lines, missed and percent covered for iOS, macOS and both.
+# How the requirements targets work: docs/architecture/04-code.md, Tests. Their logic lives
+# in scripts/, so this file holds only variables and calls.
 
 FITNESS_INSTALL = $(HOME)/.local/share/may-journal/fitness/fitness-install
 PROJECT = UITestingLibrary.xcodeproj
@@ -21,7 +10,7 @@ DERIVED_DATA = .build/DerivedData
 IOS_DESTINATION = platform=macOS,variant=Designed for iPad
 MAC_DESTINATION = platform=macOS
 XCODEBUILD = xcodebuild -project $(PROJECT) -derivedDataPath $(DERIVED_DATA)
-# YES only under requirements-coverage, which reads PROFILE_DATA after each platform's run.
+# YES only under requirements-coverage, whose script reads PROFILE_DATA after each run.
 CODE_COVERAGE ?= NO
 PROFILE_DATA = $(DERIVED_DATA)/Build/ProfileData
 COVERAGE_DIR = .build/coverage
@@ -35,21 +24,10 @@ run-hosted-tests = $(XCODEBUILD) build-for-testing -scheme $(1) -destination '$(
 	&& $(XCODEBUILD) test-without-building -scheme $(1) -destination '$(2)' \
 	-enableCodeCoverage $(CODE_COVERAGE) -collect-test-diagnostics never
 
-# $(call keep-profile,name): move the one platform's merged profile into COVERAGE_DIR.
-keep-profile = mv $(PROFILE_DATA)/*/Coverage.profdata $(COVERAGE_DIR)/$(1).profdata
-
-# $(call export-lines,name,binary): the library's per-line hit counts from one platform's run.
-export-lines = xcrun llvm-cov export -format=lcov -instr-profile=$(COVERAGE_DIR)/$(1).profdata \
-	$(2) $(LIBRARY_SOURCES) > $(COVERAGE_DIR)/$(1).lcov
-
-# $(call print-coverage,label,lcov files): count each file and line once; a line hit on
-# either platform counts as covered.
-print-coverage = awk -F'[:,]' '/^SF:/ { file = $$2 } /^DA:/ { line = file ":" $$2; seen[line] = 1; \
-	if ($$3 > 0) hit[line] = 1 } END { for (line in seen) { lines++; if (line in hit) covered++ } \
-	printf "%-9s %d lines, %d missed, %.2f%% covered\n", "$(1)", lines, lines - covered, 100 * covered / lines }' $(2)
+export COVERAGE_DIR PROFILE_DATA LIBRARY_SOURCES IOS_TEST_BINARY MAC_TEST_BINARY
 
 .PHONY: hooks fitness format generate requirements requirements-ios requirements-mac \
-	requirements-coverage
+	requirements-coverage requirements-timing
 
 # Use the org-synced hooks in .fitness-hooks (see .github/fitness-setup.md once synced).
 hooks:
@@ -80,13 +58,8 @@ requirements-mac: generate
 
 # Run both platforms with coverage on, then print the library's line coverage.
 requirements-coverage:
-	rm -rf $(COVERAGE_DIR) $(PROFILE_DATA) && mkdir -p $(COVERAGE_DIR)
-	$(MAKE) requirements-ios CODE_COVERAGE=YES && $(call keep-profile,ios)
-	rm -rf $(PROFILE_DATA)
-	$(MAKE) requirements-mac CODE_COVERAGE=YES && $(call keep-profile,mac)
-	$(call export-lines,ios,$(IOS_TEST_BINARY))
-	$(call export-lines,mac,$(MAC_TEST_BINARY))
-	@echo "Line coverage of $(LIBRARY_SOURCES)/ under the requirement tests:"
-	@$(call print-coverage,iOS,$(COVERAGE_DIR)/ios.lcov)
-	@$(call print-coverage,macOS,$(COVERAGE_DIR)/mac.lcov)
-	@$(call print-coverage,Combined,$(COVERAGE_DIR)/ios.lcov $(COVERAGE_DIR)/mac.lcov)
+	scripts/requirements-coverage.sh
+
+# Run both platforms, then print time per host and phase, even after a failing test.
+requirements-timing:
+	scripts/requirements-timing.sh

@@ -10,8 +10,8 @@ extension Backend {
     static func nodes(in window: HostWindow) -> [Node] {
         let front = frontWindow(of: window.window)
         var found: [AnyObject] = []
-        if let root = front.contentView { collect(root, into: &found) }
-        return found.map { Node(element: element(of: $0, in: front), object: $0) }
+        if let root = front.contentView { collect(root, in: front, into: &found) }
+        return found.map { node(of: $0, in: front) }
     }
 
     /// The window a person reads: the deepest sheet attached to `window`, or `window` itself.
@@ -21,14 +21,32 @@ extension Backend {
         return front
     }
 
-    private static func collect(_ object: AnyObject, into found: inout [AnyObject]) {
+    /// Walks the tree as VoiceOver does, from `object` down.
+    private static func collect(
+        _ object: AnyObject, in window: NSWindow, into found: inout [AnyObject]
+    ) {
         if let view = object as? NSView, view.isHiddenOrHasHiddenAncestor { return }
-        let children = (object.accessibilityChildren?() ?? []).map { $0 as AnyObject }
-        if object.isAccessibilityElement?() == true, children.isEmpty, !isEmptyGroup(object) {
+        let isElement = object.isAccessibilityElement?() == true
+        if isElement, stopsOn(object, in: window) {
             found.append(object)
             return
         }
-        for child in children { collect(child, into: &found) }
+        let children = (object.accessibilityChildren?() ?? []).map { $0 as AnyObject }
+        if isElement, children.isEmpty, !isEmptyGroup(object) {
+            found.append(object)
+            return
+        }
+        for child in children { collect(child, in: window, into: &found) }
+    }
+
+    /// Whether VoiceOver stops on the object without asking what it holds: a control, or a
+    /// text drawn off screen. SwiftUI builds a text's link children on request, and only a
+    /// text on screen needs them, since no look matches off screen.
+    private static func stopsOn(_ object: AnyObject, in window: NSWindow) -> Bool {
+        guard let role = text(of: object, "accessibilityRole"),
+            let roles = roleMap[NSAccessibility.Role(rawValue: role)]
+        else { return false }
+        return !roles.contains(.text) || !isOnScreen(frame(of: object, in: window), in: window)
     }
 
     /// Whether the object is a group with nothing in it, nothing to say and nothing to offer,
@@ -42,10 +60,28 @@ extension Backend {
             && (object.accessibilityCustomActions?() ?? []).isEmpty
     }
 
-    private static func element(of object: AnyObject, in window: NSWindow) -> Element {
-        let frame = window.convertFromScreen(object.accessibilityFrame?() ?? .zero)
+    /// The element, with its frame read first, so one drawn off screen waits to be read.
+    private static func node(of object: AnyObject, in window: NSWindow) -> Node {
+        let frame = Self.frame(of: object, in: window)
+        let isOnScreen = Self.isOnScreen(frame, in: window)
+        return Node(object: object, isOnScreen: isOnScreen) {
+            element(of: object, frame: frame, isOnScreen: isOnScreen)
+        }
+    }
+
+    private static func frame(of object: AnyObject, in window: NSWindow) -> CGRect {
+        window.convertFromScreen(object.accessibilityFrame?() ?? .zero)
+    }
+
+    /// Whether the frame's middle is inside the window's content.
+    private static func isOnScreen(_ frame: CGRect, in window: NSWindow) -> Bool {
         let middle = CGPoint(x: frame.midX, y: frame.midY)
-        let inside = window.contentView?.frame.contains(middle) ?? false
+        return !frame.isEmpty && (window.contentView?.frame.contains(middle) ?? false)
+    }
+
+    private static func element(of object: AnyObject, frame: CGRect, isOnScreen: Bool)
+        -> Element
+    {
         let roles = roles(of: object)
         var label = text(of: object, "accessibilityLabel") ?? text(of: object, "accessibilityTitle")
         var value = attribute(of: object, "accessibilityValue").map { "\($0)" }
@@ -58,7 +94,7 @@ extension Backend {
             label: label ?? "", value: value,
             identifier: text(of: object, "accessibilityIdentifier"), roles: roles,
             actions: object.accessibilityCustomActions?()?.map(\.name) ?? [],
-            frame: frame, isOnScreen: !frame.isEmpty && inside)
+            frame: frame, isOnScreen: isOnScreen)
     }
 
     /// An attribute as the node answers it, untyped. A typed dynamic call can pick a

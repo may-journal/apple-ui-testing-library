@@ -34,5 +34,18 @@ extension UITestingLibraryTests {
             try await user.doesNotSee(.text("First"))
             try second.close()
         }
+
+        @Test func test0001_7() async throws {
+            let screen = try Screen.render { LongScreen() }
+            let user = User(screen)
+            try await user.sees(.button("Count"))
+            let started = ContinuousClock.now
+            for _ in 1...10 {
+                let read = await user.reads().map(\.spoken)
+                #expect(read.contains("Row 1.1"))
+            }
+            #expect(ContinuousClock.now - started < .milliseconds(800))
+            try screen.close()
+        }
     }
 }
