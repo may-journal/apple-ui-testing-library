@@ -8,14 +8,14 @@ extension Backend {
     /// Remembers the menu interaction of the control under the element, if it has one, so
     /// the next read can ask for the menu it opens. A control whose primary action is its
     /// menu, such as a navigation bar's menu button, opens it here: its own activation runs
-    /// nothing. Whether this opened the menu.
+    /// nothing. A disabled control opens nothing. Whether this opened the menu.
     static func opensMenu(under object: NSObject, in window: UIWindow) -> Bool {
         let point = window.convert(object.accessibilityActivationPoint, from: nil)
         var view = window.hitTest(point, with: nil)
         while let current = view, !(current is UIControl) { view = current.superview }
-        guard let control = view as? UIControl, control.isContextMenuInteractionEnabled else {
-            return false
-        }
+        guard let control = view as? UIControl, control.isEnabled,
+            control.isContextMenuInteractionEnabled
+        else { return false }
         OpenMenu.shared.opening(control.contextMenuInteraction)
         guard control.showsMenuAsPrimaryAction else { return false }
         control.performPrimaryAction()

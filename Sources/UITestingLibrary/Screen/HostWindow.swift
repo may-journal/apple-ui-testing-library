@@ -53,7 +53,11 @@ public final class HostWindow {
         window.appearance = look.appearance.flatMap {
             NSAppearance(named: $0 == .dark ? .darkAqua : .aqua)
         }
+        // The window keeps the test's size; the hosting view never resizes it to fit.
+        host.sizingOptions = []
         window.contentView = host
+        window.contentMinSize = size.points
+        window.contentMaxSize = size.points
         window.makeKeyAndOrderFront(nil)
         window.contentView?.layoutSubtreeIfNeeded()
     }
