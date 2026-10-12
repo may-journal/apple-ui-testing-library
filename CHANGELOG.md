@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+## [1.0.1](https://github.com/may-journal/apple-ui-testing-library/compare/v1.0.0...v1.0.1) (2026-10-12)
+
+
+### Performance Improvements
+
+* **waits:** settle on the idle run loop and reuse reads ([#38](https://github.com/may-journal/apple-ui-testing-library/issues/38)) ([d610ca7](https://github.com/may-journal/apple-ui-testing-library/commit/d610ca769657b6ec3d03a6ce19de75ed0d721c2e))
+
 ### 2026.10.12.0845
 
 - Perf: a look or an act reuses the last read, and a read takes frames first and reads off-screen elements late
