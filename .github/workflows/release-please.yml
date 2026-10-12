@@ -44,7 +44,7 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           GH_REPO: ${{ github.repository }}
-          PR: ${{ fromJSON(steps.release.outputs.pr).number }}
+          PR: ${{ fromJSON(steps.release.outputs.pr || '{}').number }}
         run: |
           body="$(gh pr view "$PR" --json body --jq .body)"
           shaped="$(printf '%s\n' "$body" | awk '
@@ -65,7 +65,7 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           GH_REPO: ${{ github.repository }}
-          PR: ${{ fromJSON(steps.release.outputs.pr).number }}
+          PR: ${{ fromJSON(steps.release.outputs.pr || '{}').number }}
         run: |
           title="Publish the release from PR #$PR"
           issue="$(gh issue list --state all --limit 200 --json number,title |
@@ -86,11 +86,11 @@ jobs:
       # edited, so it judged the body Release Please first wrote. Reopen the PR
       # after a rewrite so the check reads the shaped body.
       - name: Rerun pr-check on the shaped body
-        if: ${{ steps.shape.outputs.edited == 'true' || steps.link.outputs.edited == 'true' }}
+        if: ${{ steps.release.outputs.pr != '' && (steps.shape.outputs.edited == 'true' || steps.link.outputs.edited == 'true') }}
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           GH_REPO: ${{ github.repository }}
-          PR: ${{ fromJSON(steps.release.outputs.pr).number }}
+          PR: ${{ fromJSON(steps.release.outputs.pr || '{}').number }}
         run: |
           gh pr close "$PR"
           gh pr reopen "$PR"
