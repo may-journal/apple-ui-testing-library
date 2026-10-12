@@ -6,6 +6,14 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.12.1622
+
+- Fix: a tap on a navigation bar's menu button opens its menu as Designed for iPad, through its primary action
+- Fix: the Mac reads a window's toolbar before its content, so a navigation stack's toolbar items can be found and tapped
+- Fix: the Mac window keeps the test's size, where SwiftUI shrank it to fit and hid toolbar items in an overflow menu
+- Test: 0003.7 now drives a menu in the content and one in the navigation bar, on both platforms
+- Docs: the usage guide links 0003.7, and the code doc says how a navigation bar's menu is reached
+
 ## [1.1.0](https://github.com/may-journal/apple-ui-testing-library/compare/v1.0.1...v1.1.0) (2026-10-12)
 
 

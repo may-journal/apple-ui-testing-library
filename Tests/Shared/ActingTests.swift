@@ -72,6 +72,20 @@ extension UITestingLibraryTests {
             try await user.taps(.button("Import"))
             try await user.sees(.text("Imported"))
             try screen.close()
+
+            let bar = try Screen.render { BarMenuScreen() }
+            let barUser = User(bar)
+            try await barUser.taps(.button("Add"))
+            try await barUser.sees(.button("Import"))
+            #expect(await barUser.reads().map(\.spoken) == ["Import", "Scan"])
+            try await barUser.taps(.button("Import"))
+            try await barUser.sees(.text("Imported"))
+            try await barUser.taps(.button("More"))
+            try await barUser.sees(.button("Export"))
+            #expect(await barUser.reads().map(\.spoken) == ["Export", "Print"])
+            try await barUser.taps(.button("Export"))
+            try await barUser.sees(.text("Exported"))
+            try bar.close()
         }
 
         @Test func test0003_8() async throws {
