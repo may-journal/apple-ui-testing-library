@@ -5,14 +5,29 @@ import AppKit
 /// SwiftUI's nodes answer the protocol's messages without adopting it, so every call goes
 /// through dynamic lookup on `AnyObject`.
 extension Backend {
-    /// Every element VoiceOver would stop on in the front window, depth first. A sheet is
-    /// its own window over the screen, and only the sheet is read while it is up.
+    /// Every element VoiceOver would stop on in the front window, depth first, top to bottom:
+    /// its toolbar, then its content. A sheet is its own window over the screen, and only the
+    /// sheet is read while it is up.
     static func nodes(in window: HostWindow) -> [Node] {
         if let menu = menuNodes() { return menu }
         let front = frontWindow(of: window.window)
-        var found: [AnyObject] = []
-        if let root = front.contentView { collect(root, in: front, into: &found) }
-        return found.map { node(of: $0, in: front) }
+        return areas(of: front).flatMap { root, area in
+            var found: [AnyObject] = []
+            collect(root, in: area, of: front, into: &found)
+            return found.map { node(of: $0, in: area, of: front) }
+        }
+    }
+
+    /// The parts of the window a person reads, each with the frame it draws in: the toolbar
+    /// SwiftUI puts a navigation stack's items in, then the content below it.
+    private static func areas(of window: NSWindow) -> [(root: AnyObject, area: CGRect)] {
+        let toolbars = (window.accessibilityChildren() ?? []).compactMap { $0 as? NSView }
+            .filter { $0.accessibilityRole() == .toolbar }
+        var areas: [(root: AnyObject, area: CGRect)] = toolbars.map {
+            ($0, $0.convert($0.bounds, to: nil))
+        }
+        if let content = window.contentView { areas.append((content, content.frame)) }
+        return areas
     }
 
     /// The window a person reads: the deepest sheet attached to `window`, or `window` itself.
@@ -22,13 +37,14 @@ extension Backend {
         return front
     }
 
-    /// Walks the tree as VoiceOver does, from `object` down.
+    /// Walks the tree as VoiceOver does, from `object` down, in the part of the window drawn
+    /// in `area`.
     private static func collect(
-        _ object: AnyObject, in window: NSWindow, into found: inout [AnyObject]
+        _ object: AnyObject, in area: CGRect, of window: NSWindow, into found: inout [AnyObject]
     ) {
         if let view = object as? NSView, view.isHiddenOrHasHiddenAncestor { return }
         let isElement = object.isAccessibilityElement?() == true
-        if isElement, stopsOn(object, in: window) {
+        if isElement, stopsOn(object, in: area, of: window) {
             found.append(object)
             return
         }
@@ -37,17 +53,17 @@ extension Backend {
             found.append(object)
             return
         }
-        for child in children { collect(child, in: window, into: &found) }
+        for child in children { collect(child, in: area, of: window, into: &found) }
     }
 
     /// Whether VoiceOver stops on the object without asking what it holds: a control, or a
     /// text drawn off screen. SwiftUI builds a text's link children on request, and only a
     /// text on screen needs them, since no look matches off screen.
-    private static func stopsOn(_ object: AnyObject, in window: NSWindow) -> Bool {
+    private static func stopsOn(_ object: AnyObject, in area: CGRect, of window: NSWindow) -> Bool {
         guard let role = text(of: object, "accessibilityRole"),
             let roles = roleMap[NSAccessibility.Role(rawValue: role)]
         else { return false }
-        return !roles.contains(.text) || !isOnScreen(frame(of: object, in: window), in: window)
+        return !roles.contains(.text) || !isOnScreen(frame(of: object, in: window), in: area)
     }
 
     /// Whether the object is a group with nothing in it, nothing to say and nothing to offer,
@@ -62,9 +78,9 @@ extension Backend {
     }
 
     /// The element, with its frame read first, so one drawn off screen waits to be read.
-    private static func node(of object: AnyObject, in window: NSWindow) -> Node {
+    private static func node(of object: AnyObject, in area: CGRect, of window: NSWindow) -> Node {
         let frame = Self.frame(of: object, in: window)
-        let isOnScreen = Self.isOnScreen(frame, in: window)
+        let isOnScreen = Self.isOnScreen(frame, in: area)
         return Node(object: object, isOnScreen: isOnScreen) {
             element(of: object, frame: frame, isOnScreen: isOnScreen)
         }
@@ -74,10 +90,9 @@ extension Backend {
         window.convertFromScreen(object.accessibilityFrame?() ?? .zero)
     }
 
-    /// Whether the frame's middle is inside the window's content.
-    private static func isOnScreen(_ frame: CGRect, in window: NSWindow) -> Bool {
-        let middle = CGPoint(x: frame.midX, y: frame.midY)
-        return !frame.isEmpty && (window.contentView?.frame.contains(middle) ?? false)
+    /// Whether the frame's middle is inside the part of the window it is drawn in.
+    private static func isOnScreen(_ frame: CGRect, in area: CGRect) -> Bool {
+        !frame.isEmpty && area.contains(CGPoint(x: frame.midX, y: frame.midY))
     }
 
     private static func element(of object: AnyObject, frame: CGRect, isOnScreen: Bool)

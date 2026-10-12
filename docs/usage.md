@@ -136,7 +136,7 @@ Fix the query or the screen. An empty read fails `close()` too, since it proved 
 
 ## System menus
 
-A tap on a control that opens a menu, such as a SwiftUI `Menu`, opens it. While it is open, a read holds only its items, as VoiceOver reads them. Tap one to run it; the menu closes ([0003.7](requirements/0003-actions-doing-what-a-person-does.md)). `goesBack()` closes it without choosing one ([0003.8](requirements/0003-actions-doing-what-a-person-does.md)).
+A tap on a control that opens a menu, such as a SwiftUI `Menu` in the content or a navigation bar, opens it. While it is open, a read holds only its items, as VoiceOver reads them. Tap one to run it; the menu closes ([0003.7](requirements/0003-actions-doing-what-a-person-does.md)). `goesBack()` closes it without choosing one ([0003.8](requirements/0003-actions-doing-what-a-person-does.md)).
 
 ```swift
 try await user.taps(.button("Add"))

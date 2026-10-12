@@ -73,8 +73,8 @@ One Swift package, iOS 26 and macOS 26 and later, Swift 6 with complete strict c
 
 | Platform | How it runs |
 | -------- | ----------- |
-| iOS, Designed for iPad | Hosted tests in the iOS app's process, running natively on this Mac through the UIKit backend, with no simulator boot. The Mac draws an alert natively and hides UIKit's copy, so the backend reads that copy and presses its buttons through the alert. It draws a control's menu natively too: the backend reads the items from UIKit's visible menu once, then closes the Mac's menu by name. A text size reaches the root, so a layout that reads it changes, but the Mac draws text at one size whatever the setting. |
-| Mac | Hosted tests in a Mac app's process, through the AppKit backend, with no simulator boot. A pressed menu control's menu tracks in its own run loop mode, so the backend reads it from the tracking menu. A text size reaches the root as an environment value; text draws at one size here too. |
+| iOS, Designed for iPad | Hosted tests in the iOS app's process, running natively on this Mac through the UIKit backend, with no simulator boot. The Mac draws an alert natively and hides UIKit's copy, so the backend reads that copy and presses its buttons through the alert. It draws a control's menu natively too: the backend reads the items from UIKit's visible menu once, then closes the Mac's menu by name. A navigation bar's menu button answers no activation, so the backend runs its primary action, which opens the menu. A text size reaches the root, so a layout that reads it changes, but the Mac draws text at one size whatever the setting. |
+| Mac | Hosted tests in a Mac app's process, through the AppKit backend, with no simulator boot. A pressed menu control's menu tracks in its own run loop mode, so the backend reads it from the tracking menu. A navigation stack's items live in the window's toolbar, which the backend reads before the content. The window keeps the test's size, so no toolbar item hides in an overflow menu. A text size reaches the root as an environment value; text draws at one size here too. |
 
 ## Repo tree (outline)
 

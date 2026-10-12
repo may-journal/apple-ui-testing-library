@@ -43,7 +43,7 @@ Source: #1
         - When I read it and tap one of its buttons
             - Then I hear its title, and that button's action runs
 - 0003.7
-    - Given a control that opens a menu
+    - Given a control or a navigation bar button that opens a menu
         - When I tap it, read the menu, and tap an item
             - Then I hear each item, and that item's action runs
 - 0003.8

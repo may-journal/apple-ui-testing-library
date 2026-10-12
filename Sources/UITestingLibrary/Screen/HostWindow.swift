@@ -43,7 +43,7 @@ public final class HostWindow {
 
     init<Content: View>(size: ScreenSize, look: Look, content: Content) throws {
         self.size = size
-        window = NSWindow(
+        window = FixedSizeWindow(
             contentRect: CGRect(origin: .zero, size: size.points), styleMask: [.titled],
             backing: .buffered,
             defer: false)
@@ -71,6 +71,33 @@ public final class HostWindow {
     }
     #endif
 }
+
+#if canImport(AppKit) && !canImport(UIKit)
+/// A window that keeps the test's content size. SwiftUI fits a hosting view's window to its
+/// content as it lays out, whatever its sizing options, which would clip a toolbar's items
+/// into an overflow menu.
+private final class FixedSizeWindow: NSWindow {
+    private var contentSize: CGSize?
+
+    override init(
+        contentRect: NSRect, styleMask style: NSWindow.StyleMask,
+        backing backingStoreType: NSWindow.BackingStoreType, defer flag: Bool
+    ) {
+        super.init(
+            contentRect: contentRect, styleMask: style, backing: backingStoreType, defer: flag)
+        contentSize = contentRect.size
+    }
+
+    /// Any frame keeps the content size; a title bar that grows a toolbar still grows.
+    override func setFrame(_ frameRect: NSRect, display flag: Bool) {
+        guard let contentSize else { return super.setFrame(frameRect, display: flag) }
+        var fixed = frameRect
+        fixed.size = self.frameRect(forContentRect: CGRect(origin: .zero, size: contentSize)).size
+        fixed.origin.y = frameRect.maxY - fixed.height
+        super.setFrame(fixed, display: flag)
+    }
+}
+#endif
 
 /// Why a window could not be made.
 enum HostWindowError: Error {

@@ -4,12 +4,13 @@ import UIKit
 /// Drives UIKit elements through what VoiceOver offers: activation, custom actions, the
 /// keyboard, a three-finger scroll, and the two-finger scrub that goes back.
 extension Backend {
-    /// Activates the element, or presses the control under it when it answers no
-    /// activation of its own, such as a navigation bar's Back; whether anything happened.
+    /// Opens the menu of the control under the element, activates the element, or presses
+    /// the control under it when it answers no activation of its own, such as a navigation
+    /// bar's Back; whether anything happened.
     static func activate(_ node: Node, in window: HostWindow) -> Bool {
         guard let object = node.object as? NSObject else { return false }
         if object is UIMenuElement { return choosesMenuItem(object) }
-        watchMenu(under: object, in: window.window)
+        if opensMenu(under: object, in: window.window) { return true }
         return object.accessibilityActivate()
             || pressesAlertButton(object)
             || pressesControl(under: object, in: window.window)
