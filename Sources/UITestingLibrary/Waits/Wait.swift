@@ -29,6 +29,7 @@ public struct Wait: Sendable, Equatable {
     @MainActor
     func settle(_ screen: Screen) async -> AccessibilityTree {
         await Timing.measure(.settle) {
+            _ = await until { !Backend.isMenuClosing }
             await Idle.next()
             await Idle.next()
             return AccessibilityTree.read(screen)

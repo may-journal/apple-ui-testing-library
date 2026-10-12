@@ -101,6 +101,7 @@ extension Backend {
     /// Goes back as VoiceOver's scrub does: the front element answers it, or a view holding
     /// it; whether one did.
     static func goBack(from nodes: [Node], in window: HostWindow) -> Bool {
+        if goBackOutOfMenu() { return true }
         guard let front = nodes.last(where: \.element.isOnScreen)?.object as? NSObject else {
             return false
         }

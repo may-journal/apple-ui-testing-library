@@ -47,6 +47,17 @@ extension Backend {
         return true
     }
 
+    /// Goes back out of the open menu, as a person's escape does; whether a menu was open.
+    /// Its items answer no escape, so the menu itself closes.
+    static func goBackOutOfMenu() -> Bool {
+        guard OpenMenu.shared.shown() != nil else { return false }
+        closeMenu()
+        return true
+    }
+
+    /// Whether a cancelled menu is still unwinding; UIKit's menu is gone as it closes.
+    static var isMenuClosing: Bool { false }
+
     /// Closes the open menu, if any, without choosing an item.
     static func closeMenu() {
         OpenMenu.shared.close()

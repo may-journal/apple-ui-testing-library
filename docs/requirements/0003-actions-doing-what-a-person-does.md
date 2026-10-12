@@ -46,3 +46,7 @@ Source: #1
     - Given a control that opens a menu
         - When I tap it, read the menu, and tap an item
             - Then I hear each item, and that item's action runs
+- 0003.8
+    - Given a control's menu is open
+        - When I go back
+            - Then the menu closes without running an item

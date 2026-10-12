@@ -64,7 +64,7 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 | `Role` | button, link, heading, image, text, text field, search field, adjustable, toggle, selected. |
 | Act outcome | done; nothing to act on; not actionable; did nothing. Each failure names the query and prints the report. |
 | `Canary` | read elements; read nothing. Reading nothing fails `close()`, and a `doesNotSee` that only read empty. |
-| Menu | closed; open. While a menu is open, a read holds only its items. Tapping an item runs it and closes the menu, and so does `close()`. |
+| Menu | closed; open. While a menu is open, a read holds only its items. Tapping an item runs it and closes the menu, and so does `close()`. `goesBack()` closes it without running an item, and each act settles after the Mac finishes closing it. |
 | `Failure` | message; report; location. Thrown from every look and act, so the test fails at its own line. |
 
 ## Platforms

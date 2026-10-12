@@ -73,5 +73,16 @@ extension UITestingLibraryTests {
             try await user.sees(.text("Imported"))
             try screen.close()
         }
+
+        @Test func test0003_8() async throws {
+            let screen = try Screen.render { MenuScreen() }
+            let user = User(screen)
+            try await user.taps(.button("Add"))
+            try await user.sees(.button("Import"))
+            try await user.goesBack()
+            try await user.doesNotSee(.button("Import"))
+            try await user.sees(.button("Add"))
+            try screen.close()
+        }
     }
 }

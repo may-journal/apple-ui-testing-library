@@ -55,6 +55,7 @@ extension Backend {
 
     /// Cancels from the front element, or a view holding it; whether one answered.
     static func goBack(from nodes: [Node], in window: HostWindow) -> Bool {
+        if goBackOutOfMenu() { return true }
         var next: AnyObject? = nodes.last(where: \.element.isOnScreen)?.object
         while let current = next {
             if current.accessibilityPerformCancel?() == true { return true }

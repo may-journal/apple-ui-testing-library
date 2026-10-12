@@ -30,6 +30,21 @@ extension Backend {
         return true
     }
 
+    /// Goes back out of the open menu, as a person's escape does; whether a menu was open.
+    /// Its items answer no cancel, so the menu itself closes.
+    static func goBackOutOfMenu() -> Bool {
+        OpenMenu.watch()
+        guard OpenMenu.shared.menu != nil else { return false }
+        closeMenu()
+        return true
+    }
+
+    /// Whether a cancelled menu is still unwinding. AppKit ignores a press that comes before
+    /// the cancelled menu's tracking ends, so every act settles after it.
+    static var isMenuClosing: Bool {
+        OpenMenu.shared.menu == nil && OpenMenu.shared.tracking != nil
+    }
+
     /// Closes the open menu, if any, without choosing an item.
     static func closeMenu() {
         OpenMenu.shared.menu?.cancelTracking()
@@ -43,6 +58,8 @@ private final class OpenMenu: NSObject {
     static let shared = OpenMenu()
     private static var watching = false
     var menu: NSMenu?
+    /// The menu AppKit tracks, which outlasts `menu` while a cancelled menu unwinds.
+    var tracking: NSMenu?
 
     static func watch() {
         guard !watching else { return }
@@ -59,11 +76,13 @@ private final class OpenMenu: NSObject {
     /// A menu that begins once its screen closed is cancelled at once, so the app can quit.
     @objc private func began(_ note: Notification) {
         menu = note.object as? NSMenu
+        tracking = menu
         if Screen.open == nil { Backend.closeMenu() }
     }
 
     @objc private func ended(_ note: Notification) {
         if menu === note.object as? NSMenu { menu = nil }
+        if tracking === note.object as? NSMenu { tracking = nil }
     }
 }
 #endif
