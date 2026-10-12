@@ -2,7 +2,8 @@ import os
 
 /// One timed phase of a test: its signpost name, such as `act`, and a code naming the step,
 /// such as `taps`. The log drops the names of a Designed for iPad run, whose binary is gone
-/// by then, so each interval's ID starts with the code, and the Makefile reads it from there.
+/// by then, so each interval's ID starts with the code. `config/timing-phases.json` mirrors
+/// these codes for `make requirements-timing`.
 struct Phase: Sendable {
     let name: StaticString
     let code: UInt64

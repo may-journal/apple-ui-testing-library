@@ -6,53 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
-### 2026.10.10.2233
+### 2026.10.12.0845
 
-- Fix: the Mac reader asks a text on screen for its link children again, and skips only off-screen text
-- Fix: the reused read holds its screen, so a screen rendered after it never takes its place
-- Test: 0001.7 allows 800 ms and 0004.5 allows 1.5 s, about three times the Mac's time
-
-### 2026.10.10.2228
-
-- Test: 0001.7 promises ten reads of the long fixture within half a second
-- Test: 0004.5 promises ten rounds of tap, choose and look within a second
-- Chore: `make requirements-timing` prints its table even after a failing test
-- Docs: ADR 0005 notes that parallel testing gains nothing, since the serialized suite stays in one runner
-
-### 2026.10.10.2225
-
-- Test: each row of the long fixture offers Archive, which takes the row away and moves the rest up
-- Test: 0004.5 taps, chooses and looks ten times on the long fixture
-- Perf: `chooses` cost a tap and more, since the old settle chased the rows moving up
-- Perf: with the idle settle, `chooses` takes 6 ms on iOS and 11 ms on the Mac
-
-### 2026.10.10.2223
-
-- Perf: a read takes each element's frame first, and reads one drawn off screen only on first use
-- Perf: the Mac reader never asks a control or text for its children, which SwiftUI builds on request
-- Perf: the iOS reader asks once whether it runs on a Mac, not for every view
-- Perf: ten reads of the long fixture drop from 0.18 to 0.13 s on iOS, and 0.65 to 0.27 s on the Mac
-
-### 2026.10.10.2219
-
-- Perf: a look or an act's find reuses the last read until the main thread runs anything else
-- Perf: ten taps and looks on the long fixture drop from 0.35 to 0.21 s on iOS, and 1.39 to 0.69 s on the Mac
-- Test: 0001.7 reads the long fixture ten times, so each read is fresh
-- Docs: ADR 0003 and the components doc state when a read is reused
-
-### 2026.10.10.2217
-
-- Perf: an act settles once the main run loop goes idle twice, then reads the tree once
-- Perf: the settle no longer sleeps 50 ms or reads until two reads match
-- Perf: a tap's mean drops from 144 to 61 ms as Designed for iPad, and from 209 to 128 ms on the Mac
-- Docs: ADR 0003 and the architecture docs describe the idle settle
-
-### 2026.10.10.2213
-
-- Feat: the library signposts each render, act, settle, read and look under Points of Interest
-- Feat: `make requirements-timing` runs both bundles and prints each phase's count, total and mean time
-- Test: a long, nested fixture screen measures read cost, and a test taps it ten times
-- Docs: 0001.7 and 0004.5 state how fast ten looks and ten taps finish
+- Perf: a look or an act reuses the last read, and a read takes frames first and reads off-screen elements late
+- Perf: the Mac reader skips a leaf's children, and the iOS reader asks once whether it runs on a Mac
+- Test: 0001.7 and 0004.5 promise read and act times on a long fixture whose rows offer Archive
+- Chore: `make requirements-timing` prints its table even after a failing test, with phase names in `config/timing-phases.json`
+- Docs: the Makefile's logic moves to `scripts/`, and ADR 0005 notes that parallel testing gains nothing
 
 ## 1.0.0 (2026-10-10)
 

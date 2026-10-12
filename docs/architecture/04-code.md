@@ -97,6 +97,8 @@ apple-ui-testing-library/
 ├── docs/
 │   ├── architecture/
 │   └── requirements/
+├── scripts/                # requirements-coverage.sh and requirements-timing.sh
+├── config/                 # timing-phases.json
 ├── Makefile
 ├── CHANGELOG.md
 └── README.md
@@ -107,8 +109,8 @@ apple-ui-testing-library/
 | Concern | Rule |
 | ------- | ---- |
 | Proof | Each acceptance in `docs/requirements/` is proven by one test named for it, against a real fixture screen in `TestHost`. |
-| Run | `make requirements` builds both bundles, then runs them serialized, one test at a time, each under a time limit. The iOS bundle runs natively on this Mac as Designed for iPad and never boots a simulator. 0001.1 keeps its phone layout, since the host controller sets a compact size class. |
-| Coverage | `make requirements-coverage` runs both bundles with coverage on and prints line coverage of `Sources/UITestingLibrary/` per platform and combined. |
-| Timing | `make requirements-timing` runs both bundles, then prints each phase's count, total and mean time from the library's signposts. |
+| Run | `make requirements` builds both bundles, then runs them serialized, one test at a time, each under a time limit. Each platform runs `build-for-testing` and then `test-without-building`, so a build failure reads apart from a test failure, and no diagnostics are collected. All output goes to `.build/DerivedData` inside the checkout, so parallel checkouts never share build state. The iOS bundle runs natively on this Mac as Designed for iPad and never boots a simulator. 0001.1 keeps its phone layout, since the host controller sets a compact size class. |
+| Coverage | `make requirements-coverage` runs both bundles with coverage on, then `scripts/requirements-coverage.sh` prints line coverage of `Sources/UITestingLibrary/` per platform and combined. Xcode leaves the package's static code out of `.xcresult` coverage, so the script reads each run's `Coverage.profdata` with `llvm-cov` against the test bundle that links the package, leaving out fixtures and tests. It keeps the per-line hits as `.lcov` files in `.build/coverage`. |
+| Timing | `make requirements-timing` runs both bundles, then `scripts/requirements-timing.sh` reads the library's signposts from the unified log since the run began. It prints one row per host and phase with the count, total and mean in milliseconds, even after a failing test. Phases nest: an act holds its settle, and a settle holds its reads. The log drops a Designed for iPad run's signpost names, so the phase comes from the code in each interval's ID. `config/timing-phases.json` maps each code to its name and mirrors `Tree/Timing.swift`. |
 | Never | Tests never read view types, view models, or private state. |
 | Flip | Before a test lands, its Given is flipped once, and the failure must name the Then. |

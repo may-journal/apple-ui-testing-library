@@ -28,6 +28,7 @@
     "mktime",
     "profdata",
     "signposter",
+    "slurpfile",
     "simctl",
     "strptime",
     "Subrole",
