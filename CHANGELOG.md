@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+## [1.1.1](https://github.com/may-journal/apple-ui-testing-library/compare/v1.1.0...v1.1.1) (2026-10-12)
+
+
+### Bug Fixes
+
+* **tree:** open a navigation bar's menu on both platforms ([#56](https://github.com/may-journal/apple-ui-testing-library/issues/56)) ([7c8e233](https://github.com/may-journal/apple-ui-testing-library/commit/7c8e233fa2697fbc6524687d9a7b45e5692b40dc))
+
 ### 2026.10.12.1622
 
 - Fix: a tap on a navigation bar's menu button opens its menu as Designed for iPad, through its primary action, unless disabled
