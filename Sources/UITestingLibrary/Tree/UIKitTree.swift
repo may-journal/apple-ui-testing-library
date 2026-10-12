@@ -6,6 +6,7 @@ extension Backend {
     /// Every element VoiceOver would stop on in the window, depth first. Behind a modal
     /// view, such as a sheet, nothing counts.
     static func nodes(in window: HostWindow) -> [Node] {
+        if let menu = menuNodes() { return menu }
         var found: [NSObject] = []
         collect(window.window, into: &found)
         return found.map { node(of: $0, in: window.window) }

@@ -61,5 +61,16 @@ extension UITestingLibraryTests {
             try await user.sees(.text("Deleted"))
             try screen.close()
         }
+
+        @Test func test0003_7() async throws {
+            let screen = try Screen.render { MenuScreen() }
+            let user = User(screen)
+            try await user.taps(.button("Add"))
+            try await user.sees(.button("Import"))
+            #expect(await user.reads().map(\.spoken) == ["Import", "Scan"])
+            try await user.taps(.button("Import"))
+            try await user.sees(.text("Imported"))
+            try screen.close()
+        }
     }
 }

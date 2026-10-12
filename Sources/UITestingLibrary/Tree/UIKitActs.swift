@@ -8,6 +8,8 @@ extension Backend {
     /// activation of its own, such as a navigation bar's Back; whether anything happened.
     static func activate(_ node: Node, in window: HostWindow) -> Bool {
         guard let object = node.object as? NSObject else { return false }
+        if object is UIMenuElement { return choosesMenuItem(object) }
+        watchMenu(under: object, in: window.window)
         return object.accessibilityActivate()
             || pressesAlertButton(object)
             || pressesControl(under: object, in: window.window)

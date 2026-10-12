@@ -7,16 +7,13 @@ import UITestingLibrary
 extension UITestingLibraryTests {
     @MainActor
     @Suite struct PhoneShowing {
-        @Test func test0001_1() async throws {
-            let screen = try Screen.render { LayoutScreen() }
-            try await User(screen).sees(.text("Phone layout"))
-            try screen.close()
-        }
-
-        @Test func test0001_2() async throws {
-            let screen = try Screen.render(size: .pad) { LayoutScreen() }
-            try await User(screen).sees(.text("Pad layout"))
-            try screen.close()
+        @Test func test0001_8() async throws {
+            let phone = try Screen.render { LayoutScreen() }
+            try await User(phone).sees(.text("Phone layout"))
+            try phone.close()
+            let pad = try Screen.render(size: .pad) { LayoutScreen() }
+            try await User(pad).sees(.text("Pad layout"))
+            try pad.close()
         }
     }
 }
