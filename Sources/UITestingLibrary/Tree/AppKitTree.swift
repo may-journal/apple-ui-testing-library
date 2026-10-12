@@ -8,6 +8,7 @@ extension Backend {
     /// Every element VoiceOver would stop on in the front window, depth first. A sheet is
     /// its own window over the screen, and only the sheet is read while it is up.
     static func nodes(in window: HostWindow) -> [Node] {
+        if let menu = menuNodes() { return menu }
         let front = frontWindow(of: window.window)
         var found: [AnyObject] = []
         if let root = front.contentView { collect(root, in: front, into: &found) }
@@ -106,14 +107,18 @@ extension Backend {
         return object.perform(selector)?.takeUnretainedValue()
     }
 
-    /// A string attribute, or nil when it is empty or not a string.
+    /// A string attribute, or nil when it is empty or not a string. A menu button answers its
+    /// title as an attributed string.
     private static func text(of object: AnyObject, _ key: String) -> String? {
-        guard let text = attribute(of: object, key) as? String, !text.isEmpty else { return nil }
+        let value = attribute(of: object, key)
+        guard let text = value as? String ?? (value as? NSAttributedString)?.string, !text.isEmpty
+        else { return nil }
         return text
     }
 
     private static let roleMap: [NSAccessibility.Role: Set<Role>] = [
-        .button: [.button], .link: [.link], .staticText: [.text], .image: [.image],
+        .button: [.button], .menuButton: [.button], .popUpButton: [.button], .link: [.link],
+        .staticText: [.text], .image: [.image],
         NSAccessibility.Role(rawValue: "AXHeading"): [.heading, .text], .textField: [.textField],
         .textArea: [.textField],
         .checkBox: [.toggle], .slider: [.adjustable], .incrementor: [.adjustable],

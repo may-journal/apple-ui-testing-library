@@ -8,6 +8,8 @@ extension Backend {
     /// activation of its own, such as a navigation bar's Back; whether anything happened.
     static func activate(_ node: Node, in window: HostWindow) -> Bool {
         guard let object = node.object as? NSObject else { return false }
+        if object is UIMenuElement { return choosesMenuItem(object) }
+        watchMenu(under: object, in: window.window)
         return object.accessibilityActivate()
             || pressesAlertButton(object)
             || pressesControl(under: object, in: window.window)
@@ -99,6 +101,7 @@ extension Backend {
     /// Goes back as VoiceOver's scrub does: the front element answers it, or a view holding
     /// it; whether one did.
     static func goBack(from nodes: [Node], in window: HostWindow) -> Bool {
+        if goBackOutOfMenu() { return true }
         guard let front = nodes.last(where: \.element.isOnScreen)?.object as? NSObject else {
             return false
         }

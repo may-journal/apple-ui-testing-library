@@ -10,7 +10,7 @@ public final class HostWindow {
     #if canImport(UIKit)
     let window: UIWindow
 
-    init<Content: View>(size: ScreenSize, content: Content) throws {
+    init<Content: View>(size: ScreenSize, look: Look, content: Content) throws {
         self.size = size
         let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
         guard let scene = scenes.first else { throw HostWindowError.noScene }
@@ -21,12 +21,19 @@ public final class HostWindow {
             rootView: content.transaction { $0.disablesAnimations = true })
         host.traitOverrides.horizontalSizeClass = size.isRegularWidth ? .regular : .compact
         host.traitOverrides.verticalSizeClass = .regular
+        if let textSize = look.textSize {
+            host.traitOverrides.preferredContentSizeCategory = UIContentSizeCategory(textSize)
+        }
+        if let appearance = look.appearance {
+            host.traitOverrides.userInterfaceStyle = UIUserInterfaceStyle(appearance)
+        }
         window.rootViewController = host
         window.makeKeyAndVisible()
     }
 
     /// Hides the window and drops its root.
     func close() {
+        Backend.closeMenu()
         window.endEditing(true)
         window.isHidden = true
         window.rootViewController = nil
@@ -34,13 +41,18 @@ public final class HostWindow {
     #else
     let window: NSWindow
 
-    init<Content: View>(size: ScreenSize, content: Content) throws {
+    init<Content: View>(size: ScreenSize, look: Look, content: Content) throws {
         self.size = size
         window = NSWindow(
             contentRect: CGRect(origin: .zero, size: size.points), styleMask: [.titled],
             backing: .buffered,
             defer: false)
-        let host = NSHostingView(rootView: content.transaction { $0.disablesAnimations = true })
+        let host = NSHostingView(
+            rootView: content.transaction { $0.disablesAnimations = true }
+                .transformEnvironment(\.dynamicTypeSize) { $0 = look.textSize ?? $0 })
+        window.appearance = look.appearance.flatMap {
+            NSAppearance(named: $0 == .dark ? .darkAqua : .aqua)
+        }
         // The window keeps the test's size; the hosting view never resizes it to fit.
         host.sizingOptions = []
         window.contentView = host
@@ -52,6 +64,7 @@ public final class HostWindow {
 
     /// Ends any sheet, then closes the window and drops its root.
     func close() {
+        Backend.closeMenu()
         if let sheet = window.attachedSheet { window.endSheet(sheet) }
         window.contentView = nil
         window.orderOut(nil)

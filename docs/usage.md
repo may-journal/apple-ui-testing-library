@@ -28,7 +28,7 @@ With a checked-in Xcode project, choose File > Add Package Dependencies and ente
 
 ## Render and close a screen
 
-`Screen.render` draws a root view in the app's key window. `close()` hides it and runs the canary check ([ADR 0004](architecture/adr/0004-automation-canary.md)). Pass `size: .pad` for an iPad layout.
+`Screen.render` draws a root view in the app's key window. `close()` hides it and runs the canary check ([ADR 0004](architecture/adr/0004-automation-canary.md)). Pass `size: .pad` for an iPad layout. Rendering a second screen closes the first ([ADR 0005](architecture/adr/0005-one-window-per-process.md)).
 
 ```swift
 let screen = try Screen.render { AppRoot() }
@@ -37,7 +37,15 @@ let user = User(screen)
 try screen.close()
 ```
 
-Rendering a second screen closes the first ([ADR 0005](architecture/adr/0005-one-window-per-process.md)).
+Pass a `Look` to draw the root at a text size or appearance a person chose. Each overrides the system's for that root only.
+
+```swift
+let screen = try Screen.render(look: Look(textSize: .accessibility3, appearance: .dark)) {
+    AppRoot()
+}
+```
+
+The root reads the text size and appearance from its environment, as on a device. A layout that changes for large text changes here too ([0001.9](requirements/0001-setup-showing-the-app.md)). A Mac draws text at one size whatever the setting, so text that would overflow on a phone still fits.
 
 ## Queries
 
@@ -128,4 +136,12 @@ Fix the query or the screen. An empty read fails `close()` too, since it proved 
 
 ## System menus
 
-A tap on a control that opens system UI fails and says so. See [System menus](../README.md#system-menus) for what to do.
+A tap on a control that opens a menu, such as a SwiftUI `Menu`, opens it. While it is open, a read holds only its items, as VoiceOver reads them. Tap one to run it; the menu closes ([0003.7](requirements/0003-actions-doing-what-a-person-does.md)). `goesBack()` closes it without choosing one ([0003.8](requirements/0003-actions-doing-what-a-person-does.md)).
+
+```swift
+try await user.taps(.button("Add"))
+try await user.sees(.button("Import"))
+try await user.taps(.button("Import"))
+```
+
+`close()` closes a menu left open. Other system UI, such as a share sheet, still fails the tap; see [System menus](../README.md#system-menus).

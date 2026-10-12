@@ -39,11 +39,11 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 | #   | Description | Why |
 | --- | --- | --- |
 | 1   | `Actions/`: `User.swift`, `UserActs.swift`, `UserSees.swift`. | The public verbs a test reads in. |
-| 2   | `Screen/`: `Screen.swift`, `ScreenSize.swift`, `HostWindow.swift`. | Drawing stays apart from reading; `HostWindow` holds the platform branch ([ADR 0006](adr/0006-one-api-two-backends.md)). |
+| 2   | `Screen/`: `Screen.swift`, `ScreenSize.swift`, `Look.swift`, `HostWindow.swift`. | Drawing stays apart from reading; `HostWindow` holds the platform branch ([ADR 0006](adr/0006-one-api-two-backends.md)). |
 | 3   | `Queries/`: `Role.swift`, `Query.swift`, `Match.swift`. | Matching rules live in one place. |
 | 4   | `Waits/`: `Wait.swift`. | Every wait shares one deadline rule. |
 | 5   | `Reports/`: `ScreenReport.swift`, `Failure.swift`, `SourceLocation.swift`, `Canary.swift`. | Failures read the same everywhere, and name the test's line. |
-| 6   | `Tree/`: `Automation.swift`, `AccessibilityTree.swift`, `Element.swift`, `Timing.swift`, then `UIKitTree`, `UIKitActs`, `AppKitTree`, `AppKitActs`. | The only code that touches accessibility objects, one backend per platform. `Timing` signposts each phase, since a read is the lowest one. |
+| 6   | `Tree/`: `Automation.swift`, `AccessibilityTree.swift`, `Element.swift`, `Timing.swift`, then `UIKitTree`, `UIKitActs`, `UIKitMenus`, `AppKitTree`, `AppKitActs`, `AppKitMenus`. | The only code that touches accessibility objects, one backend per platform. `Timing` signposts each phase, since a read is the lowest one. |
 | 7   | Actions resolve queries. | An act needs a found element. |
 | 8   | Actions wait after each act. | The next look sees a settled screen. |
 | 9   | Actions report failures. | One failure format. |
@@ -64,6 +64,7 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 | `Role` | button, link, heading, image, text, text field, search field, adjustable, toggle, selected. |
 | Act outcome | done; nothing to act on; not actionable; did nothing. Each failure names the query and prints the report. |
 | `Canary` | read elements; read nothing. Reading nothing fails `close()`, and a `doesNotSee` that only read empty. |
+| Menu | closed; open. While a menu is open, a read holds only its items. Tapping an item runs it and closes the menu, and so does `close()`. `goesBack()` closes it without running an item, and each act settles after the Mac finishes closing it. |
 | `Failure` | message; report; location. Thrown from every look and act, so the test fails at its own line. |
 
 ## Platforms
@@ -72,8 +73,8 @@ One Swift package, iOS 26 and macOS 26 and later, Swift 6 with complete strict c
 
 | Platform | How it runs |
 | -------- | ----------- |
-| iOS, Designed for iPad | Hosted tests in the iOS app's process, running natively on this Mac through the UIKit backend, with no simulator boot. The Mac draws an alert natively and hides UIKit's copy, so the backend reads that copy and presses its buttons through the alert. |
-| Mac | Hosted tests in a Mac app's process, through the AppKit backend, with no simulator boot. |
+| iOS, Designed for iPad | Hosted tests in the iOS app's process, running natively on this Mac through the UIKit backend, with no simulator boot. The Mac draws an alert natively and hides UIKit's copy, so the backend reads that copy and presses its buttons through the alert. It draws a control's menu natively too: the backend reads the items from UIKit's visible menu once, then closes the Mac's menu by name. A text size reaches the root, so a layout that reads it changes, but the Mac draws text at one size whatever the setting. |
+| Mac | Hosted tests in a Mac app's process, through the AppKit backend, with no simulator boot. A pressed menu control's menu tracks in its own run loop mode, so the backend reads it from the tracking menu. A text size reaches the root as an environment value; text draws at one size here too. |
 
 ## Repo tree (outline)
 
@@ -84,7 +85,7 @@ apple-ui-testing-library/
 ├── Sources/
 │   └── UITestingLibrary/
 │       ├── Actions/        # User, UserActs, UserSees
-│       ├── Screen/         # Screen, HostWindow
+│       ├── Screen/         # Screen, Look, HostWindow
 │       ├── Queries/        # Role, Query, Match
 │       ├── Waits/          # Wait
 │       ├── Reports/        # ScreenReport, Canary

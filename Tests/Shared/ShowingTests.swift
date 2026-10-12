@@ -47,5 +47,25 @@ extension UITestingLibraryTests {
             #expect(ContinuousClock.now - started < .milliseconds(800))
             try screen.close()
         }
+
+        @Test func test0001_9() async throws {
+            let screen = try Screen.render(look: Look(textSize: .accessibility3)) { PriceScreen() }
+            let user = User(screen)
+            let name = try await user.sees(.text("Oat milk"))
+            let price = try await user.sees(.text("$3.49"))
+            let apart = abs(price.frame.midY - name.frame.midY)
+            #expect(
+                apart >= name.frame.height, "price beside the name: \(price.frame), \(name.frame)")
+            try screen.close()
+        }
+
+        @Test func test0001_10() async throws {
+            let dark = try Screen.render(look: Look(appearance: .dark)) { AppearanceScreen() }
+            try await User(dark).sees(.text("Dark appearance"))
+            try dark.close()
+            let light = try Screen.render(look: Look(appearance: .light)) { AppearanceScreen() }
+            try await User(light).sees(.text("Light appearance"))
+            try light.close()
+        }
     }
 }

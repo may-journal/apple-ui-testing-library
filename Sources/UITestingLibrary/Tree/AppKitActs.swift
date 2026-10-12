@@ -7,6 +7,7 @@ extension Backend {
     /// Presses the element; whether it answered. An alert's button closes the alert yet
     /// answers false, so a press that closes the front window counts too.
     static func activate(_ node: Node, in window: HostWindow) -> Bool {
+        if node.object is NSMenuItem { return choosesMenuItem(node.object) }
         let front = frontWindow(of: window.window)
         let pressed = node.object.accessibilityPerformPress?() ?? false
         return pressed || frontWindow(of: window.window) !== front
@@ -54,6 +55,7 @@ extension Backend {
 
     /// Cancels from the front element, or a view holding it; whether one answered.
     static func goBack(from nodes: [Node], in window: HostWindow) -> Bool {
+        if goBackOutOfMenu() { return true }
         var next: AnyObject? = nodes.last(where: \.element.isOnScreen)?.object
         while let current = next {
             if current.accessibilityPerformCancel?() == true { return true }

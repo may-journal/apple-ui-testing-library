@@ -15,9 +15,9 @@ public final class Screen {
         self.window = window
     }
 
-    /// Draws `content` as the app's root at `size`, closing any screen still open.
+    /// Draws `content` as the app's root at `size` and `look`, closing any screen still open.
     public static func render<Content: View>(
-        size: ScreenSize = .phone,
+        size: ScreenSize = .phone, look: Look = .system,
         file: StaticString = #filePath, line: UInt = #line,
         @ViewBuilder content: () -> Content
     ) throws -> Screen {
@@ -25,7 +25,7 @@ public final class Screen {
         open = nil
         do {
             let screen = try Timing.measure(.render) {
-                Screen(window: try HostWindow(size: size, content: content()))
+                Screen(window: try HostWindow(size: size, look: look, content: content()))
             }
             open = screen
             return screen

@@ -6,7 +6,7 @@ relatedConfigurations: ['../../.fitnessrc.json']
 
 ## Why
 
-I tap, choose, type, scroll and go back through what VoiceOver offers, so my test uses only what the app gives everyone.
+I tap controls and menu items, choose, type, scroll and go back through what VoiceOver offers. My test uses only what the app gives everyone.
 
 ## Measurement
 
@@ -42,3 +42,11 @@ Source: #1
     - Given an alert or a confirmation dialog over the screen
         - When I read it and tap one of its buttons
             - Then I hear its title, and that button's action runs
+- 0003.7
+    - Given a control that opens a menu
+        - When I tap it, read the menu, and tap an item
+            - Then I hear each item, and that item's action runs
+- 0003.8
+    - Given a control's menu is open
+        - When I go back
+            - Then the menu closes without running an item
