@@ -17,9 +17,12 @@ extension Backend {
         }
     }
 
-    /// Runs the menu item and closes its menu; whether the object was an enabled item.
+    /// Runs the menu item and closes its menu; whether the object was an enabled item. An item
+    /// that opens a submenu runs nothing, so it answers false, as on iOS.
     static func choosesMenuItem(_ object: AnyObject) -> Bool {
-        guard let item = object as? NSMenuItem, item.isEnabled, let menu = item.menu else {
+        guard let item = object as? NSMenuItem, item.isEnabled, !item.hasSubmenu,
+            let menu = item.menu
+        else {
             return false
         }
         menu.performActionForItem(at: menu.index(of: item))

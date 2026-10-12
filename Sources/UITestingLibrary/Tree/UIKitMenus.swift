@@ -84,8 +84,10 @@ private final class OpenMenu: NSObject {
         menu = nil
     }
 
-    /// The open menu, asking UIKit only until it answers.
+    /// The open menu, asking UIKit only until it answers. A control taken off screen takes
+    /// its menu with it.
     func shown() -> UIMenu? {
+        if interaction?.view?.window == nil { (interaction, menu) = (nil, nil) }
         if menu == nil {
             interaction?.updateVisibleMenu { visible in
                 menu = visible

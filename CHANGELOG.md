@@ -6,11 +6,11 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
-### 2026.10.12.1153
+### 2026.10.12.1202
 
 - Feat: a tap on a menu control opens its menu, and `reads()` returns its items; tapping one runs it
 - Feat: `Screen.render(look:)` takes a `Look` with a text size and a light or dark appearance, each overriding the system's for that root
-- Fix: the Mac backend reads a menu button's attributed title, and maps menu and pop-up buttons to the button role
+- Fix: the Mac reads a menu button's attributed title as a button, and a submenu item tap fails, as on iOS
 - Test: 0003.7 drives a menu, and an expect checks the spoken read; 0001.8 to 0001.10 cover layouts, text size and appearance
 - Docs: the usage guide and README cover menus and `Look`, and ADR 0001 and the code doc say how menus are reached
 
