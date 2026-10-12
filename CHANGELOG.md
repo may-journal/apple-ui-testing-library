@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+## [1.1.0](https://github.com/may-journal/apple-ui-testing-library/compare/v1.0.1...v1.1.0) (2026-10-12)
+
+
+### Features
+
+* **screen:** drive menus and render at a text size and appearance ([#50](https://github.com/may-journal/apple-ui-testing-library/issues/50)) ([358c873](https://github.com/may-journal/apple-ui-testing-library/commit/358c87345acf27e02e5bb625171a2c2551cacbfc))
+
 ### 2026.10.12.1322
 
 - Feat: a tap on a menu control opens its menu, `reads()` returns its items, and `goesBack()` closes it
