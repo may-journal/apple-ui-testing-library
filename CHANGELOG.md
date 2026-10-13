@@ -8,7 +8,7 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ### 2026.10.12.2157
 
-- Feat: an `Element` reports `isEnabled` on both platforms, menu items included, and a tap on a disabled control fails saying so
+- Feat: an `Element` reports `isEnabled`, menu items included, and any tap on a disabled control fails saying so
 - Feat: the optional `UITestingLibrarySystem` product drives a real share sheet into a local destination and checks the delivered image and message
 - Feat: a `SystemSession` asks Siri a phrase and checks its visible answer, keeping the phrase, answer and test line in failures
 - Chore: `make requirements-e2e` runs the system tests on a simulator you own, while `make requirements` stays native

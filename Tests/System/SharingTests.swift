@@ -114,7 +114,7 @@ final class SharingTests: XCTestCase {
         let button = try XCTUnwrap(session.elements().first { $0.label == "Share Alex" })
         XCTAssertFalse(button.isEnabled)
         XCTAssertThrowsError(try session.taps(.button("Share Alex"))) {
-            XCTAssertTrue(String(describing: $0).contains("disabled"))
+            XCTAssertTrue(String(describing: $0).contains("the control is disabled"))
         }
         XCTAssertFalse(session.reads().contains("Share card"))
     }

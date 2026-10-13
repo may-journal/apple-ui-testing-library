@@ -48,7 +48,10 @@ public final class SystemSession {
 
     public func taps(_ query: Query, file: StaticString = #filePath, line: UInt = #line) throws {
         let element = try sees(query, file: file, line: line)
-        guard element.isHittable && element.isEnabled else {
+        guard element.isEnabled else {
+            throw failure("Cannot tap \(query): the control is disabled", file: file, line: line)
+        }
+        guard element.isHittable else {
             throw failure("Cannot tap \(query)", file: file, line: line)
         }
         element.tap()
