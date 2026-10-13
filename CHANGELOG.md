@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+## [1.2.0](https://github.com/may-journal/apple-ui-testing-library/compare/v1.1.1...v1.2.0) (2026-10-13)
+
+
+### Features
+
+* **system:** drive system sharing, Siri and disabled controls ([#60](https://github.com/may-journal/apple-ui-testing-library/issues/60)) ([ad97d28](https://github.com/may-journal/apple-ui-testing-library/commit/ad97d287cb33bb690ebd1612069a3c1127e1ca6c))
+
 ### 2026.10.12.2157
 
 - Feat: an `Element` reports `isEnabled`, menu items included, and any tap on a disabled control fails saying so
