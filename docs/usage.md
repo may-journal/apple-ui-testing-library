@@ -155,30 +155,13 @@ try await user.sees(.button("Import"))
 try await user.taps(.button("Import"))
 ```
 
-`close()` closes a menu left open. Other system UI, such as a share sheet, still fails the tap; see [System menus](../README.md#system-menus).
+`close()` closes a menu left open. A hosted tap on other system UI, such as a share sheet, still fails; drive it as [System UI](#system-ui) shows.
 
-## Ask Siri
+## System UI
 
-Link `UITestingLibrarySystem` to a separate iOS UI test target; other platforms throw a setup error. Enable Siri, use the phrase's language, and launch the app to register its App Shortcuts. Siri may need a network connection and an account.
+Hosted tests cannot drive a share sheet or Siri. Add the `UITestingLibrarySystem` product to a separate iOS UI-test target and use `SystemSession`. It accepts the same queries, reads `Element`s with their enabled state, and keeps your test's line in failures. Run these tests serially, and shut down each simulator you boot, even after failure.
 
-```swift
-let session = SystemSession(bundleIdentifier: "org.example.app", timeout: 20)
-session.launch()
-defer { session.close() }
-let answer = try session.askSiri("Who did I draw in Example", expecting: "Morgan drew Riley.")
-try answer.excludes("Casey drew Morgan")
-```
-
-The service submits recognized speech, runs system phrase routing, and reads Siri's visible transcript without recording audio. Empty text throws a setup failure; unexpected nonempty text throws an indeterminate failure. That text may come from setup, network errors, routing, or the app; it proves no intent ran. Each failure carries the phrase, observed text and test line.
-
-Run Siri tests serially on a prepared iOS device; activation itself can fail the test before a transcript is read. Shut down each simulator you boot, even after failure. A response failure means forbidden text appeared after the expected answer was verified. `SiriTranscript.expecting` checks captured text only; see [ADR 0008](architecture/adr/0008-siri-system-requests.md).
-
-## Siri system tests
-
-The system suite requires English Siri. Its built-in arithmetic question proves that the service returns accessible text and that a wrong expectation preserves the last answer after dismissal. This does not prove app shortcut routing; the three-person fixture and wrong-app-response tests own that proof.
-## Share through the system
-
-Hosted tests cannot drive a system share sheet. Add `UITestingLibrarySystem` to a separate iOS UI-test target and use `SystemSession`. It accepts the same queries and preserves source locations in failures.
+### Share through the system
 
 ```swift
 let session = SystemSession(bundleIdentifier: "org.example.App", timeout: 10)
@@ -205,3 +188,19 @@ UIKit delivers resolved items to the activity; the driver decodes its received P
 | Runner inputs | Simulator UDID and Xcode project; refuses an already booted device. |
 | Runner outputs | Build logs and test results in `.build/SystemDerivedData`. |
 | Default run | `make requirements` stays native; consumers own their runner and device cleanup. |
+
+### Ask Siri
+
+Other platforms throw a setup error. Enable Siri, use the phrase's language, and launch the app to register its App Shortcuts. Siri may need a network connection and an account.
+
+```swift
+let session = SystemSession(bundleIdentifier: "org.example.app", timeout: 20)
+session.launch()
+defer { session.close() }
+let answer = try session.askSiri("Who did I draw in Example", expecting: "Morgan drew Riley.")
+try answer.excludes("Casey drew Morgan")
+```
+
+The service submits recognized speech, runs system phrase routing, and reads Siri's visible transcript without recording audio. Empty text throws a setup failure; unexpected nonempty text throws an indeterminate failure. That text may come from setup, network errors, routing, or the app; it proves no intent ran. Each failure carries the phrase, observed text and test line.
+
+Run Siri tests on a prepared iOS device; activation itself can fail the test before a transcript is read. A response failure means forbidden text appeared after the expected answer was verified. `SiriTranscript.expecting` checks captured text only; see [ADR 0008](architecture/adr/0008-siri-system-requests.md).

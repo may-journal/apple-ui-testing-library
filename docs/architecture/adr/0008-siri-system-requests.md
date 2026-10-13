@@ -24,3 +24,4 @@ An intent handler test misses phrase routing and the answer Siri presents. Hoste
 2. The fixture uses a shipped App Shortcut and three people. Tests never call its handler.
 3. This checks the visible transcript, not audio synthesis. Network and OS setup can block a run.
 4. Simulator owners must shut down their devices even when tests fail.
+5. The system suite needs English Siri. Its arithmetic question proves only that answers are read and kept, never app routing.

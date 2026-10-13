@@ -2,7 +2,8 @@ import UITestingLibrary
 import UITestingLibrarySystem
 import XCTest
 
-/// Requirement 0008: system sharing, read from the destination's received bytes.
+/// Requirement 0008: system sharing, read from the destination's received bytes. Also 0005.6
+/// and 0006.4, which a system session proves.
 @MainActor
 final class SharingTests: XCTestCase {
     private var session: SystemSession!
@@ -70,7 +71,7 @@ final class SharingTests: XCTestCase {
         }
     }
 
-    func test0008_6() throws {
+    func test0005_6() throws {
         session = SystemSession(
             bundleIdentifier: "org.may-journal.ui-testing-library.TestHost", timeout: 1)
         session.launch(arguments: ["--system-sharing"])
@@ -118,16 +119,14 @@ final class SharingTests: XCTestCase {
         XCTAssertFalse(session.reads().contains("Share card"))
     }
 
-    func test0009_1() throws {
-        let delivery = try share("--missing-image")
-        XCTAssertTrue(delivery.images.isEmpty)
-        try checkFailure(delivery, containing: "Missing image")
-    }
-
-    func test0009_2() throws {
-        let delivery = try share("--malformed-image")
-        XCTAssertEqual(delivery.images, [Data("broken image".utf8)])
-        try checkFailure(delivery, containing: "Cannot read shared image")
+    func test0008_9() throws {
+        let missing = try share("--missing-image")
+        XCTAssertTrue(missing.images.isEmpty)
+        try checkFailure(missing, containing: "Missing image")
+        session.close()
+        let malformed = try share("--malformed-image")
+        XCTAssertEqual(malformed.images, [Data("broken image".utf8)])
+        try checkFailure(malformed, containing: "Cannot read shared image")
     }
 
     private func checkFailure(_ delivery: SharedDelivery, containing message: String) throws {

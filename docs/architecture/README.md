@@ -41,5 +41,6 @@ Architecture decision records live in [adr/](adr/). A record is rewritten in pla
 | [0004](adr/0004-automation-canary.md) | Private SPI turns automation on, and a canary fails any test that read nothing. |
 | [0005](adr/0005-one-window-per-process.md) | Tests run serialized, one key window per process. |
 | [0006](adr/0006-one-api-two-backends.md) | One API over two backends: UIKit on iOS, AppKit on macOS, each reading its own tree. |
+| [0007](adr/0007-control-state.md) | Elements report whether their control is enabled. |
 | [0008](adr/0008-siri-system-requests.md) | Optional system sessions submit Siri phrases and check the visible transcript. |
 | [0009](adr/0009-system-sharing.md) | Optional system sessions follow real shares into a local destination and check received image bytes. |

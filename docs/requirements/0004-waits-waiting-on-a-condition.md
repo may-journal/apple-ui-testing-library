@@ -19,22 +19,22 @@ Source: #1
 ## Requirements
 
 - 0004.1
-    - Given an element that appears later
+    - Given Developer has an element that appears later
         - When I look for it
             - Then the look passes before the deadline
 - 0004.2
-    - Given an element that never appears
+    - Given Developer has an element that never appears
         - When I look for it
             - Then the look fails at the deadline I set
 - 0004.3
-    - Given an element that leaves later
+    - Given Developer has an element that leaves later
         - When I look for it to be gone
             - Then the look passes before the deadline
 - 0004.4
-    - Given a button that redraws the screen
+    - Given Developer has a button that redraws the screen
         - When I tap it
             - Then my next look reads the redrawn screen
 - 0004.5
-    - Given a long screen that each act redraws
+    - Given Developer has a long screen that each act redraws
         - When I tap, choose and look ten times
             - Then all ten finish within 1.5 seconds

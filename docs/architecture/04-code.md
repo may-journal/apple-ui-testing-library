@@ -84,21 +84,24 @@ One Swift package, iOS 26 and macOS 26 and later, Swift 6 with complete strict c
 
 ```
 apple-ui-testing-library/
-├── Package.swift           # library product UITestingLibrary
-├── project.yml             # XcodeGen: TestHost and TestHostMac, each with a hosted test bundle
+├── Package.swift           # products UITestingLibrary, UITestingLibrarySystem, UITestingLibraryShareDestination
+├── project.yml             # XcodeGen: TestHost and TestHostMac with hosted bundles, plus the system UI-test target
 ├── Sources/
-│   └── UITestingLibrary/
-│       ├── Actions/        # User, UserActs, UserSees
-│       ├── Screen/         # Screen, Look, HostWindow
-│       ├── Queries/        # Role, Query, Match
-│       ├── Waits/          # Wait
-│       ├── Reports/        # ScreenReport, Canary
-│       └── Tree/           # Automation, AccessibilityTree, Element, UIKit and AppKit backends
+│   ├── UITestingLibrary/
+│   │   ├── Actions/        # User, UserActs, UserSees
+│   │   ├── Screen/         # Screen, Look, HostWindow
+│   │   ├── Queries/        # Role, Query, Match
+│   │   ├── Waits/          # Wait
+│   │   ├── Reports/        # ScreenReport, Canary
+│   │   └── Tree/           # Automation, AccessibilityTree, Element, UIKit and AppKit backends
+│   ├── UITestingLibrarySystem/            # SystemSession, Siri, SharedDelivery
+│   └── UITestingLibraryShareDestination/  # LocalShareDestination
 ├── TestHost/               # TestHostApp.swift and Fixtures/, shared by both hosts
 ├── Tests/
 │   ├── Shared/                    # both bundles: one test per platform-neutral acceptance
 │   ├── UITestingLibraryTests/     # the iOS bundle only: the phone and iPad layouts
-│   └── UITestingLibraryMacTests/  # the macOS bundle only: the Mac layout
+│   ├── UITestingLibraryMacTests/  # the macOS bundle only: the Mac layout
+│   └── System/                    # the opt-in system UI-test target, scheme SystemTests
 ├── docs/
 │   ├── architecture/
 │   └── requirements/

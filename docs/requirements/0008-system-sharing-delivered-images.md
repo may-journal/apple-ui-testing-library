@@ -6,7 +6,7 @@ relatedConfigurations: ['../../.fitnessrc.json']
 
 ## Why
 
-I follow a real share to a local destination and check the image and message it receives.
+I follow a real share to a local destination and check the image and message it receives. A failed check shows my line and the evidence received.
 
 ## Measurement
 
@@ -19,34 +19,34 @@ Source: #40
 ## Requirements
 
 - 0008.1
-    - Given an image and message
+    - Given Developer has an image and message
         - When I share through system UI
             - Then the local destination receives both
 - 0008.2
-    - Given a received card
+    - Given Developer has a received card
         - When I read its image
             - Then it names only the chosen match
 - 0008.3
-    - Given the wrong image
+    - Given Developer has the wrong image
         - When I check the delivery
             - Then the check fails despite the right message
 - 0008.4
-    - Given the wrong message
+    - Given Developer has the wrong message
         - When I check the delivery
             - Then the check fails despite the right image
 - 0008.5
-    - Given an image with another match
+    - Given Developer has an image with another match
         - When I check the delivery
             - Then the check names the unwanted match
-- 0008.6
-    - Given an absent control
-        - When I wait for it
-            - Then failure names my line and screen
 - 0008.7
-    - Given an open share sheet
+    - Given Developer has an open share sheet
         - When I cancel
             - Then the source screen returns
 - 0008.8
-    - Given a share button below the screen
+    - Given Developer has a share button below the screen
         - When I scroll down
             - Then I can tap it
+- 0008.9
+    - Given Developer has a delivery with a missing or unreadable image
+        - When I check the delivery
+            - Then failure shows my line and received message
