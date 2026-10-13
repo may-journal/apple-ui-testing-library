@@ -27,7 +27,7 @@ The [usage guide](docs/usage.md) covers every query, action and wait, and failur
 
 ## System menus
 
-A menu runs in-process: see [System menus](docs/usage.md#system-menus). Other system UI, such as a share sheet, is beyond any in-process accessibility action, and tapping its control fails saying so. Cover that screen with one XCUITest smoke test, which drives the app by touch. Keep the rest of the suite in-process.
+A menu runs in-process: see [System menus](docs/usage.md#system-menus). Other system UI, such as a share sheet, is beyond any in-process accessibility action, and tapping its control fails saying so. The optional `UITestingLibrarySystem` product drives it from a UI-test target; see [System UI](docs/usage.md#system-ui). Keep the rest of the suite in-process.
 
 ## Docs
 

@@ -8,6 +8,7 @@ extension Backend {
     /// the control under it when it answers no activation of its own, such as a navigation
     /// bar's Back; whether anything happened.
     static func activate(_ node: Node, in window: HostWindow) -> Bool {
+        guard node.element.isEnabled else { return false }
         guard let object = node.object as? NSObject else { return false }
         if object is UIMenuElement { return choosesMenuItem(object) }
         if opensMenu(under: object, in: window.window) { return true }
@@ -37,7 +38,8 @@ extension Backend {
         let point = window.convert(object.accessibilityActivationPoint, from: nil)
         var view = window.hitTest(point, with: nil)
         while let current = view, !(current is UIControl) { view = current.superview }
-        guard let control = view as? UIControl, !control.allTargets.isEmpty else { return false }
+        guard let control = view as? UIControl, control.isEnabled, !control.allTargets.isEmpty
+        else { return false }
         control.sendActions(for: .touchUpInside)
         control.sendActions(for: .primaryActionTriggered)
         return true

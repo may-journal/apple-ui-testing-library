@@ -67,11 +67,14 @@ try await user.sees(.text("Milk"))
 try await user.sees(.identifier("add-bottom"))
 ```
 
-`sees` returns the `Element` it found, with `label`, `value`, `spoken` and `has(_:)`.
+`sees` returns an `Element` with `label`, `value`, `spoken`, `has(_:)` and `isEnabled`.
+Read state again after entering required input to check that a control becomes enabled.
+A disabled tap fails with the control's state in the message and screen report.
 
 ```swift
 let save = try await user.sees(.button("Save"))
 #expect(save.has(.button))
+#expect(!save.isEnabled)
 ```
 
 ## Actions
@@ -84,6 +87,14 @@ try await user.types("Milk")                     // types into the field being e
 try await user.chooses("Archive", on: .text("Note"))  // a custom action
 try await user.scrolls(.down)                    // or .up
 try await user.goesBack()                        // as a two-finger scrub does
+```
+
+To check a required field enables saving, read the button after typing:
+
+```swift
+try await user.types("Milk")
+let save = try await user.sees(.button("Save"))
+#expect(save.isEnabled)
 ```
 
 `goesBack()` passes only once what is read on screen changes. On the Mac, SwiftUI drops a focus set in `onAppear`, so set it one main-queue turn later.
@@ -144,4 +155,52 @@ try await user.sees(.button("Import"))
 try await user.taps(.button("Import"))
 ```
 
-`close()` closes a menu left open. Other system UI, such as a share sheet, still fails the tap; see [System menus](../README.md#system-menus).
+`close()` closes a menu left open. A hosted tap on other system UI, such as a share sheet, still fails; drive it as [System UI](#system-ui) shows.
+
+## System UI
+
+Hosted tests cannot drive a share sheet or Siri. Add the `UITestingLibrarySystem` product to a separate iOS UI-test target and use `SystemSession`. It accepts the same queries, reads `Element`s with their enabled state, and keeps your test's line in failures. Run these tests serially, and shut down each simulator you boot, even after failure.
+
+### Share through the system
+
+```swift
+let session = SystemSession(bundleIdentifier: "org.example.App", timeout: 10)
+session.launch(arguments: ["--test-share-destination"])
+defer { session.close() }
+try session.taps(.button("Share"))
+let delivery = try session.receivesShare()
+try delivery.check(message: "Alex's card", containing: ["Taylor"], excluding: ["Morgan"])
+try session.dismissShare()
+```
+
+The app's test build must link the UIKit-only `UITestingLibraryShareDestination` product and add `LocalShareDestination()` to `UIActivityViewController`'s `applicationActivities`. Inject that destination at the share sheet seam; keep the app's real share action and rendering. Release builds omit the local destination.
+
+UIKit delivers resolved items to the activity; the driver decodes its received PNG bytes and strings after a bounded wait. Vision reads those pixels, and `check` requires one image, an exact message, required phrases, and no forbidden phrases. Failures include recognized words; list every other match to prove absence ([ADR 0009](architecture/adr/0009-system-sharing.md)).
+
+| Concern | Support |
+| ------- | ------- |
+| Roles | XCTest exposes the listed control roles and selected state; it does not expose heading traits. |
+| Items | `UIImage`, image `Data`, and `String`; other types and installed destinations need their own receiver. |
+| Receipt | `dismissShare()` finishes it. |
+| Cancel | Pass the sheet's visible close query, such as `.button("Close")`, and verify the source screen returns. |
+| Session | `close()` terminates only its app. |
+| Simulator run | `make requirements-e2e SIMULATOR_ID=<udid>` boots your shut-down simulator, runs `SystemTests` in series, and shuts it down on failure too. |
+| Runner inputs | Simulator UDID and Xcode project; refuses an already booted device. |
+| Runner outputs | Build logs and test results in `.build/SystemDerivedData`. |
+| Default run | `make requirements` stays native; consumers own their runner and device cleanup. |
+
+### Ask Siri
+
+Other platforms throw a setup error. Enable Siri, use the phrase's language, and launch the app to register its App Shortcuts. Siri may need a network connection and an account.
+
+```swift
+let session = SystemSession(bundleIdentifier: "org.example.app", timeout: 20)
+session.launch()
+defer { session.close() }
+let answer = try session.askSiri("Who did I draw in Example", expecting: "Morgan drew Riley.")
+try answer.excludes("Casey drew Morgan")
+```
+
+The service submits recognized speech, runs system phrase routing, and reads Siri's visible transcript without recording audio. Empty text throws a setup failure; unexpected nonempty text throws an indeterminate failure. That text may come from setup, network errors, routing, or the app; it proves no intent ran. Each failure carries the phrase, observed text and test line.
+
+Run Siri tests on a prepared iOS device; activation itself can fail the test before a transcript is read. A response failure means forbidden text appeared after the expected answer was verified. `SiriTranscript.expecting` checks captured text only; see [ADR 0008](architecture/adr/0008-siri-system-requests.md).

@@ -16,6 +16,8 @@
   "words": [
     "AMPJZXR",
     "argjson",
+    "Autoresizing",
+    "bootstatus",
     "discardable",
     "dlsym",
     "Dodds",
@@ -32,7 +34,9 @@
     "slurpfile",
     "simctl",
     "strptime",
+    "Siri",
     "Subrole",
+    "Subview",
     "subviews",
     "superview",
     "swiftlint",
@@ -48,6 +52,7 @@
     "xcresult",
     "xcrun",
     "xctest",
-    "XCUI"
+    "XCUI",
+    "XCTNS"
   ]
 }

@@ -115,6 +115,9 @@ extension User {
                 "Nothing tappable has the label \(query): \(node.element) is not actionable",
                 location)
         }
+        guard node.element.isEnabled else {
+            throw failure("Cannot tap \(query): the control is disabled", location)
+        }
         return node
     }
 }

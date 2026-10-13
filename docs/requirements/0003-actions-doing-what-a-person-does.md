@@ -19,34 +19,34 @@ Source: #1
 ## Requirements
 
 - 0003.1
-    - Given a button on screen
+    - Given Developer has a button on screen
         - When I tap its label
             - Then its action runs
 - 0003.2
-    - Given an element with custom actions
+    - Given Developer has an element with custom actions
         - When I choose one by name
             - Then that action runs
 - 0003.3
-    - Given a field being edited
+    - Given Developer has a field being edited
         - When I type text
             - Then the text lands in that field
 - 0003.4
-    - Given content longer than the screen
+    - Given Developer has content longer than the screen
         - When I scroll
             - Then what was below comes on screen
 - 0003.5
-    - Given a pushed view
+    - Given Developer has pushed a view
         - When I go back
             - Then the view behind returns
 - 0003.6
-    - Given an alert or a confirmation dialog over the screen
+    - Given Developer has an alert or a confirmation dialog over the screen
         - When I read it and tap one of its buttons
             - Then I hear its title, and that button's action runs
 - 0003.7
-    - Given a control or a navigation bar button that opens a menu
+    - Given Developer has a control or a navigation bar button that opens a menu
         - When I tap it, read the menu, and tap an item
             - Then I hear each item, and that item's action runs
 - 0003.8
-    - Given a control's menu is open
+    - Given Developer has a control's menu open
         - When I go back
             - Then the menu closes without running an item

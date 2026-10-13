@@ -6,6 +6,14 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+### 2026.10.12.2157
+
+- Feat: an `Element` reports `isEnabled`, menu items included, and any tap on a disabled control fails saying so
+- Feat: the optional `UITestingLibrarySystem` product drives a real share sheet into a local destination and checks the delivered image and message
+- Feat: a `SystemSession` asks Siri a phrase and checks its visible answer, keeping the phrase, answer and test line in failures
+- Chore: `make requirements-e2e` runs the system tests on a simulator you own, while `make requirements` stays native
+- Docs: requirements 0006 to 0008, ADRs 0007 to 0009, the usage guide's System UI section, and architecture views that name every source
+
 ## [1.1.1](https://github.com/may-journal/apple-ui-testing-library/compare/v1.1.0...v1.1.1) (2026-10-12)
 
 

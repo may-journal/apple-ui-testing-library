@@ -16,10 +16,13 @@ public struct Element: Sendable, Equatable, CustomStringConvertible {
     public let frame: CGRect
     /// Whether its middle is inside the window.
     public let isOnScreen: Bool
+    /// Whether the control allows interaction.
+    public let isEnabled: Bool
 
     public init(
         label: String, value: String? = nil, identifier: String? = nil, roles: Set<Role> = [],
-        actions: [String] = [], frame: CGRect = .zero, isOnScreen: Bool = true
+        actions: [String] = [], frame: CGRect = .zero, isOnScreen: Bool = true,
+        isEnabled: Bool = true
     ) {
         self.label = label
         self.value = value
@@ -28,6 +31,7 @@ public struct Element: Sendable, Equatable, CustomStringConvertible {
         self.actions = actions
         self.frame = frame
         self.isOnScreen = isOnScreen
+        self.isEnabled = isEnabled
     }
 
     /// What VoiceOver says: the label, then the value.
@@ -42,7 +46,8 @@ public struct Element: Sendable, Equatable, CustomStringConvertible {
     public var isActionable: Bool { !roles.isDisjoint(with: Role.actionable) }
 
     public var description: String {
-        let named = roles.map(\.rawValue).sorted().joined(separator: " ")
+        let named = (roles.map(\.rawValue).sorted() + (isEnabled ? [] : ["disabled"]))
+            .joined(separator: " ")
         return named.isEmpty ? "\"\(spoken)\"" : "\"\(spoken)\" (\(named))"
     }
 }

@@ -27,7 +27,9 @@ extension Backend {
         guard let menu = OpenMenu.shared.shown() else { return nil }
         return items(of: menu).map { item in
             Node(object: item, isOnScreen: true) {
-                Element(label: item.title, roles: [.button])
+                Element(
+                    label: item.title, roles: [.button],
+                    isEnabled: (item as? UIMenuLeaf)?.attributes.contains(.disabled) != true)
             }
         }
     }

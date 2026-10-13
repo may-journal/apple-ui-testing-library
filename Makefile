@@ -1,5 +1,5 @@
 # Repo tasks. Run: make fitness, make requirements, make requirements-coverage,
-# make requirements-timing
+# make requirements-timing, and opt in to make requirements-e2e
 #
 # How the requirements targets work: docs/architecture/04-code.md, Tests. Their logic lives
 # in scripts/, so this file holds only variables and calls.
@@ -24,10 +24,10 @@ run-hosted-tests = $(XCODEBUILD) build-for-testing -scheme $(1) -destination '$(
 	&& $(XCODEBUILD) test-without-building -scheme $(1) -destination '$(2)' \
 	-enableCodeCoverage $(CODE_COVERAGE) -collect-test-diagnostics never
 
-export COVERAGE_DIR PROFILE_DATA LIBRARY_SOURCES IOS_TEST_BINARY MAC_TEST_BINARY
+export PROJECT SIMULATOR_ID COVERAGE_DIR PROFILE_DATA LIBRARY_SOURCES IOS_TEST_BINARY MAC_TEST_BINARY
 
 .PHONY: hooks fitness format generate requirements requirements-ios requirements-mac \
-	requirements-coverage requirements-timing
+	requirements-coverage requirements-timing requirements-e2e
 
 # Use the org-synced hooks in .fitness-hooks (see .github/fitness-setup.md once synced).
 hooks:
@@ -55,6 +55,10 @@ requirements-ios: generate
 
 requirements-mac: generate
 	$(call run-hosted-tests,TestHostMac,$(MAC_DESTINATION))
+
+# Opt-in system tests on a shut-down simulator you own: make requirements-e2e SIMULATOR_ID=<UDID>.
+requirements-e2e: generate
+	scripts/requirements-e2e.sh
 
 # Run both platforms with coverage on, then print the library's line coverage.
 requirements-coverage:
