@@ -6,6 +6,27 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+## [1.3.0](https://github.com/may-journal/apple-ui-testing-library/compare/v1.2.0...v1.3.0) (2026-10-13)
+
+
+### Features
+
+* **guard:** flag app names with cspell flagWords ([#17](https://github.com/may-journal/apple-ui-testing-library/issues/17)) ([2b82575](https://github.com/may-journal/apple-ui-testing-library/commit/2b82575cab1e4ecb09ba205c6d7b75f0a8d6db8e))
+* **library:** one API over UIKit and AppKit, with tests for every acceptance ([#18](https://github.com/may-journal/apple-ui-testing-library/issues/18)) ([f29742f](https://github.com/may-journal/apple-ui-testing-library/commit/f29742f2d84ad814a52ed740b6cf5177d58478fd))
+* **screen:** drive menus and render at a text size and appearance ([#50](https://github.com/may-journal/apple-ui-testing-library/issues/50)) ([358c873](https://github.com/may-journal/apple-ui-testing-library/commit/358c87345acf27e02e5bb625171a2c2551cacbfc))
+* **system:** drive system sharing, Siri and disabled controls ([#60](https://github.com/may-journal/apple-ui-testing-library/issues/60)) ([ad97d28](https://github.com/may-journal/apple-ui-testing-library/commit/ad97d287cb33bb690ebd1612069a3c1127e1ca6c))
+
+
+### Bug Fixes
+
+* **tree:** open a navigation bar's menu on both platforms ([#56](https://github.com/may-journal/apple-ui-testing-library/issues/56)) ([7c8e233](https://github.com/may-journal/apple-ui-testing-library/commit/7c8e233fa2697fbc6524687d9a7b45e5692b40dc))
+* **tree:** read and press alerts and confirmation dialogs as Designed for iPad ([#32](https://github.com/may-journal/apple-ui-testing-library/issues/32)) ([6bd667f](https://github.com/may-journal/apple-ui-testing-library/commit/6bd667f25334b943f08f3f35b06eb0ab3792c5c8))
+
+
+### Performance Improvements
+
+* **waits:** settle on the idle run loop and reuse reads ([#38](https://github.com/may-journal/apple-ui-testing-library/issues/38)) ([d610ca7](https://github.com/may-journal/apple-ui-testing-library/commit/d610ca769657b6ec3d03a6ce19de75ed0d721c2e))
+
 ## [1.2.0](https://github.com/may-journal/apple-ui-testing-library/compare/v1.1.1...v1.2.0) (2026-10-13)
 
 
