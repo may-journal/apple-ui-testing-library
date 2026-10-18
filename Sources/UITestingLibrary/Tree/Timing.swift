@@ -24,6 +24,18 @@ struct Phase: Sendable {
     static let seesShareSheet = Phase(name: "look", code: 14)
     static let neverSees = Phase(name: "look", code: 15)
     static let staysResponsive = Phase(name: "look", code: 16)
+    static let tabs = Phase(name: "act", code: 17)
+    static let selectsAll = Phase(name: "act", code: 18)
+    static let copies = Phase(name: "act", code: 19)
+    static let cuts = Phase(name: "act", code: 20)
+    static let pastes = Phase(name: "act", code: 21)
+    static let doubleTaps = Phase(name: "act", code: 22)
+    static let longPresses = Phase(name: "act", code: 23)
+    static let swipes = Phase(name: "act", code: 24)
+    static let drags = Phase(name: "act", code: 25)
+    static let adjusts = Phase(name: "act", code: 26)
+    static let hovers = Phase(name: "act", code: 27)
+    static let unhovers = Phase(name: "act", code: 28)
 }
 
 /// Signposts that time each phase of a test. Instruments shows them under Points of

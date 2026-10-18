@@ -65,6 +65,12 @@ extension Backend {
     /// Whether a cancelled menu is still unwinding; UIKit's menu is gone as it closes.
     static var isMenuClosing: Bool { false }
 
+    /// Opens `menu` as a person's hold opens a context menu, without drawing it: its items
+    /// become what a read holds until an item runs or the menu closes.
+    static func holdMenu(_ menu: UIMenu) {
+        OpenMenu.shared.hold(menu)
+    }
+
     /// Closes the open menu, if any, without choosing an item.
     static func closeMenu() {
         OpenMenu.shared.close()
@@ -85,6 +91,8 @@ private final class OpenMenu: NSObject {
     private var interaction: UIContextMenuInteraction?
     private var menu: UIMenu?
     private var native: NSObject?
+    /// A context menu a hold opened without drawing it.
+    private var held: UIMenu?
 
     override private init() {
         super.init()
@@ -102,9 +110,15 @@ private final class OpenMenu: NSObject {
         menu = nil
     }
 
+    func hold(_ menu: UIMenu) {
+        close()
+        held = menu
+    }
+
     /// The open menu, asking UIKit only until it answers. A control taken off screen takes
     /// its menu with it.
     func shown() -> UIMenu? {
+        if let held { return held }
         if interaction?.view?.window == nil { (interaction, menu) = (nil, nil) }
         if menu == nil {
             interaction?.updateVisibleMenu { visible in
@@ -116,6 +130,7 @@ private final class OpenMenu: NSObject {
     }
 
     func close() {
+        held = nil
         interaction?.dismissMenu()
         (interaction, menu) = (nil, nil)
         native?.perform(NSSelectorFromString("cancelTracking"))

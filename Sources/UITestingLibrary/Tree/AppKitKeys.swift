@@ -1,19 +1,76 @@
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 
-/// Presses keys in the AppKit field being edited, as the keyboard sends them: each key runs
-/// its editing command, which the field's delegate hears first. Also clears a field and
-/// finds the system share picker over the window.
+/// Presses keys in the AppKit field being edited, as the keyboard sends them: a key goes to
+/// the window's key equivalents first, so a shortcut answers it, then to the field, whose
+/// delegate hears its editing command first. Also clears a field and finds the system share
+/// picker over the window.
 extension Backend {
-    /// Presses `key` in the field being edited; whether one was. Enter runs insert newline,
-    /// which ends a one-line field's editing and sends its action. End moves to the end.
-    static func press(_ key: Key, in window: HostWindow) -> Bool {
-        guard let field = editing(in: window) else { return false }
-        switch key {
-        case .enter: field.doCommand(by: #selector(NSResponder.insertNewline(_:)))
-        case .end: field.doCommand(by: #selector(NSResponder.moveToEndOfDocument(_:)))
+    /// Presses `key` with `modifiers` in the field being edited; whether one was. Enter runs
+    /// insert newline, which ends a one-line field's editing and sends its action; Home and
+    /// End move to the start and end, as user-event's keys do, where a Mac's would scroll.
+    static func press(
+        _ key: Key, with modifiers: Set<Modifier>, nodes: [Node], in window: HostWindow
+    ) -> Bool {
+        let front = frontWindow(of: window.window)
+        guard let field = editing(in: window), let event = keyEvent(key, modifiers, in: front)
+        else { return false }
+        if front.performKeyEquivalent(with: event) { return true }
+        if let command = commands[key]?[modifiers] {
+            field.doCommand(by: command)
+        } else {
+            field.keyDown(with: event)
         }
         return true
+    }
+
+    /// The editing command a key runs, by the modifiers held, where it runs one directly:
+    /// Enter inserts a newline, and Home and End move to the ends, with Shift selecting.
+    private static let commands: [Key: [Set<Modifier>: Selector]] = [
+        .enter: [[]: #selector(NSResponder.insertNewline(_:))],
+        .end: [
+            []: #selector(NSResponder.moveToEndOfDocument(_:)),
+            [.shift]: #selector(NSResponder.moveToEndOfDocumentAndModifySelection(_:)),
+        ],
+        .home: [
+            []: #selector(NSResponder.moveToBeginningOfDocument(_:)),
+            [.shift]: #selector(NSResponder.moveToBeginningOfDocumentAndModifySelection(_:)),
+        ],
+    ]
+
+    /// The key-down event the keyboard sends for `key`, addressed to `window`.
+    private static func keyEvent(_ key: Key, _ modifiers: Set<Modifier>, in window: NSWindow)
+        -> NSEvent?
+    {
+        guard let (code, plain) = keys[key] else { return nil }
+        var flags = NSEvent.ModifierFlags(modifiers.compactMap { flags[$0] })
+        if [.left, .right, .up, .down, .home, .end].contains(key) {
+            flags.formUnion([.function, .numericPad])
+        }
+        // Shift-Tab types the back-tab character, as the keyboard does.
+        let typed = key == .tab && modifiers.contains(.shift) ? "\u{19}" : plain
+        return NSEvent.keyEvent(
+            with: .keyDown, location: .zero, modifierFlags: flags,
+            timestamp: ProcessInfo.processInfo.systemUptime, windowNumber: window.windowNumber,
+            context: nil, characters: typed, charactersIgnoringModifiers: plain,
+            isARepeat: false, keyCode: code)
+    }
+
+    private static let flags: [Modifier: NSEvent.ModifierFlags] = [
+        .command: .command, .shift: .shift, .option: .option, .control: .control,
+    ]
+
+    /// Each key's virtual key code and the characters it types.
+    private static let keys: [Key: (UInt16, String)] = [
+        .enter: (36, "\r"), .tab: (48, "\t"), .delete: (51, "\u{7f}"), .escape: (53, "\u{1b}"),
+        .home: (115, string(NSHomeFunctionKey)), .end: (119, string(NSEndFunctionKey)),
+        .left: (123, string(NSLeftArrowFunctionKey)),
+        .right: (124, string(NSRightArrowFunctionKey)),
+        .down: (125, string(NSDownArrowFunctionKey)), .up: (126, string(NSUpArrowFunctionKey)),
+    ]
+
+    private static func string(_ functionKey: Int) -> String {
+        UnicodeScalar(UInt16(functionKey)).map { String(Character($0)) } ?? ""
     }
 
     /// Makes the field under the element the one being edited, as a click into it does;
@@ -31,7 +88,7 @@ extension Backend {
     }
 
     /// The deepest view drawn at the middle of `frame`, in window coordinates.
-    private static func hitView(at frame: CGRect, in window: NSWindow) -> NSView? {
+    static func hitView(at frame: CGRect, in window: NSWindow) -> NSView? {
         guard let root = window.contentView, let parent = root.superview else { return nil }
         let middle = CGPoint(x: frame.midX, y: frame.midY)
         return root.hitTest(parent.convert(middle, from: nil))
@@ -52,7 +109,7 @@ extension Backend {
 
     /// The text view editing in the front window: a one-line field's shared field editor, or
     /// a text view of its own.
-    private static func editing(in window: HostWindow) -> NSTextView? {
+    static func editing(in window: HostWindow) -> NSTextView? {
         frontWindow(of: window.window).firstResponder as? NSTextView
     }
 
@@ -68,4 +125,5 @@ extension Backend {
         }
     }
 }
+
 #endif

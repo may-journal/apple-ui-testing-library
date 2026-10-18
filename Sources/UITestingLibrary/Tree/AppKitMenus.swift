@@ -45,6 +45,14 @@ extension Backend {
         OpenMenu.shared.menu == nil && OpenMenu.shared.tracking != nil
     }
 
+    /// Opens `menu` as a person's hold opens a context menu, without drawing it: its items
+    /// become what a read holds until an item runs or the menu closes.
+    static func holdMenu(_ menu: NSMenu) {
+        OpenMenu.watch()
+        menu.update()
+        OpenMenu.shared.menu = menu
+    }
+
     /// Closes the open menu, if any, without choosing an item.
     static func closeMenu() {
         OpenMenu.shared.menu?.cancelTracking()

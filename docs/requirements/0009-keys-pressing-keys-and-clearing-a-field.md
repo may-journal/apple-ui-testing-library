@@ -6,13 +6,13 @@ relatedConfigurations: ['../../.fitnessrc.json']
 
 ## Why
 
-I press Enter and End and clear a field as user-event does. My test keeps no copy of these keys.
+I press keys with modifiers, tab between fields, clear a field and use the clipboard as user-event does. My test keeps no copy of these steps.
 
 ## Measurement
 
-keys pressed through the field's own key commands
+keys and clipboard steps run through the field's own key commands and edit actions
 -
-keys pressed
+keys and clipboard steps
 
 Source: #65
 
@@ -30,3 +30,19 @@ Source: #65
     - Given Developer has a field with its words selected
         - When I press End and type
             - Then the typed text follows the words
+- 0009.4
+    - Given Developer has a field in a view with a Cmd+Return shortcut
+        - When I press Enter with Command
+            - Then the shortcut runs, and the field holds no new line
+- 0009.5
+    - Given Developer has a form of two fields, the first being edited
+        - When I tab, then tab backward
+            - Then focus moves to the second field, then back
+- 0009.6
+    - Given Developer has a field holding text
+        - When I select all, copy, and paste into an empty field
+            - Then both fields hold the text
+- 0009.7
+    - Given Developer has a field holding text
+        - When I select all and cut
+            - Then the field reads empty, and pasting brings the text back

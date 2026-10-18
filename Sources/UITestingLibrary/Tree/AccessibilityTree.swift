@@ -52,12 +52,55 @@ public enum ScrollDirection: Sendable, Equatable {
 
 /// A key a person presses beyond typing text, in the field being edited, as user-event's
 /// `{Enter}` and `{End}` name them.
-public enum Key: Sendable, Equatable {
+public enum Key: Sendable, Equatable, CaseIterable {
     /// Enter, the Return key: submits a one-line field, or starts a new line in a field of many.
     case enter
     /// End: moves the cursor to the end of the field. A Mac selects a one-line field's words
     /// as it gains focus, so typing would replace them.
     case end
+    /// Home: moves the cursor to the start of the field.
+    case home
+    /// Escape: runs the shortcut that answers it, such as a sheet's cancel.
+    case escape
+    /// Tab: moves focus to the next field; with Shift, to the one before.
+    case tab
+    /// Delete, the Backspace key: deletes the character before the cursor, or the selection.
+    case delete
+    /// The arrow keys: move the cursor a character left or right, or to the start or end of
+    /// a one-line field for up and down. With Shift they select as they move.
+    case left, right, up, down
+}
+
+/// A key held while another is pressed, as user-event's `{Meta>}` holds one.
+public enum Modifier: Sendable, Hashable, CaseIterable {
+    case command, shift, option, control
+}
+
+/// Which way a person swipes a row: left shows its trailing actions, right its leading ones.
+public enum SwipeDirection: Sendable, Equatable {
+    case left
+    case right
+}
+
+/// Which way a person adjusts a slider or stepper: up steps its value up, down steps it down.
+public enum AdjustDirection: Sendable, Equatable {
+    case up
+    case down
+}
+
+/// How a drag ended.
+enum DragOutcome {
+    /// Nothing under the element began a drag.
+    case noDrag
+    /// The target took nothing the drag carried.
+    case refused
+    /// The target took the drop.
+    case dropped
+}
+
+/// A clipboard command a field's Edit menu runs.
+enum EditCommand {
+    case selectAll, copy, cut, paste
 }
 
 /// The platform's accessibility objects, read and driven. UIKit on iOS, AppKit on macOS.
