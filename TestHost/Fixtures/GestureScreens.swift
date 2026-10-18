@@ -101,3 +101,24 @@ struct HoverScreen: View {
         }
     }
 }
+
+/// A map that counts pinches in and pinches out apart, each as its magnify gesture ends.
+struct PinchScreen: View {
+    @State private var ins = 0
+    @State private var outs = 0
+
+    var body: some View {
+        VStack(spacing: 40) {
+            Text("Map")
+                .frame(width: 200, height: 200)
+                .contentShape(Rectangle())
+                .gesture(
+                    MagnifyGesture().onEnded { value in
+                        if value.magnification < 1 { ins += 1 }
+                        if value.magnification > 1 { outs += 1 }
+                    })
+            Text("Pinches in: \(ins)")
+            Text("Pinches out: \(outs)")
+        }
+    }
+}

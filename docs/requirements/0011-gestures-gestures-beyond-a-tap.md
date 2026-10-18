@@ -6,7 +6,7 @@ relatedConfigurations: ['../../.fitnessrc.json']
 
 ## Why
 
-I double-tap, hold, swipe, drag, adjust and hover as a person does, in process and off screen. My test keeps no copy of these gestures.
+I double-tap, hold, swipe, drag, adjust, hover and pinch as a person does, in process and off screen. My test keeps no copy of these gestures.
 
 ## Measurement
 
@@ -46,3 +46,7 @@ Source: #70
     - Given Developer has a root view shown on a Mac
         - When I act on it
             - Then its window stays off every display
+- 0011.8
+    - Given Developer has a view that counts pinches by direction
+        - When I pinch in on it, then pinch out
+            - Then it counts one pinch in, then one pinch out

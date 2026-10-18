@@ -82,5 +82,14 @@ extension UITestingLibraryTests {
             try await user.sees(.text("Source: Milk"))
             try screen.close()
         }
+
+        @Test func test0009_8() async throws {
+            let screen = try Screen.render { TabShortcutScreen() }
+            let user = User(screen)
+            try await user.sees(.text("First tab open"))
+            try await user.presses("3", with: [.command])
+            try await user.sees(.text("Third tab open"))
+            try screen.close()
+        }
     }
 }

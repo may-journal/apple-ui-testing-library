@@ -107,12 +107,13 @@ Keys follow [user-event](https://testing-library.com/docs/user-event/intro)'s `k
 try await user.presses(.enter)               // keyboard("{Enter}"): submits a one-line field
 try await user.presses(.end)                 // keyboard("{End}"): moves to the end
 try await user.presses(.enter, with: [.command])  // a Cmd-Return shortcut
+try await user.presses("3", with: [.command])     // keyboard("{Meta>}3{/Meta}"): a Cmd-3 shortcut
 try await user.tabs()                        // tab(): the next field
 try await user.tabs(backward: true)          // tab({shift: true}): the field before
 try await user.clears(.role(.textField, "Note"))  // clear(element): edits it, deletes all
 ```
 
-The keys are `enter`, `end`, `home`, `escape`, `tab`, `delete` and the four arrows. The modifiers are `command`, `shift`, `option` and `control`. With Shift, Home, End and the arrows select as they move.
+The named keys are `enter`, `end`, `home`, `escape`, `tab`, `delete` and the four arrows. Any other key is named by the character it types, such as `"3"`, and reaches the app's shortcuts with no field being edited. The modifiers are `command`, `shift`, `option` and `control`. With Shift, Home, End and the arrows select as they move.
 
 The clipboard steps act in the field being edited. `pastes("Milk")` puts the text on the clipboard first, as `paste(text)` does. Closing the screen puts back what the clipboard held before.
 
@@ -136,9 +137,10 @@ try await user.drags(.text("Milk"), to: .text("Basket"))
 try await user.adjusts(.up, .role(.adjustable, "Volume"))  // or .down
 try await user.hovers(.text("Card"))         // hover(element)
 try await user.unhovers(.text("Card"))       // unhover(element)
+try await user.pinches(.in, .text("Map"))    // or .out: a trackpad's pinch
 ```
 
-While a held menu is open, a read holds only its items, as for a tapped menu. A double tap and a hover need a pointer, so on iOS they run where the app runs on a Mac. A Mac app's list shows swipe actions only for a trackpad's touches, so `swipes` fails there with a message saying so.
+While a held menu is open, a read holds only its items, as for a tapped menu. A double tap, a hover and a pinch need a Mac's pointer or trackpad. On iOS they run where the app runs on a Mac. A Mac app's list shows swipe actions only for a trackpad's touches, so `swipes` fails there with a message saying so.
 
 On a Mac the test window sits off every display, and the app never comes forward. A test never shows on screen or takes focus.
 

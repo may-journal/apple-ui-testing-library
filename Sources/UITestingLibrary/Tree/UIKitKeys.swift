@@ -1,24 +1,40 @@
 #if canImport(UIKit)
 import UIKit
 
-/// Presses keys in the UIKit field being edited, as a hardware keyboard sends them: a key
-/// command up the responder chain answers a key first, as a shortcut does; otherwise the
-/// field edits as the key does. Also clears a field and finds the system share sheet
-/// presented over the window.
+/// Presses keys as a hardware keyboard sends them: a key command up the responder chain,
+/// from the field being edited or else the view on top, answers a key first, as a shortcut
+/// does; otherwise the field edits as the key does. Also clears a field and finds the
+/// system share sheet presented over the window.
 extension Backend {
-    /// Presses `key` with `modifiers` in the field being edited; whether one was. Enter
-    /// submits a one-line field, as the field hears the key: its delegate first, then its
-    /// end-on-exit action. A field of many lines takes a new line instead. Tab moves to the
-    /// next field in reading order, or the one before with Shift.
+    /// Presses `key` with `modifiers`; whether a key command or the field being edited took
+    /// it. A character types in the field. Enter submits a one-line field, as the field
+    /// hears the key: its delegate first, then its end-on-exit action. A field of many lines
+    /// takes a new line instead. Tab moves to the next field in reading order, or the one
+    /// before with Shift.
     static func press(
         _ key: Key, with modifiers: Set<Modifier>, nodes: [Node], in window: HostWindow
     ) -> Bool {
-        guard let field = editing(in: window.window) else { return false }
-        if runsKeyCommand(key, modifiers, from: field) { return true }
-        if modifiers.isEmpty || modifiers == [.shift] {
+        let field = editing(in: window.window)
+        // With no field being edited, the key goes to the view on top, as a shortcut does.
+        guard let first = field as? UIResponder ?? topController(of: window.window) else {
+            return false
+        }
+        if runsKeyCommand(key, modifiers, from: first) { return true }
+        guard let field else { return false }
+        guard modifiers.isEmpty || modifiers == [.shift] else { return true }
+        if case .character(let character) = key {
+            field.insertText(String(character))
+        } else {
             edits[key]?(field, !modifiers.isEmpty, nodes)
         }
         return true
+    }
+
+    /// The view controller drawn on top in the window: the last one presented over its root.
+    private static func topController(of window: UIWindow) -> UIViewController? {
+        var top = window.rootViewController
+        while let presented = top?.presentedViewController { top = presented }
+        return top
     }
 
     /// What each key does in the field, given whether Shift is held. Enter and Delete do
@@ -35,21 +51,21 @@ extension Backend {
         .right: { field, shift, _ in move(field, by: 1, extending: shift) },
     ]
 
-    /// Runs the key command a responder from the field up offers for the key, as the
-    /// keyboard does before the field hears it; whether one did.
+    /// Runs the key command a responder from `first` up offers for the key, as the keyboard
+    /// does before a field hears it; whether one did.
     private static func runsKeyCommand(
-        _ key: Key, _ modifiers: Set<Modifier>, from field: UIKeyInput
+        _ key: Key, _ modifiers: Set<Modifier>, from first: UIResponder
     ) -> Bool {
         let flags = UIKeyModifierFlags(modifiers.compactMap { flags[$0] })
-        var responder = field as? UIResponder
+        let input = input(of: key)
+        var responder: UIResponder? = first
         while let current = responder {
             let command = current.keyCommands?.first {
-                $0.input == inputs[key] && $0.modifierFlags == flags && $0.action != nil
+                $0.input == input && $0.modifierFlags == flags && $0.action != nil
             }
             // The responder that lists a command need not run it; the chain names who does.
             if let command, let action = command.action,
-                let target = (field as? UIResponder)?.target(forAction: action, withSender: command)
-                    as? NSObject,
+                let target = first.target(forAction: action, withSender: command) as? NSObject,
                 target.responds(to: action)
             {
                 return UIApplication.shared.sendAction(action, to: target, from: command, for: nil)
@@ -59,7 +75,14 @@ extension Backend {
         return false
     }
 
-    /// The input each key names a key command by.
+    /// The input a key names a key command by: a character's own, lowercased as a key command
+    /// lists it, or a named key's from the table below.
+    private static func input(of key: Key) -> String? {
+        guard case .character(let character) = key else { return inputs[key] }
+        return character.lowercased()
+    }
+
+    /// The input each named key names a key command by.
     private static let inputs: [Key: String] = [
         .enter: "\r", .tab: "\t", .delete: "\u{8}", .escape: UIKeyCommand.inputEscape,
         .home: UIKeyCommand.inputHome, .end: UIKeyCommand.inputEnd,

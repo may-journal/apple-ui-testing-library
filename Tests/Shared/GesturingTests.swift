@@ -84,5 +84,18 @@ extension UITestingLibraryTests {
             #expect(screen.window.isOffScreen)
             try screen.close()
         }
+
+        @Test func test0011_8() async throws {
+            let screen = try Screen.render { PinchScreen() }
+            let user = User(screen)
+            try await user.pinches(.in, .text("Map"))
+            try await user.sees(.text("Pinches in: 1"))
+            try await user.sees(.text("Pinches out: 0"))
+            try await user.pinches(.out, .text("Map"))
+            try await user.sees(.text("Pinches in: 1"))
+            try await user.sees(.text("Pinches out: 1"))
+            #expect(screen.window.isOffScreen)
+            try screen.close()
+        }
     }
 }

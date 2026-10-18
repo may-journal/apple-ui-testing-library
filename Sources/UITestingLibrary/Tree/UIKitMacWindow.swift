@@ -151,6 +151,30 @@ struct MacWindow {
         )?.takeUnretainedValue()
     }
 
+    /// A trackpad's magnify event at `point` in the window, as a pinch sends.
+    func magnify(by amount: Double, _ phase: GesturePhase, at point: CGPoint) -> NSObject? {
+        Trackpad.magnify(by: amount, phase, at: point, inWindow: number, height: frame.height)
+    }
+
+    /// Whether the window server has the window where AppKit last moved it, as Quartz's
+    /// window list tells. A move reaches the window server a moment after AppKit makes it.
+    var isPlaced: Bool {
+        typealias CopyInfo = @convention(c) (UInt32, UInt32) -> Unmanaged<CFArray>?
+        guard
+            let symbol = dlsym(
+                UnsafeMutableRawPointer(bitPattern: -2), "CGWindowListCopyWindowInfo")
+        else { return false }
+        let includingWindow: UInt32 = 1 << 3
+        guard
+            let info = unsafeBitCast(symbol, to: CopyInfo.self)(includingWindow, UInt32(number))?
+                .takeRetainedValue() as? [[String: Any]],
+            let bounds = info.first?["kCGWindowBounds"] as? [String: Double],
+            let height = Self.displays.first?.height
+        else { return false }
+        // Quartz counts down from the top of the first display; AppKit up from its bottom.
+        return bounds["X"] == frame.minX && bounds["Y"] == height - frame.maxY
+    }
+
     private var number: Int { window.value(forKey: "windowNumber") as? Int ?? 0 }
 
     /// Hands the event straight to the window, as AppKit does with one from the mouse.
