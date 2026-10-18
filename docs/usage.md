@@ -136,9 +136,10 @@ try await user.drags(.text("Milk"), to: .text("Basket"))
 try await user.adjusts(.up, .role(.adjustable, "Volume"))  // or .down
 try await user.hovers(.text("Card"))         // hover(element)
 try await user.unhovers(.text("Card"))       // unhover(element)
+try await user.pinches(.in, .text("Map"))    // or .out: a trackpad's pinch
 ```
 
-While a held menu is open, a read holds only its items, as for a tapped menu. A double tap and a hover need a pointer, so on iOS they run where the app runs on a Mac. A Mac app's list shows swipe actions only for a trackpad's touches, so `swipes` fails there with a message saying so.
+While a held menu is open, a read holds only its items, as for a tapped menu. A double tap, a hover and a pinch need a Mac's pointer or trackpad. On iOS they run where the app runs on a Mac. A Mac app's list shows swipe actions only for a trackpad's touches, so `swipes` fails there with a message saying so.
 
 On a Mac the test window sits off every display, and the app never comes forward. A test never shows on screen or takes focus.
 

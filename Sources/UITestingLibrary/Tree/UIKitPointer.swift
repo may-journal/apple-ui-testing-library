@@ -95,7 +95,7 @@ extension Backend {
         return true
     }
 
-    private static var isHovering = false
+    static var isHovering = false
 
     /// Forgets the pointer and puts back the clipboard as a screen closes.
     static func endPointer() {

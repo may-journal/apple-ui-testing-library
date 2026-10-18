@@ -1,5 +1,5 @@
 /// Gestures beyond a tap, named as user-event's `dblClick`, `hover` and `unhover` are, and
-/// as a person holds, swipes, drags and adjusts. Each finds its element, acts through the
+/// as a person holds, swipes, drags, adjusts and pinches. Each finds its element, acts through the
 /// platform's own entry point, in process, and waits for the screen to settle after
 /// (ADR 0011).
 extension User {
@@ -101,6 +101,26 @@ extension User {
             guard changed else {
                 throw failure(
                     "Adjusting \(query) \(direction) left its value \(before ?? "empty")", location)
+            }
+            _ = await wait.settle(screen)
+        }
+    }
+
+    /// Pinches the element `query` finds in or out, as two fingers on a trackpad do, which its
+    /// magnify gesture hears. It needs a trackpad's events, so on iOS it runs where the app
+    /// runs on a Mac.
+    public func pinches(
+        _ direction: PinchDirection, _ query: Query,
+        file: StaticString = #filePath, line: UInt = #line
+    ) async throws {
+        try await Timing.measure(.pinches) {
+            let location = SourceLocation(file: file, line: line)
+            let node = try await drawn(query, "pinch", location)
+            _ = await wait.until { Backend.showsForPinch(screen.window) }
+            guard await Backend.pinch(direction, node, in: screen.window) else {
+                throw failure(
+                    "Pinching \(query) needs a trackpad's events, which only a Mac sends in "
+                        + "process; run the iOS app on a Mac", location)
             }
             _ = await wait.settle(screen)
         }

@@ -88,6 +88,27 @@ public enum AdjustDirection: Sendable, Equatable {
     case down
 }
 
+/// Which way a person pinches: in draws two fingers together, which zooms out; out spreads
+/// them apart, which zooms in.
+public enum PinchDirection: Sendable, Equatable {
+    case `in`
+    case out
+
+    /// A trackpad's magnify events for the pinch, each with how much it scales by: a began,
+    /// five steps that shrink to half or grow by half, and an ended.
+    var events: [(GesturePhase, Double)] {
+        let step = self == .in ? -0.1 : 0.1
+        return [(.began, 0)] + Array(repeating: (.changed, step), count: 5) + [(.ended, 0)]
+    }
+}
+
+/// A trackpad gesture's phase, as Quartz numbers it in a gesture event.
+enum GesturePhase: Int64 {
+    case began = 1
+    case changed = 2
+    case ended = 4
+}
+
 /// How a drag ended.
 enum DragOutcome {
     /// Nothing under the element began a drag.

@@ -151,6 +151,18 @@ struct MacWindow {
         )?.takeUnretainedValue()
     }
 
+    /// A trackpad's magnify event at `point` in the window, as a pinch sends.
+    func magnify(by amount: Double, _ phase: GesturePhase, at point: CGPoint) -> NSObject? {
+        Trackpad.magnify(by: amount, phase, at: point, inWindow: number, height: frame.height)
+    }
+
+    /// Whether AppKit counts some of the window as shown on a display: its occlusion state
+    /// holds the visible flag.
+    var isShown: Bool {
+        let visible: UInt = 1 << 1
+        return (window.value(forKey: "occlusionState") as? UInt).map { $0 & visible != 0 } ?? false
+    }
+
     private var number: Int { window.value(forKey: "windowNumber") as? Int ?? 0 }
 
     /// Hands the event straight to the window, as AppKit does with one from the mouse.
