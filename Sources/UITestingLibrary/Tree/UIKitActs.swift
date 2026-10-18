@@ -65,7 +65,8 @@ extension Backend {
         return true
     }
 
-    private static func editing(in view: UIView) -> UIKeyInput? {
+    /// The field being edited in the view, if any.
+    static func editing(in view: UIView) -> UIKeyInput? {
         if view.isFirstResponder, let input = view as? UIKeyInput { return input }
         return view.subviews.lazy.compactMap(editing(in:)).first
     }

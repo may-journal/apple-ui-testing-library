@@ -52,11 +52,43 @@ extension User {
         file: StaticString = #filePath, line: UInt = #line
     ) async throws {
         try await Timing.measure(.types) {
-            let typed = await wait.until { Backend.type(text, in: screen.window) }
-            guard typed else {
-                throw failure("No field is being edited", SourceLocation(file: file, line: line))
+            try await editsField(SourceLocation(file: file, line: line)) {
+                Backend.type(text, in: screen.window)
             }
-            _ = await wait.settle(screen)
+        }
+    }
+
+    /// Presses `key` on the keyboard, in the field being edited, as user-event's
+    /// `keyboard("{Enter}")` does. Enter submits a one-line field; End moves to its end.
+    public func presses(
+        _ key: Key,
+        file: StaticString = #filePath, line: UInt = #line
+    ) async throws {
+        try await Timing.measure(.presses) {
+            try await editsField(SourceLocation(file: file, line: line)) {
+                Backend.press(key, in: screen.window)
+            }
+        }
+    }
+
+    /// Edits the field `query` finds and deletes every character in it, as user-event's
+    /// `clear(element)` does.
+    public func clears(
+        _ query: Query,
+        file: StaticString = #filePath, line: UInt = #line
+    ) async throws {
+        try await Timing.measure(.clears) {
+            let location = SourceLocation(file: file, line: line)
+            guard let node = await find(query) else {
+                throw failure("Expected to clear \(query), and \(found(query))", location)
+            }
+            guard node.element.isEnabled else {
+                throw failure("Cannot clear \(query): the field is disabled", location)
+            }
+            guard await wait.until({ Backend.edit(node, in: screen.window) }) else {
+                throw failure("Cannot clear \(query): it takes no text", location)
+            }
+            try await editsField(location) { Backend.clearField(in: screen.window) }
         }
     }
 
@@ -101,6 +133,16 @@ extension User {
             }
             _ = await wait.settle(screen)
         }
+    }
+
+    /// Runs `edit` once a field is being edited, then waits for the screen to settle.
+    private func editsField(_ location: SourceLocation, _ edit: @MainActor () -> Bool)
+        async throws
+    {
+        guard await wait.until(edit) else {
+            throw failure("No field is being edited", location)
+        }
+        _ = await wait.settle(screen)
     }
 
     /// The one actionable element `query` finds, waiting for it.

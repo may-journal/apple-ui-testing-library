@@ -99,6 +99,16 @@ let save = try await user.sees(.button("Save"))
 
 `goesBack()` passes only once what is read on screen changes. On the Mac, SwiftUI drops a focus set in `onAppear`, so set it one main-queue turn later.
 
+## Keys
+
+Keys follow [user-event](https://testing-library.com/docs/user-event/intro)'s `keyboard` and `clear`, through the field's own key commands ([0009](requirements/0009-keys-pressing-keys-and-clearing-a-field.md)). A Mac selects a one-line field's words as it gains focus, so press End before typing to add to them.
+
+```swift
+try await user.presses(.enter)               // keyboard("{Enter}"): submits a one-line field
+try await user.presses(.end)                 // keyboard("{End}"): moves to the end
+try await user.clears(.role(.textField, "Note"))  // clear(element): edits it, deletes all
+```
+
 ## Waits
 
 Every look and act polls until its condition holds or the deadline passes ([ADR 0003](architecture/adr/0003-condition-waits.md)). The default deadline is five seconds. Set one per user:
@@ -114,6 +124,15 @@ try await user.doesNotSee(.text("Loading"))
 ```swift
 let spoken = await user.reads().map(\.spoken)
 #expect(spoken.contains("Milk"))
+```
+
+Two watches run for a set time instead ([0010](requirements/0010-watches-watching-beyond-one-read.md), [ADR 0010](architecture/adr/0010-keys-watches-share-sheet.md)). `neverSees(_:for:)` fails as soon as its query matches. `doesNotSee` returns once the match is gone. `staysResponsive(under:)` fails if the main thread stalls that long during its action, naming the longest stall.
+
+```swift
+try await user.neverSees(.button("Retry"), for: .seconds(2))
+try await user.staysResponsive(under: .milliseconds(500)) {
+    try await user.taps(.button("Share"))
+}
 ```
 
 ## Serialize the suite
@@ -156,6 +175,13 @@ try await user.taps(.button("Import"))
 ```
 
 `close()` closes a menu left open. A hosted tap on other system UI, such as a share sheet, still fails; drive it as [System UI](#system-ui) shows.
+
+A hosted test can still check that the app opened the share sheet. `seesShareSheet()` waits for the sheet over the window, without reading or driving it ([0010.3](requirements/0010-watches-watching-beyond-one-read.md)):
+
+```swift
+try await user.taps(.button("Share"))
+try await user.seesShareSheet()
+```
 
 ## System UI
 

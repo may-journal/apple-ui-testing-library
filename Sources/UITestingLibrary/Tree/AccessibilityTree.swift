@@ -50,6 +50,16 @@ public enum ScrollDirection: Sendable, Equatable {
     case up
 }
 
+/// A key a person presses beyond typing text, in the field being edited, as user-event's
+/// `{Enter}` and `{End}` name them.
+public enum Key: Sendable, Equatable {
+    /// Enter, the Return key: submits a one-line field, or starts a new line in a field of many.
+    case enter
+    /// End: moves the cursor to the end of the field. A Mac selects a one-line field's words
+    /// as it gains focus, so typing would replace them.
+    case end
+}
+
 /// The platform's accessibility objects, read and driven. UIKit on iOS, AppKit on macOS.
 @MainActor
 enum Backend {}
