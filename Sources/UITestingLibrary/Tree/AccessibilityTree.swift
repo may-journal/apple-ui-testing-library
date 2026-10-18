@@ -50,6 +50,12 @@ public enum ScrollDirection: Sendable, Equatable {
     case up
 }
 
+/// A key a person presses beyond typing text, in the field being edited.
+public enum Key: Sendable, Equatable {
+    /// Return: submits a one-line field, or starts a new line in a field of many.
+    case `return`
+}
+
 /// The platform's accessibility objects, read and driven. UIKit on iOS, AppKit on macOS.
 @MainActor
 enum Backend {}

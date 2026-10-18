@@ -41,9 +41,9 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 | 1   | `Actions/`: `User.swift`, `UserActs.swift`, `UserSees.swift`. | The public verbs a test reads in. |
 | 2   | `Screen/`: `Screen.swift`, `ScreenSize.swift`, `Look.swift`, `HostWindow.swift`. | Drawing stays apart from reading; `HostWindow` holds the platform branch ([ADR 0006](adr/0006-one-api-two-backends.md)). |
 | 3   | `Queries/`: `Role.swift`, `Query.swift`, `Match.swift`. | Matching rules live in one place. |
-| 4   | `Waits/`: `Wait.swift`. | Every wait shares one deadline rule. |
+| 4   | `Waits/`: `Wait.swift`, `Stalls.swift`. | Every wait shares one deadline rule; stalls are timed on the main run loop ([ADR 0010](adr/0010-keys-watches-share-sheet.md)). |
 | 5   | `Reports/`: `ScreenReport.swift`, `Failure.swift`, `SourceLocation.swift`, `Canary.swift`. | Failures read the same everywhere, and name the test's line. |
-| 6   | `Tree/`: `Automation.swift`, `AccessibilityTree.swift`, `Element.swift`, `Timing.swift`, then `UIKitTree`, `UIKitActs`, `UIKitMenus`, `AppKitTree`, `AppKitActs`, `AppKitMenus`. | The only code that touches accessibility objects, one backend per platform. `Timing` signposts each phase, since a read is the lowest one. |
+| 6   | `Tree/`: `Automation.swift`, `AccessibilityTree.swift`, `Element.swift`, `Timing.swift`, then `UIKitTree`, `UIKitActs`, `UIKitMenus`, `UIKitKeys`, `AppKitTree`, `AppKitActs`, `AppKitMenus`, `AppKitKeys`. | The only code that touches accessibility objects, one backend per platform. `Timing` signposts each phase, since a read is the lowest one. |
 | 7   | Actions resolve queries. | An act needs a found element. |
 | 8   | Actions wait after each act. | The next look sees a settled screen. |
 | 9   | Actions report failures. | One failure format. |
@@ -63,6 +63,9 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 | `Wait` | held; timed out. A timeout fails with the `ScreenReport`. |
 | `Role` | button, link, heading, image, text, text field, search field, adjustable, toggle, selected. |
 | Act outcome | done; nothing to act on; not actionable; did nothing. Each failure names the query and prints the report. |
+| Key | return. Each key needs a field being edited, as `types` does, and fails "No field is being edited" at the deadline. |
+| Watch | held for its set time; failed at the first miss. `neverSees` fails on the first match, or a screen that only read empty. `staysResponsive` fails on a stall at or over its limit. |
+| Share sheet | up; not up. `seesShareSheet` waits for the sheet's controller over the window and never reads its contents. |
 | `Canary` | read elements; read nothing. Reading nothing fails `close()`, and a `doesNotSee` that only read empty. |
 | Menu | closed; open. While a menu is open, a read holds only its items. Tapping an item runs it and closes the menu, and so does `close()`. `goesBack()` closes it without running an item, and each act settles after the Mac finishes closing it. |
 | `Failure` | message; report; location. Thrown from every look and act, so the test fails at its own line. |

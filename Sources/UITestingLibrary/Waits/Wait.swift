@@ -23,6 +23,18 @@ public struct Wait: Sendable, Equatable {
         return condition()
     }
 
+    /// Polls `condition` until the deadline passes; whether it held at every read. Stops at
+    /// the first read where it fails, for a look that something never happens.
+    @MainActor
+    func throughout(_ condition: @MainActor () -> Bool) async -> Bool {
+        let end = ContinuousClock.now + deadline
+        while ContinuousClock.now < end {
+            if !condition() { return false }
+            try? await Task.sleep(for: Self.pause)
+        }
+        return condition()
+    }
+
     /// Lets the main run loop finish what the act queued, then reads the screen once
     /// (ADR 0003). The run loop goes idle twice: once after the act's own work, and once
     /// after the redraw that work queued.

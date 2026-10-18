@@ -11,6 +11,12 @@
     "8": "act chooses",
     "9": "act types",
     "10": "act scrolls",
-    "11": "act goesBack"
+    "11": "act goesBack",
+    "12": "act presses",
+    "13": "act clearsField",
+    "14": "act movesToEnd",
+    "15": "look seesShareSheet",
+    "16": "look neverSees",
+    "17": "look staysResponsive"
   }
 }

@@ -52,11 +52,45 @@ extension User {
         file: StaticString = #filePath, line: UInt = #line
     ) async throws {
         try await Timing.measure(.types) {
-            let typed = await wait.until { Backend.type(text, in: screen.window) }
-            guard typed else {
-                throw failure("No field is being edited", SourceLocation(file: file, line: line))
+            try await editsField(SourceLocation(file: file, line: line)) {
+                Backend.type(text, in: screen.window)
             }
-            _ = await wait.settle(screen)
+        }
+    }
+
+    /// Presses `key` on the keyboard, in the field being edited. Return submits a one-line
+    /// field.
+    public func presses(
+        _ key: Key,
+        file: StaticString = #filePath, line: UInt = #line
+    ) async throws {
+        try await Timing.measure(.presses) {
+            try await editsField(SourceLocation(file: file, line: line)) {
+                Backend.press(key, in: screen.window)
+            }
+        }
+    }
+
+    /// Deletes every character in the field being edited, as holding Delete at its end does.
+    public func clearsField(
+        file: StaticString = #filePath, line: UInt = #line
+    ) async throws {
+        try await Timing.measure(.clearsField) {
+            try await editsField(SourceLocation(file: file, line: line)) {
+                Backend.clearField(in: screen.window)
+            }
+        }
+    }
+
+    /// Moves the cursor to the end of the field being edited, as the End key does. A Mac
+    /// selects a one-line field's words as it gains focus, so typing would replace them.
+    public func movesToEnd(
+        file: StaticString = #filePath, line: UInt = #line
+    ) async throws {
+        try await Timing.measure(.movesToEnd) {
+            try await editsField(SourceLocation(file: file, line: line)) {
+                Backend.moveToEnd(in: screen.window)
+            }
         }
     }
 
@@ -101,6 +135,16 @@ extension User {
             }
             _ = await wait.settle(screen)
         }
+    }
+
+    /// Runs `edit` once a field is being edited, then waits for the screen to settle.
+    private func editsField(_ location: SourceLocation, _ edit: @MainActor () -> Bool)
+        async throws
+    {
+        guard await wait.until(edit) else {
+            throw failure("No field is being edited", location)
+        }
+        _ = await wait.settle(screen)
     }
 
     /// The one actionable element `query` finds, waiting for it.
