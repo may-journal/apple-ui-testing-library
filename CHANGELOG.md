@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+## [1.6.0](https://github.com/may-journal/apple-ui-testing-library/compare/v1.5.0...v1.6.0) (2026-10-18)
+
+
+### Features
+
+* **gestures:** pinch, any character key, and shortcuts with no field ([#79](https://github.com/may-journal/apple-ui-testing-library/issues/79)) ([ad739ef](https://github.com/may-journal/apple-ui-testing-library/commit/ad739ef8a2d34abc5776f5217511800cdd58f959))
+
 ## [1.5.0](https://github.com/may-journal/apple-ui-testing-library/compare/v1.4.0...v1.5.0) (2026-10-18)
 
 
