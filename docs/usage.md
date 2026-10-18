@@ -28,7 +28,7 @@ With a checked-in Xcode project, choose File > Add Package Dependencies and ente
 
 ## Render and close a screen
 
-`Screen.render` draws a root view in the app's key window. `close()` hides it and runs the canary check ([ADR 0004](architecture/adr/0004-automation-canary.md)). Pass `size: .pad` for an iPad layout. Rendering a second screen closes the first ([ADR 0005](architecture/adr/0005-one-window-per-process.md)).
+`Screen.render` draws a root view in a window of the app's own. `close()` hides it and runs the canary check ([ADR 0004](architecture/adr/0004-automation-canary.md)). Pass `size: .pad` for an iPad layout. Rendering a second screen closes the first ([ADR 0005](architecture/adr/0005-one-window-per-process.md)).
 
 ```swift
 let screen = try Screen.render { AppRoot() }
@@ -101,13 +101,46 @@ let save = try await user.sees(.button("Save"))
 
 ## Keys
 
-Keys follow [user-event](https://testing-library.com/docs/user-event/intro)'s `keyboard` and `clear`, through the field's own key commands ([0009](requirements/0009-keys-pressing-keys-and-clearing-a-field.md)). A Mac selects a one-line field's words as it gains focus, so press End before typing to add to them.
+Keys follow [user-event](https://testing-library.com/docs/user-event/intro)'s `keyboard`, `tab`, `clear` and clipboard calls, through the field's own key commands and edit actions ([0009](requirements/0009-keys-pressing-keys-and-clearing-a-field.md), [ADR 0011](architecture/adr/0011-person-actions-in-process.md)). A shortcut that answers a key runs first. A Mac selects a one-line field's words as it gains focus, so press End before typing to add to them.
 
 ```swift
 try await user.presses(.enter)               // keyboard("{Enter}"): submits a one-line field
 try await user.presses(.end)                 // keyboard("{End}"): moves to the end
+try await user.presses(.enter, with: [.command])  // a Cmd-Return shortcut
+try await user.tabs()                        // tab(): the next field
+try await user.tabs(backward: true)          // tab({shift: true}): the field before
 try await user.clears(.role(.textField, "Note"))  // clear(element): edits it, deletes all
 ```
+
+The keys are `enter`, `end`, `home`, `escape`, `tab`, `delete` and the four arrows. The modifiers are `command`, `shift`, `option` and `control`. With Shift, Home, End and the arrows select as they move.
+
+The clipboard steps act in the field being edited. `pastes("Milk")` puts the text on the clipboard first, as `paste(text)` does. Closing the screen puts back what the clipboard held before.
+
+```swift
+try await user.selectsAll(in: .role(.textField, "Note"))
+try await user.copies()                      // or cuts()
+try await user.tabs()
+try await user.pastes()
+```
+
+## Gestures
+
+Gestures beyond a tap run in process, each through the platform's own entry point ([0011](requirements/0011-gestures-gestures-beyond-a-tap.md), [ADR 0011](architecture/adr/0011-person-actions-in-process.md)).
+
+```swift
+try await user.doubleTaps(.text("Photo"))    // dblClick(element): one double tap
+try await user.longPresses(.text("Note"))    // opens its context menu
+try await user.taps(.button("Delete"))       // runs a menu item
+try await user.swipes(.left, .text("Milk"))  // shows a row's trailing swipe actions
+try await user.drags(.text("Milk"), to: .text("Basket"))
+try await user.adjusts(.up, .role(.adjustable, "Volume"))  // or .down
+try await user.hovers(.text("Card"))         // hover(element)
+try await user.unhovers(.text("Card"))       // unhover(element)
+```
+
+While a held menu is open, a read holds only its items, as for a tapped menu. A double tap and a hover need a pointer, so on iOS they run where the app runs on a Mac. A Mac app's list shows swipe actions only for a trackpad's touches, so `swipes` fails there with a message saying so.
+
+On a Mac the test window sits off every display, and the app never comes forward. A test never shows on screen or takes focus.
 
 ## Waits
 

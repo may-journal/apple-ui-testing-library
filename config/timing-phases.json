@@ -16,6 +16,18 @@
     "13": "act clears",
     "14": "look seesShareSheet",
     "15": "look neverSees",
-    "16": "look staysResponsive"
+    "16": "look staysResponsive",
+    "17": "act tabs",
+    "18": "act selectsAll",
+    "19": "act copies",
+    "20": "act cuts",
+    "21": "act pastes",
+    "22": "act doubleTaps",
+    "23": "act longPresses",
+    "24": "act swipes",
+    "25": "act drags",
+    "26": "act adjusts",
+    "27": "act hovers",
+    "28": "act unhovers"
   }
 }

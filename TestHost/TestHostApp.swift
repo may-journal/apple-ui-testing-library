@@ -8,6 +8,10 @@ struct TestHostApp: App {
         WindowGroup {
             HostRoot()
         }
+        #if os(macOS)
+        // Tests draw in windows of their own, off every display; the app opens none on screen.
+        .defaultLaunchBehavior(.suppressed)
+        #endif
     }
 }
 

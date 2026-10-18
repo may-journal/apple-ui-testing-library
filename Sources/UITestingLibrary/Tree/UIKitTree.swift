@@ -14,7 +14,9 @@ extension Backend {
 
     private static func collect(_ object: NSObject, into found: inout [NSObject]) {
         if isHidden(object) { return }
-        if object.isAccessibilityElement {
+        // VoiceOver reads a stepper as two buttons, which a Mac running the iOS app never
+        // presses; it is read as one adjustable control, as AppKit reads its own.
+        if object.isAccessibilityElement || object is UIStepper {
             found.append(object)
             return
         }
@@ -86,6 +88,7 @@ extension Backend {
         let traits = object.accessibilityTraits
         var roles = Set(traitRoles.filter { traits.contains($0.0) }.map(\.1))
         if object is UIKeyInput, !roles.contains(.searchField) { roles.insert(.textField) }
+        if object is UIStepper { roles.insert(.adjustable) }
         return roles
     }
 }

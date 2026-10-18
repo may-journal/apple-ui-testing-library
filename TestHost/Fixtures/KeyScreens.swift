@@ -41,3 +41,57 @@ struct EditingScreen: View {
         }
     }
 }
+
+/// A field of many lines being edited, holding "Milk", in a view whose Send button answers
+/// Command-Return.
+struct ShortcutScreen: View {
+    @State private var note = "Milk"
+    @State private var sent = ""
+    @FocusState private var editing: Bool
+
+    var body: some View {
+        VStack {
+            TextField("Note", text: $note, axis: .vertical).focused($editing)
+            Button("Send") { sent = note }.keyboardShortcut(.return, modifiers: .command)
+            Text(sent.isEmpty ? "Not sent" : "Sent: \(sent)")
+            Text(note.contains("\n") ? "Note has a new line" : "Note is one line")
+        }
+        .onAppear { DispatchQueue.main.async { editing = true } }
+    }
+}
+
+/// A form of two fields, the first being edited, and a line naming the one being edited.
+struct FormScreen: View {
+    private enum Field { case first, second }
+    @State private var first = ""
+    @State private var second = ""
+    @FocusState private var editing: Field?
+
+    var body: some View {
+        VStack {
+            TextField("First", text: $first).focused($editing, equals: .first)
+            TextField("Second", text: $second).focused($editing, equals: .second)
+            Text(
+                editing == .second
+                    ? "Editing second" : editing == .first ? "Editing first" : "Editing none")
+        }
+        .onAppear { DispatchQueue.main.async { editing = .first } }
+    }
+}
+
+/// A source field holding "Milk", being edited, then an empty target field.
+struct ClipboardScreen: View {
+    @State private var source = "Milk"
+    @State private var target = ""
+    @FocusState private var editing: Bool
+
+    var body: some View {
+        VStack {
+            TextField("Source", text: $source).focused($editing).accessibilityLabel("Source")
+            TextField("Target", text: $target).accessibilityLabel("Target")
+            Text(source.isEmpty ? "Source empty" : "Source: \(source)")
+            Text(target.isEmpty ? "Target empty" : "Target: \(target)")
+        }
+        .onAppear { DispatchQueue.main.async { editing = true } }
+    }
+}

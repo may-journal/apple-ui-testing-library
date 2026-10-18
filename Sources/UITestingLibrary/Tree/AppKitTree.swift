@@ -48,12 +48,27 @@ extension Backend {
             found.append(object)
             return
         }
-        let children = (object.accessibilityChildren?() ?? []).map { $0 as AnyObject }
+        let children = Self.children(of: object)
         if isElement, children.isEmpty, !isEmptyGroup(object) {
             found.append(object)
             return
         }
         for child in children { collect(child, in: area, of: window, into: &found) }
+    }
+
+    /// What the object holds, as VoiceOver asks: through the accessibility protocol, or for
+    /// an element that answers only AppKit's older attribute protocol, such as a list's row
+    /// and cell, through its children attribute.
+    private static func children(of object: AnyObject) -> [AnyObject] {
+        if let listed = object.accessibilityChildren?(), !listed.isEmpty {
+            return listed.map { $0 as AnyObject }
+        }
+        let older = NSSelectorFromString("accessibilityAttributeValue:")
+        guard !(object is NSView), object.responds(to: older),
+            let value = object.perform(older, with: NSAccessibility.Attribute.children.rawValue)?
+                .takeUnretainedValue() as? [Any]
+        else { return [] }
+        return value.map { $0 as AnyObject }
     }
 
     /// Whether VoiceOver stops on the object without asking what it holds: a control, or a
