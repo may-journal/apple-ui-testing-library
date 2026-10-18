@@ -50,9 +50,12 @@ public enum ScrollDirection: Sendable, Equatable {
     case up
 }
 
-/// A key a person presses beyond typing text, in the field being edited, as user-event's
-/// `{Enter}` and `{End}` name them.
-public enum Key: Sendable, Equatable, CaseIterable {
+/// A key a person presses, as user-event's `keyboard` names them: `{Enter}` and `{End}` by
+/// name, and any other key by the character it types, such as `"3"`.
+public enum Key: Sendable, Hashable, CaseIterable, ExpressibleByExtendedGraphemeClusterLiteral {
+    /// The key that types `character`, such as `"3"` or `"k"`: in a field, it types the
+    /// character; with Command, it runs the app's shortcut for it.
+    case character(Character)
     /// Enter, the Return key: submits a one-line field, or starts a new line in a field of many.
     case enter
     /// End: moves the cursor to the end of the field. A Mac selects a one-line field's words
@@ -69,6 +72,20 @@ public enum Key: Sendable, Equatable, CaseIterable {
     /// The arrow keys: move the cursor a character left or right, or to the start or end of
     /// a one-line field for up and down. With Shift they select as they move.
     case left, right, up, down
+
+    /// The keys named beyond the characters they type.
+    public static let allCases: [Key] = [
+        .enter, .end, .home, .escape, .tab, .delete, .left, .right, .up, .down,
+    ]
+
+    /// The key that types the character, as `presses("3")` names it.
+    public init(extendedGraphemeClusterLiteral character: Character) {
+        self = .character(character)
+    }
+
+    public init(unicodeScalarLiteral scalar: Unicode.Scalar) {
+        self = .character(Character(scalar))
+    }
 }
 
 /// A key held while another is pressed, as user-event's `{Meta>}` holds one.

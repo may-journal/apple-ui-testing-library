@@ -63,7 +63,7 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 | `Wait` | held; timed out. A timeout fails with the `ScreenReport`. |
 | `Role` | button, link, heading, image, text, text field, search field, adjustable, toggle, selected. |
 | Act outcome | done; nothing to act on; not actionable; did nothing. Each failure names the query and prints the report. |
-| Key | enter; end; home; escape; tab; delete; arrows; each with modifiers. A shortcut answers first. Each key needs a field being edited, and fails "No field is being edited" at the deadline. `clears` and `selectsAll` find their field and edit it first. |
+| Key | enter; end; home; escape; tab; delete; arrows; any character; each with modifiers. A shortcut or menu command answers first. Otherwise a key needs a field being edited, and fails "No field is being edited, and no shortcut answers" at the deadline. `clears` and `selectsAll` find their field and edit it first. |
 | Clipboard | kept; put back. The first copy, cut or paste keeps what the clipboard holds. Closing the screen puts it back. |
 | Gesture | done; no menu; no drag; refused; unchanged; no pointer. Each failure names the query. A swipe on a Mac's list fails, saying it needs a trackpad. |
 | Window | off every display; on a display, see-through. The iOS app's scene window comes onto a display, see-through, only for a hover or a pinch. |

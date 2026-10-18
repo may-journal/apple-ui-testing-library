@@ -6,7 +6,7 @@ relatedConfigurations: ['../../.fitnessrc.json']
 
 ## Why
 
-I press keys with modifiers, tab between fields, clear a field and use the clipboard as user-event does. My test keeps no copy of these steps.
+I press any key with modifiers, run the app's shortcuts, tab between fields, clear a field and use the clipboard as user-event does. My test keeps no copy of these steps.
 
 ## Measurement
 
@@ -46,3 +46,7 @@ Source: #65
     - Given Developer has a field holding text
         - When I select all and cut
             - Then the field reads empty, and pasting brings the text back
+- 0009.8
+    - Given Developer has a view with a Cmd+3 shortcut and no field focused
+        - When I press 3 with Command
+            - Then the shortcut runs

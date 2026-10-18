@@ -1,21 +1,24 @@
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 
-/// Presses keys in the AppKit field being edited, as the keyboard sends them: a key goes to
-/// the window's key equivalents first, so a shortcut answers it, then to the field, whose
-/// delegate hears its editing command first. Also clears a field and finds the system share
-/// picker over the window.
+/// Presses keys as the keyboard sends them: a key goes to the window's key equivalents
+/// first, so a shortcut answers it, then to the app's menu commands, then to the field
+/// being edited, whose delegate hears its editing command first. Also clears a field and
+/// finds the system share picker over the window.
 extension Backend {
-    /// Presses `key` with `modifiers` in the field being edited; whether one was. Enter runs
-    /// insert newline, which ends a one-line field's editing and sends its action; Home and
-    /// End move to the start and end, as user-event's keys do, where a Mac's would scroll.
+    /// Presses `key` with `modifiers`, as the keyboard sends it: the window's shortcuts hear
+    /// it first, then the app's menu commands, then the field being edited. Whether one of
+    /// them took it. Enter runs insert newline, which ends a one-line field's editing and
+    /// sends its action; Home and End move to the start and end, as user-event's keys do,
+    /// where a Mac's would scroll.
     static func press(
         _ key: Key, with modifiers: Set<Modifier>, nodes: [Node], in window: HostWindow
     ) -> Bool {
         let front = frontWindow(of: window.window)
-        guard let field = editing(in: window), let event = keyEvent(key, modifiers, in: front)
-        else { return false }
+        guard let event = keyEvent(key, modifiers, in: front) else { return false }
         if front.performKeyEquivalent(with: event) { return true }
+        if NSApp.mainMenu?.performKeyEquivalent(with: event) == true { return true }
+        guard let field = editing(in: window) else { return false }
         if let command = commands[key]?[modifiers] {
             field.doCommand(by: command)
         } else {
@@ -42,7 +45,7 @@ extension Backend {
     private static func keyEvent(_ key: Key, _ modifiers: Set<Modifier>, in window: NSWindow)
         -> NSEvent?
     {
-        guard let (code, plain) = keys[key] else { return nil }
+        guard let (code, plain) = codeAndCharacters(of: key) else { return nil }
         var flags = NSEvent.ModifierFlags(modifiers.compactMap { flags[$0] })
         if [.left, .right, .up, .down, .home, .end].contains(key) {
             flags.formUnion([.function, .numericPad])
@@ -67,6 +70,24 @@ extension Backend {
         .left: (123, string(NSLeftArrowFunctionKey)),
         .right: (124, string(NSRightArrowFunctionKey)),
         .down: (125, string(NSDownArrowFunctionKey)), .up: (126, string(NSUpArrowFunctionKey)),
+    ]
+
+    /// A key's virtual key code and the characters it types: a named key's from the table
+    /// above, and a character's from where it sits on the US keyboard.
+    private static func codeAndCharacters(of key: Key) -> (UInt16, String)? {
+        guard case .character(let character) = key else { return keys[key] }
+        let code = usKeyboard[Character(character.lowercased())]
+        return (code ?? 0, String(character))
+    }
+
+    /// Each character's virtual key code on the US keyboard.
+    private static let usKeyboard: [Character: UInt16] = [
+        "a": 0, "s": 1, "d": 2, "f": 3, "h": 4, "g": 5, "z": 6, "x": 7, "c": 8, "v": 9,
+        "b": 11, "q": 12, "w": 13, "e": 14, "r": 15, "y": 16, "t": 17, "1": 18, "2": 19,
+        "3": 20, "4": 21, "6": 22, "5": 23, "=": 24, "9": 25, "7": 26, "-": 27, "8": 28,
+        "0": 29, "]": 30, "o": 31, "u": 32, "[": 33, "i": 34, "p": 35, "l": 37, "j": 38,
+        "'": 39, "k": 40, ";": 41, "\\": 42, ",": 43, "/": 44, "n": 45, "m": 46, ".": 47,
+        " ": 49, "`": 50,
     ]
 
     private static func string(_ functionKey: Int) -> String {

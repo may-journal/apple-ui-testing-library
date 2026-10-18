@@ -6,13 +6,13 @@ import UIKit
 /// under the pointer (ADR 0011).
 extension Backend {
     /// Brings the scene's Mac window onto a display, see-through, for a pinch: the scene
-    /// hears the pointer only where a display shows it. Whether AppKit counts the window as
-    /// shown yet; a window long off every display hears no pinch until it does. True where
-    /// the app runs on no Mac, as there is nothing to show and the pinch fails at once.
+    /// hears the pointer only where a display shows it. Whether the window server has it
+    /// there yet; the scene hears no pinch until it does. True where the app runs on no Mac,
+    /// as there is nothing to show and the pinch fails at once.
     static func showsForPinch(_ window: HostWindow) -> Bool {
         guard let mac = MacWindow.current else { return true }
         mac.moveOnScreenUnseen()
-        return mac.isShown
+        return mac.isPlaced
     }
 
     /// Pinches the middle of the element in or out: the pointer moves over it, then a began,

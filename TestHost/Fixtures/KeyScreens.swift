@@ -60,6 +60,19 @@ struct ShortcutScreen: View {
     }
 }
 
+/// A view with no field whose third tab opens on Command-3, and a line naming the open tab.
+struct TabShortcutScreen: View {
+    @State private var open = "First tab open"
+
+    var body: some View {
+        VStack {
+            Button("Third tab") { open = "Third tab open" }
+                .keyboardShortcut("3", modifiers: .command)
+            Text(open)
+        }
+    }
+}
+
 /// A form of two fields, the first being edited, and a line naming the one being edited.
 struct FormScreen: View {
     private enum Field { case first, second }

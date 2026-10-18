@@ -156,11 +156,23 @@ struct MacWindow {
         Trackpad.magnify(by: amount, phase, at: point, inWindow: number, height: frame.height)
     }
 
-    /// Whether AppKit counts some of the window as shown on a display: its occlusion state
-    /// holds the visible flag.
-    var isShown: Bool {
-        let visible: UInt = 1 << 1
-        return (window.value(forKey: "occlusionState") as? UInt).map { $0 & visible != 0 } ?? false
+    /// Whether the window server has the window where AppKit last moved it, as Quartz's
+    /// window list tells. A move reaches the window server a moment after AppKit makes it.
+    var isPlaced: Bool {
+        typealias CopyInfo = @convention(c) (UInt32, UInt32) -> Unmanaged<CFArray>?
+        guard
+            let symbol = dlsym(
+                UnsafeMutableRawPointer(bitPattern: -2), "CGWindowListCopyWindowInfo")
+        else { return false }
+        let includingWindow: UInt32 = 1 << 3
+        guard
+            let info = unsafeBitCast(symbol, to: CopyInfo.self)(includingWindow, UInt32(number))?
+                .takeRetainedValue() as? [[String: Any]],
+            let bounds = info.first?["kCGWindowBounds"] as? [String: Double],
+            let height = Self.displays.first?.height
+        else { return false }
+        // Quartz counts down from the top of the first display; AppKit up from its bottom.
+        return bounds["X"] == frame.minX && bounds["Y"] == height - frame.maxY
     }
 
     private var number: Int { window.value(forKey: "windowNumber") as? Int ?? 0 }

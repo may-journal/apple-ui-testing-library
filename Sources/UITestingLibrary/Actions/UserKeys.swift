@@ -1,21 +1,29 @@
 /// Keys and the clipboard, named as user-event's `keyboard`, `tab`, `clear`, `copy`, `cut`
 /// and `paste` are. Each acts in the field being edited, through its own key commands and
-/// edit actions, and waits for the screen to settle after (ADR 0010, ADR 0011).
+/// edit actions, and waits for the screen to settle after; a key's shortcut answers with or
+/// without one (ADR 0010, ADR 0011).
 extension User {
-    /// Presses `key` with `modifiers` held, in the field being edited, as user-event's
-    /// `keyboard("{Meta>}{Enter}{/Meta}")` does. A shortcut that answers the key runs first;
-    /// otherwise Enter submits a one-line field, End and Home move to its ends, and Tab moves
-    /// to the next field.
+    /// Presses `key` with `modifiers` held, as user-event's `keyboard("{Meta>}3{/Meta}")`
+    /// does: `presses("3", with: [.command])`. A shortcut or app command that answers the
+    /// key runs first, with or without a field being edited. Otherwise the field being
+    /// edited hears it: a character types, Enter submits a one-line field, End and Home move
+    /// to its ends, and Tab moves to the next field.
     public func presses(
         _ key: Key, with modifiers: Set<Modifier> = [],
         file: StaticString = #filePath, line: UInt = #line
     ) async throws {
         try await Timing.measure(.presses) {
-            try await editsField(SourceLocation(file: file, line: line)) {
+            let pressed = await wait.until {
                 Backend.press(
                     key, with: modifiers, nodes: AccessibilityTree.current(screen).nodes,
                     in: screen.window)
             }
+            guard pressed else {
+                throw failure(
+                    "No field is being edited, and no shortcut answers \(key)",
+                    SourceLocation(file: file, line: line))
+            }
+            _ = await wait.settle(screen)
         }
     }
 
