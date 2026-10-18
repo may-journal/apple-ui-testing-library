@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+## [1.5.0](https://github.com/may-journal/apple-ui-testing-library/compare/v1.4.0...v1.5.0) (2026-10-18)
+
+
+### Features
+
+* **actions:** every common person action, in process and off screen ([#71](https://github.com/may-journal/apple-ui-testing-library/issues/71)) ([e90b014](https://github.com/may-journal/apple-ui-testing-library/commit/e90b0140c08bd976f7870f987e7f136f7fa8a4c9))
+
 ## [1.4.0](https://github.com/may-journal/apple-ui-testing-library/compare/v1.3.0...v1.4.0) (2026-10-18)
 
 
