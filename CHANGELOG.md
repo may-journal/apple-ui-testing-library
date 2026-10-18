@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+## [1.4.0](https://github.com/may-journal/apple-ui-testing-library/compare/v1.3.0...v1.4.0) (2026-10-18)
+
+
+### Features
+
+* **actions:** press keys, watch for a set time and see the share sheet ([#66](https://github.com/may-journal/apple-ui-testing-library/issues/66)) ([166b54d](https://github.com/may-journal/apple-ui-testing-library/commit/166b54da6508057584bf565bf9f541d2a8907a0a))
+
 ## [1.3.0](https://github.com/may-journal/apple-ui-testing-library/compare/v1.2.0...v1.3.0) (2026-10-13)
 
 
