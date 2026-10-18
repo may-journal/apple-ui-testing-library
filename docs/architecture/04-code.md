@@ -63,7 +63,7 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 | `Wait` | held; timed out. A timeout fails with the `ScreenReport`. |
 | `Role` | button, link, heading, image, text, text field, search field, adjustable, toggle, selected. |
 | Act outcome | done; nothing to act on; not actionable; did nothing. Each failure names the query and prints the report. |
-| Key | return. Each key needs a field being edited, as `types` does, and fails "No field is being edited" at the deadline. |
+| Key | enter; end. Each key needs a field being edited, as `types` does, and fails "No field is being edited" at the deadline. `clears` first finds its field and edits it; a field that takes no text fails. |
 | Watch | held for its set time; failed at the first miss. `neverSees` fails on the first match, or a screen that only read empty. `staysResponsive` fails on a stall at or over its limit. |
 | Share sheet | up; not up. `seesShareSheet` waits for the sheet's controller over the window and never reads its contents. |
 | `Canary` | read elements; read nothing. Reading nothing fails `close()`, and a `doesNotSee` that only read empty. |

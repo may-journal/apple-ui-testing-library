@@ -1,25 +1,38 @@
 #if canImport(UIKit)
 import UIKit
 
-/// Presses keys in the UIKit field being edited, as the keyboard sends them, and finds the
-/// system share sheet presented over the window.
+/// Presses keys in the UIKit field being edited, as the keyboard sends them, clears a field,
+/// and finds the system share sheet presented over the window.
 extension Backend {
-    /// Presses `key` in the field being edited; whether one was. Return submits a one-line
+    /// Presses `key` in the field being edited; whether one was. Enter submits a one-line
     /// field, as the field hears the key: its delegate first, then its end-on-exit action.
-    /// A field of many lines takes a new line instead.
+    /// A field of many lines takes a new line instead. End moves the cursor to the end.
     static func press(_ key: Key, in window: HostWindow) -> Bool {
         guard let field = editing(in: window.window) else { return false }
         switch key {
-        case .return:
-            guard let line = field as? UITextField else {
-                field.insertText("\n")
-                return true
-            }
-            if line.delegate?.textFieldShouldReturn?(line) != false {
-                line.sendActions(for: .editingDidEndOnExit)
-            }
+        case .enter: enter(field)
+        case .end: moveToEnd(field)
         }
         return true
+    }
+
+    private static func enter(_ field: UIKeyInput) {
+        guard let line = field as? UITextField else {
+            field.insertText("\n")
+            return
+        }
+        if line.delegate?.textFieldShouldReturn?(line) != false {
+            line.sendActions(for: .editingDidEndOnExit)
+        }
+    }
+
+    /// Asks the element's field to be the one being edited, as a tap into it does; whether
+    /// it is now. SwiftUI may move focus a turn later, so a caller asks again until it is.
+    static func edit(_ node: Node, in window: HostWindow) -> Bool {
+        guard node.element.isEnabled, let field = node.object as? UIView, field is UITextInput
+        else { return false }
+        if !field.isFirstResponder { _ = field.becomeFirstResponder() }
+        return field.isFirstResponder
     }
 
     /// Deletes every character in the field being edited, as holding Delete at its end does;
@@ -32,14 +45,6 @@ extension Backend {
             field.deleteBackward()
             left -= 1
         }
-        return true
-    }
-
-    /// Moves the cursor to the end of the field being edited, as the End key does; whether
-    /// one was.
-    static func moveToEnd(in window: HostWindow) -> Bool {
-        guard let field = editing(in: window.window) else { return false }
-        moveToEnd(field)
         return true
     }
 

@@ -58,8 +58,8 @@ extension User {
         }
     }
 
-    /// Presses `key` on the keyboard, in the field being edited. Return submits a one-line
-    /// field.
+    /// Presses `key` on the keyboard, in the field being edited, as user-event's
+    /// `keyboard("{Enter}")` does. Enter submits a one-line field; End moves to its end.
     public func presses(
         _ key: Key,
         file: StaticString = #filePath, line: UInt = #line
@@ -71,26 +71,24 @@ extension User {
         }
     }
 
-    /// Deletes every character in the field being edited, as holding Delete at its end does.
-    public func clearsField(
+    /// Edits the field `query` finds and deletes every character in it, as user-event's
+    /// `clear(element)` does.
+    public func clears(
+        _ query: Query,
         file: StaticString = #filePath, line: UInt = #line
     ) async throws {
-        try await Timing.measure(.clearsField) {
-            try await editsField(SourceLocation(file: file, line: line)) {
-                Backend.clearField(in: screen.window)
+        try await Timing.measure(.clears) {
+            let location = SourceLocation(file: file, line: line)
+            guard let node = await find(query) else {
+                throw failure("Expected to clear \(query), and \(found(query))", location)
             }
-        }
-    }
-
-    /// Moves the cursor to the end of the field being edited, as the End key does. A Mac
-    /// selects a one-line field's words as it gains focus, so typing would replace them.
-    public func movesToEnd(
-        file: StaticString = #filePath, line: UInt = #line
-    ) async throws {
-        try await Timing.measure(.movesToEnd) {
-            try await editsField(SourceLocation(file: file, line: line)) {
-                Backend.moveToEnd(in: screen.window)
+            guard node.element.isEnabled else {
+                throw failure("Cannot clear \(query): the field is disabled", location)
             }
+            guard await wait.until({ Backend.edit(node, in: screen.window) }) else {
+                throw failure("Cannot clear \(query): it takes no text", location)
+            }
+            try await editsField(location) { Backend.clearField(in: screen.window) }
         }
     }
 

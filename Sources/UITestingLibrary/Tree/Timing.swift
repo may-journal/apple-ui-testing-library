@@ -20,11 +20,10 @@ struct Phase: Sendable {
     static let scrolls = Phase(name: "act", code: 10)
     static let goesBack = Phase(name: "act", code: 11)
     static let presses = Phase(name: "act", code: 12)
-    static let clearsField = Phase(name: "act", code: 13)
-    static let movesToEnd = Phase(name: "act", code: 14)
-    static let seesShareSheet = Phase(name: "look", code: 15)
-    static let neverSees = Phase(name: "look", code: 16)
-    static let staysResponsive = Phase(name: "look", code: 17)
+    static let clears = Phase(name: "act", code: 13)
+    static let seesShareSheet = Phase(name: "look", code: 14)
+    static let neverSees = Phase(name: "look", code: 15)
+    static let staysResponsive = Phase(name: "look", code: 16)
 }
 
 /// Signposts that time each phase of a test. Instruments shows them under Points of

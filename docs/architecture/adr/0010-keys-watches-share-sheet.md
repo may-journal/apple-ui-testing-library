@@ -10,7 +10,7 @@ Client tests kept private copies of Return, clearing a field, never-seen checks,
 
 ## Decision
 
-1. `presses(.return)`, `clearsField()` and `movesToEnd()` run the field's own key commands. Like `types`, each waits for a field, then settles.
+1. `presses(.enter)`, `presses(.end)` and `clears(_:)` follow user-event and run the field's own key commands. Each waits for a field, then settles.
 2. `neverSees(_:for:)` watches for a set time and fails at the first match. Absence needs time to prove.
 3. A `neverSees` that only read an empty screen fails, as `doesNotSee` does.
 4. `staysResponsive(under:)` runs an action while a main run loop timer fires every 10 ms. The longest gap between fires is the stall.

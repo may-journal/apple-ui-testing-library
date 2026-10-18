@@ -101,12 +101,12 @@ let save = try await user.sees(.button("Save"))
 
 ## Keys
 
-Keys beyond typing act on the field being edited, through its own key commands ([0009](requirements/0009-keys-pressing-keys-beyond-typing.md)). A Mac selects a one-line field's words as it gains focus, so call `movesToEnd()` before typing to add to them.
+Keys follow [user-event](https://testing-library.com/docs/user-event/intro)'s `keyboard` and `clear`, through the field's own key commands ([0009](requirements/0009-keys-pressing-keys-and-clearing-a-field.md)). A Mac selects a one-line field's words as it gains focus, so press End before typing to add to them.
 
 ```swift
-try await user.presses(.return)   // submits a one-line field
-try await user.clearsField()      // deletes every character, as holding Delete does
-try await user.movesToEnd()       // as the End key does, before typing more
+try await user.presses(.enter)               // keyboard("{Enter}"): submits a one-line field
+try await user.presses(.end)                 // keyboard("{End}"): moves to the end
+try await user.clears(.role(.textField, "Note"))  // clear(element): edits it, deletes all
 ```
 
 ## Waits

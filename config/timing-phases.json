@@ -13,10 +13,9 @@
     "10": "act scrolls",
     "11": "act goesBack",
     "12": "act presses",
-    "13": "act clearsField",
-    "14": "act movesToEnd",
-    "15": "look seesShareSheet",
-    "16": "look neverSees",
-    "17": "look staysResponsive"
+    "13": "act clears",
+    "14": "look seesShareSheet",
+    "15": "look neverSees",
+    "16": "look staysResponsive"
   }
 }

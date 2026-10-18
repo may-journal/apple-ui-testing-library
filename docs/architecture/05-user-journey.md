@@ -19,7 +19,7 @@ flowchart TB
     find(5 Find by role and label<br/>Req 0002):::action
     match{6 How many match?<br/>Req 0002}:::check
     missing[7 Fails with the screen report<br/>Req 0005]:::blocked
-    act(8 Tap, hold, scroll, go back, type, press keys<br/>Req 0003, 0006, 0009):::action
+    act(8 Tap, hold, scroll, go back, type, press keys, clear<br/>Req 0003, 0006, 0009):::action
     settle[(9 Wait until settled<br/>Req 0004)]:::system
     sees(10 Sees the result<br/>Req 0004, 0006, 0010):::action
     close[11 Close the screen<br/>Req 0001]:::step
@@ -76,7 +76,7 @@ Numbers match the callout table. See [03-components.md](03-components.md) and [0
 | 5   | Find by role and label | A query resolves against the current tree. | Role and label first ([ADR 0002](adr/0002-query-priority.md)). |
 | 6   | How many match? | One, none, or many, polled up to the deadline. | An ambiguous match is a failure, as in Testing Library. |
 | 7   | Fails with the screen report | Names the query, then lists what is on and off screen. | The fix starts from what a person hears. |
-| 8   | Tap, hold, scroll, go back, type, press keys | Acts through activation, custom actions, scrolling, escape, or the keyboard and its keys. A disabled control fails the act. | VoiceOver's own entry points ([ADR 0007](adr/0007-control-state.md)). |
+| 8   | Tap, hold, scroll, go back, type, press keys, clear | Acts through activation, custom actions, scrolling, escape, or the keyboard and its keys. A disabled control fails the act. | VoiceOver's own entry points ([ADR 0007](adr/0007-control-state.md)). |
 | 9   | Wait until settled | Lets the main run loop go idle twice, then reads once, with animations off. | No sleeps ([ADR 0003](adr/0003-condition-waits.md)). |
 | 10  | Sees the result | Waits until the expected element shows, or stays gone, and reads its enabled state. It can also watch for a set time, time stalls, or find the share sheet. | The claim is about the screen. |
 | 11  | Close the screen | Hides the window and releases the root. | The next test gets a fresh window ([ADR 0005](adr/0005-one-window-per-process.md)). |

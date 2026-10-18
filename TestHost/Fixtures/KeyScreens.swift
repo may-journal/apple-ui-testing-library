@@ -1,5 +1,21 @@
 import SwiftUI
 
+/// Two fields: an empty one being edited, and a note holding "Milk" that is not.
+struct ClearingScreen: View {
+    @State private var item = ""
+    @State private var note = "Milk"
+    @FocusState private var editing: Bool
+
+    var body: some View {
+        VStack {
+            TextField("Item", text: $item).focused($editing).accessibilityLabel("Item")
+            TextField("Note", text: $note).accessibilityLabel("Note")
+            Text(note.isEmpty ? "Note empty" : "Note: \(note)")
+        }
+        .onAppear { DispatchQueue.main.async { editing = true } }
+    }
+}
+
 /// A one-line field already being edited, holding "Milk" with every word selected, as a Mac
 /// selects a field's words when it gains focus. Return submits what it holds.
 struct EditingScreen: View {
