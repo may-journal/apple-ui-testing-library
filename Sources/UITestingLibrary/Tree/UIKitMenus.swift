@@ -9,7 +9,11 @@ extension Backend {
     /// the next read can ask for the menu it opens. A control whose primary action is its
     /// menu, such as a navigation bar's menu button, opens it here: its own activation runs
     /// nothing. A disabled control opens nothing. Whether this opened the menu.
+    ///
+    /// SwiftUI adds a `Menu`'s control to its window only at the layout after it draws,
+    /// which comes before a person's tap. So the window lays out first.
     static func opensMenu(under object: NSObject, in window: UIWindow) -> Bool {
+        window.layoutIfNeeded()
         let point = window.convert(object.accessibilityActivationPoint, from: nil)
         var view = window.hitTest(point, with: nil)
         while let current = view, !(current is UIControl) { view = current.superview }
@@ -62,8 +66,9 @@ extension Backend {
         return true
     }
 
-    /// Whether a cancelled menu is still unwinding; UIKit's menu is gone as it closes.
-    static var isMenuClosing: Bool { false }
+    /// Whether a cancelled Mac menu is still unwinding. The Mac ignores a tap on a menu button
+    /// that comes before the cancelled menu's tracking ends, so every act settles after it.
+    static var isMenuClosing: Bool { OpenMenu.shared.isClosing }
 
     /// Opens `menu` as a person's hold opens a context menu, without drawing it: its items
     /// become what a read holds until an item runs or the menu closes.
@@ -91,6 +96,8 @@ private final class OpenMenu: NSObject {
     private var interaction: UIContextMenuInteraction?
     private var menu: UIMenu?
     private var native: NSObject?
+    /// The Mac menu tracking, which outlasts `native` while a cancelled menu unwinds.
+    private var tracking: NSObject?
     /// A context menu a hold opened without drawing it.
     private var held: UIMenu?
 
@@ -129,6 +136,8 @@ private final class OpenMenu: NSObject {
         return menu
     }
 
+    var isClosing: Bool { native == nil && tracking != nil }
+
     func close() {
         held = nil
         interaction?.dismissMenu()
@@ -140,12 +149,14 @@ private final class OpenMenu: NSObject {
     /// A Mac menu that begins after its menu was closed is cancelled at once.
     @objc private func began(_ note: Notification) {
         native = note.object as? NSObject
+        tracking = native
         if interaction == nil { close() }
     }
 
     @objc private func ended(_ note: Notification) {
-        guard native != nil, native === note.object as? NSObject else { return }
-        (interaction, menu, native) = (nil, nil, nil)
+        let object = note.object as? NSObject
+        if native != nil, native === object { (interaction, menu, native) = (nil, nil, nil) }
+        if tracking === object { tracking = nil }
     }
 }
 #endif

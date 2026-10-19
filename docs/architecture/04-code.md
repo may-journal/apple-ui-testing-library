@@ -70,7 +70,7 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 | Watch | held for its set time; failed at the first miss. `neverSees` fails on the first match, or a screen that only read empty. `staysResponsive` fails on a stall at or over its limit. |
 | Share sheet | up; not up. `seesShareSheet` waits for the sheet's controller over the window and never reads its contents. |
 | `Canary` | read elements; read nothing. Reading nothing fails `close()`, and a `doesNotSee` that only read empty. |
-| Menu | closed; open. While a menu is open, a read holds only its items. Tapping an item runs it and closes the menu, and so does `close()`. `goesBack()` closes it without running an item, and each act settles after the Mac finishes closing it. |
+| Menu | closed; open. While a menu is open, a read holds only its items. Tapping an item runs it and closes the menu, and so does `close()`. `goesBack()` closes it without running an item, and each act settles after the Mac finishes closing it, on both backends. A tap lays out the window first, so a `Menu` that just drew or redrew opens. |
 | `Failure` | message; report; location. Thrown from every look and act, so the test fails at its own line. |
 
 ## Platforms
