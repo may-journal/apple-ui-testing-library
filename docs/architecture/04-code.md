@@ -65,7 +65,7 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 | Act outcome | done; nothing to act on; not actionable; did nothing. Each failure names the query and prints the report. |
 | Key | enter; end; home; escape; tab; delete; arrows; any character; each with modifiers. A shortcut or menu command answers first. Otherwise a key needs a field being edited, and fails "No field is being edited, and no shortcut answers" at the deadline. `clears` and `selectsAll` find their field and edit it first. |
 | Clipboard | kept; put back. The first copy, cut or paste keeps what the clipboard holds. Closing the screen puts it back. |
-| Gesture | done; no menu; no drag; refused; unchanged; no pointer. Each failure names the query. A swipe on a Mac's list fails, saying it needs a trackpad. A swipe on anything but a list row flicks it. |
+| Gesture | done; no menu; no drag; refused; unchanged; no pointer; nothing to press. Each failure names the query. A swipe on a Mac's list fails, saying it needs a trackpad. A swipe on anything but a list row flicks it. |
 | Window | off every display; on a display, see-through. The iOS app's scene window comes onto a display, see-through, only for a hover or a pinch. A drag by a distance keeps it off. |
 | Watch | held for its set time; failed at the first miss. `neverSees` fails on the first match, or a screen that only read empty. `staysResponsive` fails on a stall at or over its limit. |
 | Share sheet | up; not up. `seesShareSheet` waits for the sheet's controller over the window and never reads its contents. |

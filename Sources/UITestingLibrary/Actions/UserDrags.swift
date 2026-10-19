@@ -24,10 +24,16 @@ extension User {
         _ node: Node, _ query: Query, by offset: CGVector, _ speed: DragSpeed,
         _ location: SourceLocation
     ) async throws {
-        guard await Backend.drag(node, by: offset, speed, in: screen.window) else {
+        switch await Backend.drag(node, by: offset, speed, in: screen.window) {
+        case .noPointer:
             throw failure(
                 "Dragging \(query) needs a pointer, which only a Mac sends in process; run the "
                     + "iOS app on a Mac", location)
+        case .unheard:
+            throw failure(
+                "Dragging \(query) found nothing to press: it draws no frame, or the window has "
+                    + "no view that hears the pointer", location)
+        case .moved: break
         }
         _ = await wait.settle(screen)
     }

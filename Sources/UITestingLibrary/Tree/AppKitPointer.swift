@@ -140,13 +140,22 @@ extension Backend {
         return frame.isEmpty ? nil : CGPoint(x: frame.midX, y: frame.midY)
     }
 
+    /// The time a pointer event is stamped: `time`, or now, but never before the last one
+    /// stamped. A drag stamps its moves ahead of the clock, so what follows stays in order.
+    static func stamp(_ time: TimeInterval? = nil) -> TimeInterval {
+        stamped = max(time ?? ProcessInfo.processInfo.systemUptime, stamped)
+        return stamped
+    }
+
+    private static var stamped: TimeInterval = 0
+
     static func mouse(
         _ type: NSEvent.EventType, at point: CGPoint, clicks: Int, in window: NSWindow,
         time: TimeInterval? = nil
     ) -> NSEvent? {
         NSEvent.mouseEvent(
             with: type, location: point, modifierFlags: [],
-            timestamp: time ?? ProcessInfo.processInfo.systemUptime,
+            timestamp: stamp(time),
             windowNumber: window.windowNumber,
             context: nil, eventNumber: 0, clickCount: clicks,
             pressure: type == .leftMouseDown || type == .leftMouseDragged ? 1 : 0)
@@ -159,7 +168,7 @@ extension Backend {
     ) -> NSEvent? {
         NSEvent.enterExitEvent(
             with: type, location: point, modifierFlags: [],
-            timestamp: ProcessInfo.processInfo.systemUptime, windowNumber: window.windowNumber,
+            timestamp: stamp(), windowNumber: window.windowNumber,
             context: nil, eventNumber: 0,
             trackingNumber: Int(bitPattern: Unmanaged.passUnretained(area).toOpaque()),
             userData: nil)

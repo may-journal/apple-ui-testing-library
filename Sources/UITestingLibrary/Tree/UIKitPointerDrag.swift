@@ -7,37 +7,34 @@ import UIKit
 extension Backend {
     /// Presses the middle of the element, moves by `offset` at `speed` and lets go. UIKit
     /// stamps each touch as it arrives, so the view's drag gesture hears a slow drag by its
-    /// rest before letting go, and a flick by letting go mid-move. Whether the app runs on a
-    /// Mac and its scene's input view was found.
+    /// still last move, and a flick by letting go mid-move. Once pressed, every move and the
+    /// release are sent, so no touch stays down.
     static func drag(
         _ node: Node, by offset: CGVector, _ speed: DragSpeed, in window: HostWindow
-    ) async -> Bool {
-        guard let mac = MacWindow.current else { return false }
+    ) async -> MoveOutcome {
+        guard let mac = MacWindow.current else { return .noPointer }
         let frame = node.element.frame
         func point(_ progress: CGFloat) -> CGPoint {
             mac.point(
                 for: frame.offsetBy(dx: offset.dx * progress, dy: offset.dy * progress),
                 in: window.window)
         }
-        guard mac.press(.leftDown, at: point(0)) else { return false }
+        guard mac.press(.leftDown, at: point(0)) else { return .unheard }
         await Task.yield()
+        var heard = true
         for move in speed.moves {
-            mac.press(.dragged, at: point(move.progress))
+            heard = mac.press(.dragged, at: point(move.progress)) && heard
             await Task.yield()
         }
-        mac.press(.leftUp, at: point(1))
+        heard = mac.press(.leftUp, at: point(1)) && heard
         await Task.yield()
-        return true
+        return heard ? .moved : .unheard
     }
 
-    /// Whether the element sits in a list's row, as a collection view's item under its middle.
-    static func isListRow(_ node: Node, in window: HostWindow) -> Bool {
-        guard let object = node.object as? NSObject else { return false }
-        let point = window.window.convert(object.accessibilityActivationPoint, from: nil)
-        return views(at: point, in: window.window).contains { view in
-            guard let list = view as? UICollectionView else { return false }
-            return list.indexPathForItem(at: list.convert(point, from: window.window)) != nil
-        }
+    /// Whether a swipe the list could not open must fail rather than flick. UIKit's swipe
+    /// controller opens any list row it finds, so a swipe it cannot open always flicks.
+    static func refusesSwipe(_ node: Node, in window: HostWindow) -> Bool {
+        false
     }
 }
 
@@ -46,7 +43,6 @@ extension MacWindow {
     /// of its tracking area, as a key window does. The window is never key, since the app
     /// never comes forward, so it would keep a lone press to make itself key, and the scene
     /// would hear no touch. Whether the input view and event were found.
-    @discardableResult
     func press(_ type: Mouse, at point: CGPoint) -> Bool {
         guard let view = trackingArea?.value(forKey: "owner") as? NSObject,
             let event = mouse(type, at: point, clicks: 1)

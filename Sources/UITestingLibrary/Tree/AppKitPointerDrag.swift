@@ -7,34 +7,39 @@ import AppKit
 extension Backend {
     /// Presses the middle of the element, moves by `offset` at `speed` and lets go. Each event
     /// is stamped as a mouse at that speed would stamp it, so the view's drag gesture hears
-    /// the speed as well as the distance. Whether the element is drawn.
+    /// the speed as well as the distance. Once pressed, every move and the release are sent.
     static func drag(
         _ node: Node, by offset: CGVector, _ speed: DragSpeed, in window: HostWindow
-    ) async -> Bool {
+    ) async -> MoveOutcome {
         let front = frontWindow(of: window.window)
-        guard let start = middle(of: node) else { return false }
+        guard let start = middle(of: node) else { return .unheard }
         // The window counts up from its bottom; the offset counts down, as SwiftUI does.
         func point(_ progress: CGFloat) -> CGPoint {
             CGPoint(x: start.x + offset.dx * progress, y: start.y - offset.dy * progress)
         }
-        let pressed = ProcessInfo.processInfo.systemUptime
-        send(mouse(.leftMouseDown, at: point(0), clicks: 1, in: front, time: pressed), to: front)
+        let pressed = stamp()
+        guard let press = mouse(.leftMouseDown, at: point(0), clicks: 1, in: front) else {
+            return .unheard
+        }
+        front.sendEvent(press)
         await Task.yield()
-        for move in speed.moves {
+        let moves = speed.moves
+        for move in moves {
             send(
                 mouse(
                     .leftMouseDragged, at: point(move.progress), clicks: 1, in: front,
                     time: pressed + move.time), to: front)
             await Task.yield()
         }
-        let released = pressed + (speed.moves.last?.time ?? 0)
+        let released = pressed + (moves.last?.time ?? 0)
         send(mouse(.leftMouseUp, at: point(1), clicks: 1, in: front, time: released), to: front)
         await Task.yield()
-        return true
+        return .moved
     }
 
-    /// Whether the element sits in a list's row, as a table's row view holding its middle.
-    static func isListRow(_ node: Node, in window: HostWindow) -> Bool {
+    /// Whether a swipe AppKit could not open must fail rather than flick: whether the element
+    /// sits in a list's row, whose swipe actions show only for a trackpad's touches.
+    static func refusesSwipe(_ node: Node, in window: HostWindow) -> Bool {
         var view = hitView(at: node.element.frame, in: frontWindow(of: window.window))
         while let current = view {
             if current is NSTableRowView { return true }

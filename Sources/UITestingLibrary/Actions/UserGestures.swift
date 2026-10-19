@@ -51,18 +51,18 @@ extension User {
         try await Timing.measure(.swipes) {
             let location = SourceLocation(file: file, line: line)
             let node = try await drawn(query, "swipe", location)
-            guard Backend.isListRow(node, in: screen.window) else {
-                let offset = CGVector(dx: direction == .left ? -100 : 100, dy: 0)
-                try await drag(node, query, by: offset, .flick, location)
+            if Backend.swipe(direction, node, in: screen.window) {
+                _ = await wait.settle(screen)
                 return
             }
-            guard Backend.swipe(direction, node, in: screen.window) else {
+            guard !Backend.refusesSwipe(node, in: screen.window) else {
                 throw failure(
-                    "Swiping \(query) \(direction) showed no actions: it is not a list row with "
-                        + "swipe actions, or this platform shows them only for a trackpad's "
-                        + "touches (ADR 0011)", location)
+                    "Swiping \(query) \(direction) showed no actions: this platform shows a "
+                        + "list row's swipe actions only for a trackpad's touches (ADR 0011)",
+                    location)
             }
-            _ = await wait.settle(screen)
+            let offset = CGVector(dx: direction == .left ? -100 : 100, dy: 0)
+            try await drag(node, query, by: offset, .flick, location)
         }
     }
 
