@@ -68,6 +68,20 @@ struct NoteScreen: View {
     }
 }
 
+/// A disabled button still advertises an accessibility action, but a person cannot run it.
+struct DisabledNoteActionScreen: View {
+    @State private var archived = false
+
+    var body: some View {
+        VStack {
+            Button("Note") {}
+                .accessibilityAction(named: "Archive") { archived = true }
+                .disabled(true)
+            Text(archived ? "Archived" : "Not archived")
+        }
+    }
+}
+
 /// A field already being edited, echoing what is typed.
 struct FieldScreen: View {
     @State private var item = ""

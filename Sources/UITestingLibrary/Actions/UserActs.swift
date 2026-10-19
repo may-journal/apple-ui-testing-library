@@ -31,6 +31,11 @@ extension User {
                     "Expected to hold \(query), and \(found(query))",
                     SourceLocation(file: file, line: line))
             }
+            guard node.element.isEnabled else {
+                throw failure(
+                    "Cannot choose \"\(action)\" on \(query): the control is disabled",
+                    SourceLocation(file: file, line: line))
+            }
             let offered = node.element.actions
             guard offered.contains(action) else {
                 throw failure(
