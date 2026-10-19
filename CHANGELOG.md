@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+## [1.7.0](https://github.com/may-journal/apple-ui-testing-library/compare/v1.6.0...v1.7.0) (2026-10-19)
+
+
+### Features
+
+* **gestures:** drag any element by a distance, slowly or as a flick ([#84](https://github.com/may-journal/apple-ui-testing-library/issues/84)) ([c459542](https://github.com/may-journal/apple-ui-testing-library/commit/c4595423f6c16899adf408f5c4b44d1a635e2097))
+
 ## [1.6.0](https://github.com/may-journal/apple-ui-testing-library/compare/v1.5.0...v1.6.0) (2026-10-18)
 
 
