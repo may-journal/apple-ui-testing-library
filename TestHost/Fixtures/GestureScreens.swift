@@ -122,3 +122,27 @@ struct PinchScreen: View {
         }
     }
 }
+
+/// A card that reports, as its drag gesture ends, how far it moved and whether it was flicked:
+/// let go while still moving fast, so its predicted end lies well past where it stopped.
+struct DragByScreen: View {
+    @State private var report = "Not dragged"
+
+    var body: some View {
+        VStack(spacing: 40) {
+            Text("Card")
+                .frame(width: 200, height: 200)
+                .contentShape(Rectangle())
+                .gesture(
+                    DragGesture().onEnded { value in
+                        let moved = value.translation
+                        let ahead = value.predictedEndTranslation
+                        let flung = hypot(ahead.width - moved.width, ahead.height - moved.height)
+                        let distance =
+                            "\(Int(moved.width.rounded())), \(Int(moved.height.rounded()))"
+                        report = "\(flung > 100 ? "Flicked" : "Dragged") \(distance)"
+                    })
+            Text(report)
+        }
+    }
+}

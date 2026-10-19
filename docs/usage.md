@@ -126,7 +126,7 @@ try await user.pastes()
 
 ## Gestures
 
-Gestures beyond a tap run in process, each through the platform's own entry point ([0011](requirements/0011-gestures-gestures-beyond-a-tap.md), [ADR 0011](architecture/adr/0011-person-actions-in-process.md)).
+Gestures beyond a tap run in process, each through the platform's own entry point ([0011](requirements/0011-gestures-gestures-beyond-a-tap.md), [ADR 0011](architecture/adr/0011-person-actions-in-process.md)). `drags(_:by:speed:)` drags from the element's middle, right and down by the offset's points ([0012](requirements/0012-drags-drags-by-a-distance.md)). A slow drag comes to rest before letting go, and a flick lets go mid-move.
 
 ```swift
 try await user.doubleTaps(.text("Photo"))    // dblClick(element): one double tap
@@ -138,9 +138,11 @@ try await user.adjusts(.up, .role(.adjustable, "Volume"))  // or .down
 try await user.hovers(.text("Card"))         // hover(element)
 try await user.unhovers(.text("Card"))       // unhover(element)
 try await user.pinches(.in, .text("Map"))    // or .out: a trackpad's pinch
+try await user.drags(.text("Photo"), by: CGVector(dx: -300, dy: 0), speed: .slow)  // or .flick
+try await user.swipes(.left, .text("Photo")) // not a row: flicks it 100 points left
 ```
 
-While a held menu is open, a read holds only its items, as for a tapped menu. A double tap, a hover and a pinch need a Mac's pointer or trackpad. On iOS they run where the app runs on a Mac. A Mac app's list shows swipe actions only for a trackpad's touches, so `swipes` fails there with a message saying so.
+While a held menu is open, a read holds only its items, as for a tapped menu. A double tap, a hover, a pinch and a drag by a distance need a Mac's pointer or trackpad. On iOS they run where the app runs on a Mac. A Mac app's list shows swipe actions only for a trackpad's touches, so `swipes` fails there with a message saying so.
 
 On a Mac the test window sits off every display, and the app never comes forward. A test never shows on screen or takes focus.
 

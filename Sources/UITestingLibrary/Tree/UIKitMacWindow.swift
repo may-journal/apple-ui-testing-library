@@ -109,6 +109,7 @@ struct MacWindow {
         case leftDown = 1
         case leftUp = 2
         case moved = 5
+        case dragged = 6
     }
 
     enum Crossing: UInt {
@@ -129,7 +130,7 @@ struct MacWindow {
         else { return nil }
         return unsafeBitCast(method_getImplementation(method), to: Make.self)(
             event, selector, type.rawValue, point, 0, ProcessInfo.processInfo.systemUptime,
-            number, nil, 0, clicks, type == .leftDown ? 1 : 0
+            number, nil, 0, clicks, type == .leftDown || type == .dragged ? 1 : 0
         )?.takeUnretainedValue()
     }
 

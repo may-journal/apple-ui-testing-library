@@ -1,3 +1,5 @@
+import CoreGraphics
+
 /// Gestures beyond a tap, named as user-event's `dblClick`, `hover` and `unhover` are, and
 /// as a person holds, swipes, drags, adjusts and pinches. Each finds its element, acts through the
 /// platform's own entry point, in process, and waits for the screen to settle after
@@ -39,8 +41,9 @@ extension User {
         }
     }
 
-    /// Swipes the list row `query` finds, which shows its swipe actions: left shows the
-    /// trailing ones, right the leading ones.
+    /// Swipes the element `query` finds. A list row shows its swipe actions: left shows the
+    /// trailing ones, right the leading ones. Any other element is flicked 100 points left
+    /// or right, as `drags(_:by:speed:)` flicks it.
     public func swipes(
         _ direction: SwipeDirection, _ query: Query,
         file: StaticString = #filePath, line: UInt = #line
@@ -48,13 +51,18 @@ extension User {
         try await Timing.measure(.swipes) {
             let location = SourceLocation(file: file, line: line)
             let node = try await drawn(query, "swipe", location)
-            guard Backend.swipe(direction, node, in: screen.window) else {
-                throw failure(
-                    "Swiping \(query) \(direction) showed no actions: it is not a list row with "
-                        + "swipe actions, or this platform shows them only for a trackpad's "
-                        + "touches (ADR 0011)", location)
+            if Backend.swipe(direction, node, in: screen.window) {
+                _ = await wait.settle(screen)
+                return
             }
-            _ = await wait.settle(screen)
+            guard !Backend.refusesSwipe(node, in: screen.window) else {
+                throw failure(
+                    "Swiping \(query) \(direction) showed no actions: this platform shows a "
+                        + "list row's swipe actions only for a trackpad's touches (ADR 0011)",
+                    location)
+            }
+            let offset = CGVector(dx: direction == .left ? -100 : 100, dy: 0)
+            try await drag(node, query, by: offset, .flick, location)
         }
     }
 
@@ -162,7 +170,7 @@ extension User {
 
     /// The one element `query` finds on screen, waiting for it, failing with `verb` in the
     /// message.
-    private func drawn(_ query: Query, _ verb: String, _ location: SourceLocation) async throws
+    func drawn(_ query: Query, _ verb: String, _ location: SourceLocation) async throws
         -> Node
     {
         guard let node = await find(query) else {
