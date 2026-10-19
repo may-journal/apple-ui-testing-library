@@ -12,7 +12,7 @@ A test must read disabled controls without reaching into native views. Sending n
 
 1. Add `Element.isEnabled`, defaulting to true for manually built elements.
 2. Read UIKit control state and disabled traits, and AppKit accessibility enabled state.
-3. Refuse disabled taps before activation and include disabled state in element descriptions.
+3. Refuse disabled taps and custom actions before activation and include disabled state in element descriptions.
 
 ## Consequences
 

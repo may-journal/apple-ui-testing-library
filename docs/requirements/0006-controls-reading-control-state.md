@@ -34,3 +34,7 @@ Source: #41
     - Given Developer has a disabled share button in a system session
         - When I read it and try to tap it
             - Then its state and failure report say disabled and no share opens
+- 0006.5
+    - Given Developer has a disabled control that offers a custom action
+        - When I choose that action
+            - Then the action does not run and the failure shows its disabled state

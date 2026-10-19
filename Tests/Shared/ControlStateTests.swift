@@ -39,5 +39,24 @@ extension UITestingLibraryTests {
             try await user.sees(.text("Saved"))
             try screen.close()
         }
+
+        @Test func test0006_5() async throws {
+            let screen = try Screen.render { DisabledNoteActionScreen() }
+            let user = User(screen)
+            let note = try await user.sees(.button("Note"))
+            #expect(!note.isEnabled)
+            #expect(note.actions.contains("Archive"))
+
+            var failure: Failure?
+            do {
+                try await user.chooses("Archive", on: .button("Note"))
+            } catch let caught as Failure {
+                failure = caught
+            }
+            #expect(failure?.message.contains("disabled") == true)
+            #expect(failure?.description.contains("\"Note\" (button disabled)") == true)
+            try await user.sees(.text("Not archived"))
+            try screen.close()
+        }
     }
 }
