@@ -126,7 +126,7 @@ try await user.pastes()
 
 ## Gestures
 
-Gestures beyond a tap run in process, each through the platform's own entry point ([0011](requirements/0011-gestures-gestures-beyond-a-tap.md), [ADR 0011](architecture/adr/0011-person-actions-in-process.md)). `drags(_:by:speed:)` drags from the element's middle, right and down by the offset's points ([0012](requirements/0012-drags-drags-by-a-distance.md)). A slow drag comes to rest before letting go, and a flick lets go mid-move.
+Gestures beyond a tap run in process, each through the platform's own entry point ([0011](requirements/0011-gestures-gestures-beyond-a-tap.md), [ADR 0011](architecture/adr/0011-person-actions-in-process.md)). `drags(_:by:speed:)` drags from the element's middle, right and down by the offset's points ([0012](requirements/0012-drags-drags-by-a-distance.md)). A slow drag comes to rest before letting go, and a flick lets go mid-move. A pinch ends at the scale named, as the view's magnify gesture reads it, or holds there until released ([0013](requirements/0013-pinches-pinches-to-a-scale.md), [ADR 0012](architecture/adr/0012-pinch-to-a-scale.md)).
 
 ```swift
 try await user.doubleTaps(.text("Photo"))    // dblClick(element): one double tap
@@ -138,6 +138,9 @@ try await user.adjusts(.up, .role(.adjustable, "Volume"))  // or .down
 try await user.hovers(.text("Card"))         // hover(element)
 try await user.unhovers(.text("Card"))       // unhover(element)
 try await user.pinches(.in, .text("Map"))    // or .out: a trackpad's pinch
+try await user.pinches(.in, .text("Map"), to: 0.8)  // ends at that scale
+let pinch = try await user.holdsPinch(.out, .text("Map"), to: 1.2)
+try await pinch.releases()                   // lifts the held fingers
 try await user.drags(.text("Photo"), by: CGVector(dx: -300, dy: 0), speed: .slow)  // or .flick
 try await user.swipes(.left, .text("Photo")) // not a row: flicks it 100 points left
 ```

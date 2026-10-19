@@ -37,6 +37,8 @@ struct Phase: Sendable {
     static let hovers = Phase(name: "act", code: 27)
     static let unhovers = Phase(name: "act", code: 28)
     static let pinches = Phase(name: "act", code: 29)
+    static let holdsPinch = Phase(name: "act", code: 30)
+    static let releases = Phase(name: "act", code: 31)
 }
 
 /// Signposts that time each phase of a test. Instruments shows them under Points of

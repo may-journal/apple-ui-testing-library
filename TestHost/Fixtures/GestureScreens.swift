@@ -123,6 +123,32 @@ struct PinchScreen: View {
     }
 }
 
+/// A photo that shows its magnify gesture's scale while the pinch goes on, and the scale it
+/// ended at once the fingers lift.
+struct PinchScaleScreen: View {
+    @State private var scale: Double?
+    @State private var ended: Double?
+
+    var body: some View {
+        VStack(spacing: 40) {
+            Text("Photo")
+                .frame(width: 200, height: 200)
+                .contentShape(Rectangle())
+                .gesture(
+                    MagnifyGesture()
+                        .onChanged { scale = $0.magnification }
+                        .onEnded { ended = $0.magnification })
+            Text(scale.map { "Pinching at \(Self.rounded($0))" } ?? "Not pinched")
+            Text(ended.map { "Ended at \(Self.rounded($0))" } ?? "Not ended")
+        }
+    }
+
+    /// The scale to two places, as a person reads it.
+    private static func rounded(_ scale: Double) -> String {
+        scale.formatted(.number.precision(.fractionLength(2)))
+    }
+}
+
 /// A card that reports, as its drag gesture ends, how far it moved and whether it was flicked:
 /// let go while still moving fast, so its predicted end lies well past where it stopped.
 struct DragByScreen: View {

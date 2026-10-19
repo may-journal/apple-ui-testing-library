@@ -97,8 +97,10 @@ extension Backend {
 
     static var isHovering = false
 
-    /// Forgets the pointer and puts back the clipboard as a screen closes.
+    /// Lifts any held pinch, forgets the pointer and puts back the clipboard, as a screen
+    /// closes.
     static func endPointer() {
+        endHeldPinch()
         isHovering = false
         Clipboard.restore()
     }

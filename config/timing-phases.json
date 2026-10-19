@@ -29,6 +29,8 @@
     "26": "act adjusts",
     "27": "act hovers",
     "28": "act unhovers",
-    "29": "act pinches"
+    "29": "act pinches",
+    "30": "act holdsPinch",
+    "31": "act releases"
   }
 }

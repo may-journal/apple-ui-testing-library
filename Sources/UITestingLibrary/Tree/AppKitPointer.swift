@@ -81,8 +81,10 @@ extension Backend {
     /// The tracking areas the pointer is inside after a hover, until it leaves them.
     private static var hovered: [NSTrackingArea] = []
 
-    /// Forgets the pointer and puts back the clipboard as a screen closes.
+    /// Lifts any held pinch, forgets the pointer and puts back the clipboard, as a screen
+    /// closes.
     static func endPointer() {
+        endHeldPinch()
         hovered = []
         forgetDrag()
         Clipboard.restore()

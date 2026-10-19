@@ -111,11 +111,25 @@ public enum PinchDirection: Sendable, Equatable {
     case `in`
     case out
 
-    /// A trackpad's magnify events for the pinch, each with how much it scales by: a began,
-    /// five steps that shrink to half or grow by half, and an ended.
-    var events: [(GesturePhase, Double)] {
-        let step = self == .in ? -0.1 : 0.1
-        return [(.began, 0)] + Array(repeating: (.changed, step), count: 5) + [(.ended, 0)]
+    /// The scale a pinch this way ends at when the test names none: half for in, one and a
+    /// half for out.
+    var scale: Double { self == .in ? 0.5 : 1.5 }
+
+    /// Whether a pinch this way can end at `scale`: in only shrinks, to between 0 and 1; out
+    /// only grows, past 1.
+    func reaches(_ scale: Double) -> Bool {
+        self == .in ? scale > 0 && scale < 1 : scale > 1 && scale.isFinite
+    }
+
+    /// How many changed events a pinch moves its fingers in, as evenly as a person's.
+    static let stepCount = 5
+
+    /// A trackpad's magnify events up to `scale`, each with how much it scales by: a began,
+    /// then equal changes. A Mac app's magnify gesture adds the changes to 1, so it reads
+    /// `scale` after the last. The ended event follows on its own, at once or on release.
+    static func steps(to scale: Double) -> [(GesturePhase, Double)] {
+        [(.began, 0)]
+            + Array(repeating: (.changed, (scale - 1) / Double(stepCount)), count: stepCount)
     }
 }
 

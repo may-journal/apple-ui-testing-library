@@ -38,7 +38,7 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 
 | #   | Description | Why |
 | --- | --- | --- |
-| 1   | `Actions/`: `User.swift`, `UserActs.swift`, `UserKeys.swift`, `UserGestures.swift`, `UserDrags.swift`, `UserSees.swift`. | The public verbs a test reads in. |
+| 1   | `Actions/`: `User.swift`, `UserActs.swift`, `UserKeys.swift`, `UserGestures.swift`, `UserPinches.swift`, `UserDrags.swift`, `UserSees.swift`. | The public verbs a test reads in. |
 | 2   | `Screen/`: `Screen.swift`, `ScreenSize.swift`, `Look.swift`, `HostWindow.swift`. | Drawing stays apart from reading; `HostWindow` holds the platform branch ([ADR 0006](adr/0006-one-api-two-backends.md)). It keeps a Mac's window off every display ([ADR 0011](adr/0011-person-actions-in-process.md)). |
 | 3   | `Queries/`: `Role.swift`, `Query.swift`, `Match.swift`. | Matching rules live in one place. |
 | 4   | `Waits/`: `Wait.swift`, `Stalls.swift`. | Every wait shares one deadline rule; stalls are timed on the main run loop ([ADR 0010](adr/0010-keys-watches-share-sheet.md)). |
