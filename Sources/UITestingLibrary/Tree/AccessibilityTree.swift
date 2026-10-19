@@ -119,6 +119,25 @@ public enum PinchDirection: Sendable, Equatable {
     }
 }
 
+/// How fast a person drags an element by a distance: slowly, coming to rest before letting
+/// go, or as a flick, letting go while still moving fast.
+public enum DragSpeed: Sendable, Equatable {
+    case slow
+    case flick
+
+    /// The drag's moves after the press, each as how far along the offset it is and how many
+    /// seconds after the press its event is stamped. The release comes with the last. A slow
+    /// drag moves as a mouse reports, 60 times a second, then rests at the end; a flick covers
+    /// the offset in a few quick moves. The iOS app on a Mac stamps each touch as it arrives,
+    /// so there the rest alone tells a slow drag from a flick.
+    var moves: [(progress: CGFloat, time: TimeInterval)] {
+        let count = self == .slow ? 30 : 4
+        let interval = self == .slow ? 1.0 / 60 : 0.008
+        let path = (1...count).map { (CGFloat($0) / CGFloat(count), Double($0) * interval) }
+        return self == .slow ? path + [(1, Double(count) * interval + 0.2)] : path
+    }
+}
+
 /// A trackpad gesture's phase, as Quartz numbers it in a gesture event.
 enum GesturePhase: Int64 {
     case began = 1

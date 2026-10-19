@@ -141,11 +141,13 @@ extension Backend {
     }
 
     static func mouse(
-        _ type: NSEvent.EventType, at point: CGPoint, clicks: Int, in window: NSWindow
+        _ type: NSEvent.EventType, at point: CGPoint, clicks: Int, in window: NSWindow,
+        time: TimeInterval? = nil
     ) -> NSEvent? {
         NSEvent.mouseEvent(
             with: type, location: point, modifierFlags: [],
-            timestamp: ProcessInfo.processInfo.systemUptime, windowNumber: window.windowNumber,
+            timestamp: time ?? ProcessInfo.processInfo.systemUptime,
+            windowNumber: window.windowNumber,
             context: nil, eventNumber: 0, clickCount: clicks,
             pressure: type == .leftMouseDown || type == .leftMouseDragged ? 1 : 0)
     }

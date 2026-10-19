@@ -19,7 +19,7 @@ flowchart TB
     find(5 Find by role and label<br/>Req 0002):::action
     match{6 How many match?<br/>Req 0002}:::check
     missing[7 Fails with the screen report<br/>Req 0005]:::blocked
-    act(8 Tap, hold, scroll, go back, type, press keys, clear, swipe, drag, adjust, hover, pinch<br/>Req 0003, 0006, 0009, 0011):::action
+    act(8 Tap, hold, scroll, go back, type, press keys, clear, swipe, drag, adjust, hover, pinch<br/>Req 0003, 0006, 0009, 0011, 0012):::action
     settle[(9 Wait until settled<br/>Req 0004)]:::system
     sees(10 Sees the result<br/>Req 0004, 0006, 0010):::action
     close[11 Close the screen<br/>Req 0001]:::step
