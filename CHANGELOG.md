@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+## [1.7.2](https://github.com/may-journal/apple-ui-testing-library/compare/v1.7.1...v1.7.2) (2026-10-20)
+
+
+### Bug Fixes
+
+* **menus:** open a Menu tapped after a redraw ([#97](https://github.com/may-journal/apple-ui-testing-library/issues/97)) ([1909aec](https://github.com/may-journal/apple-ui-testing-library/commit/1909aec546194adf72d47612f947bc15efaa1217))
+
 ## [1.7.1](https://github.com/may-journal/apple-ui-testing-library/compare/v1.7.0...v1.7.1) (2026-10-19)
 
 
