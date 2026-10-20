@@ -86,6 +86,16 @@ extension UITestingLibraryTests {
             try await barUser.taps(.button("Export"))
             try await barUser.sees(.text("Exported"))
             try bar.close()
+
+            let redrawn = try Screen.render { RedrawnMenuScreen() }
+            let redrawnUser = User(redrawn)
+            try await redrawnUser.taps(.button("Options"))
+            try await redrawnUser.taps(.button("Simple"))
+            try await redrawnUser.sees(.text("Simple row"))
+            try await redrawnUser.taps(.button("Options"))
+            try await redrawnUser.taps(.button("Detailed"))
+            try await redrawnUser.sees(.text("Detailed row"))
+            try redrawn.close()
         }
 
         @Test func test0003_8() async throws {

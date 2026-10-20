@@ -44,7 +44,7 @@ Source: #1
             - Then I hear its title, and that button's action runs
 - 0003.7
     - Given Developer has a control or a navigation bar button that opens a menu
-        - When I tap it, read the menu, and tap an item
+        - When I tap it, read the menu, and tap an item, even after an item redrew the view
             - Then I hear each item, and that item's action runs
 - 0003.8
     - Given Developer has a control's menu open

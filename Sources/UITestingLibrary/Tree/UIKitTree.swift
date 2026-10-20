@@ -4,9 +4,11 @@ import UIKit
 /// Reads the UIKit tree as VoiceOver walks it.
 extension Backend {
     /// Every element VoiceOver would stop on in the window, depth first. Behind a modal
-    /// view, such as a sheet, nothing counts.
+    /// view, such as a sheet, nothing counts. The window lays out first, as before a person
+    /// sees it: SwiftUI adds a `Menu`'s control only at the layout after it draws.
     static func nodes(in window: HostWindow) -> [Node] {
         if let menu = menuNodes() { return menu }
+        window.window.layoutIfNeeded()
         var found: [NSObject] = []
         collect(window.window, into: &found)
         return found.map { node(of: $0, in: window.window) }
