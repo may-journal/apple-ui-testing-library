@@ -9,11 +9,7 @@ extension Backend {
     /// the next read can ask for the menu it opens. A control whose primary action is its
     /// menu, such as a navigation bar's menu button, opens it here: its own activation runs
     /// nothing. A disabled control opens nothing. Whether this opened the menu.
-    ///
-    /// SwiftUI adds a `Menu`'s control to its window only at the layout after it draws,
-    /// which comes before a person's tap. So the window lays out first.
     static func opensMenu(under object: NSObject, in window: UIWindow) -> Bool {
-        window.layoutIfNeeded()
         let point = window.convert(object.accessibilityActivationPoint, from: nil)
         var view = window.hitTest(point, with: nil)
         while let current = view, !(current is UIControl) { view = current.superview }
@@ -96,8 +92,9 @@ private final class OpenMenu: NSObject {
     private var interaction: UIContextMenuInteraction?
     private var menu: UIMenu?
     private var native: NSObject?
-    /// The Mac menu tracking, which outlasts `native` while a cancelled menu unwinds.
-    private var tracking: NSObject?
+    /// The Mac menu this cancelled, until its tracking ends. Only a menu cancelled here
+    /// counts, so another menu in the app never holds an act.
+    private var cancelled: NSObject?
     /// A context menu a hold opened without drawing it.
     private var held: UIMenu?
 
@@ -136,12 +133,13 @@ private final class OpenMenu: NSObject {
         return menu
     }
 
-    var isClosing: Bool { native == nil && tracking != nil }
+    var isClosing: Bool { cancelled != nil }
 
     func close() {
         held = nil
         interaction?.dismissMenu()
         (interaction, menu) = (nil, nil)
+        if let native { cancelled = native }
         native?.perform(NSSelectorFromString("cancelTracking"))
         native = nil
     }
@@ -149,14 +147,13 @@ private final class OpenMenu: NSObject {
     /// A Mac menu that begins after its menu was closed is cancelled at once.
     @objc private func began(_ note: Notification) {
         native = note.object as? NSObject
-        tracking = native
         if interaction == nil { close() }
     }
 
     @objc private func ended(_ note: Notification) {
         let object = note.object as? NSObject
         if native != nil, native === object { (interaction, menu, native) = (nil, nil, nil) }
-        if tracking === object { tracking = nil }
+        if cancelled === object { cancelled = nil }
     }
 }
 #endif
