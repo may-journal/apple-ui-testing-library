@@ -6,6 +6,13 @@ relatedConfigurations: ['.fitnessrc.json']
 
 ## Changes
 
+## [1.7.1](https://github.com/may-journal/apple-ui-testing-library/compare/v1.7.0...v1.7.1) (2026-10-19)
+
+
+### Bug Fixes
+
+* **actions:** refuse disabled custom actions ([#90](https://github.com/may-journal/apple-ui-testing-library/issues/90)) ([133007c](https://github.com/may-journal/apple-ui-testing-library/commit/133007c6484caa84bd7e3b6198d19cc38ea39870))
+
 ## [1.7.0](https://github.com/may-journal/apple-ui-testing-library/compare/v1.6.0...v1.7.0) (2026-10-19)
 
 
