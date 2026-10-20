@@ -62,8 +62,9 @@ extension Backend {
         return true
     }
 
-    /// Whether a cancelled menu is still unwinding; UIKit's menu is gone as it closes.
-    static var isMenuClosing: Bool { false }
+    /// Whether a cancelled Mac menu is still unwinding. The Mac ignores a tap on a menu button
+    /// that comes before the cancelled menu's tracking ends, so every act settles after it.
+    static var isMenuClosing: Bool { OpenMenu.shared.isClosing }
 
     /// Opens `menu` as a person's hold opens a context menu, without drawing it: its items
     /// become what a read holds until an item runs or the menu closes.
@@ -91,6 +92,9 @@ private final class OpenMenu: NSObject {
     private var interaction: UIContextMenuInteraction?
     private var menu: UIMenu?
     private var native: NSObject?
+    /// The Mac menu this cancelled, until its tracking ends. Only a menu cancelled here
+    /// counts, so another menu in the app never holds an act.
+    private var cancelled: NSObject?
     /// A context menu a hold opened without drawing it.
     private var held: UIMenu?
 
@@ -129,10 +133,13 @@ private final class OpenMenu: NSObject {
         return menu
     }
 
+    var isClosing: Bool { cancelled != nil }
+
     func close() {
         held = nil
         interaction?.dismissMenu()
         (interaction, menu) = (nil, nil)
+        if let native { cancelled = native }
         native?.perform(NSSelectorFromString("cancelTracking"))
         native = nil
     }
@@ -144,8 +151,9 @@ private final class OpenMenu: NSObject {
     }
 
     @objc private func ended(_ note: Notification) {
-        guard native != nil, native === note.object as? NSObject else { return }
-        (interaction, menu, native) = (nil, nil, nil)
+        let object = note.object as? NSObject
+        if native != nil, native === object { (interaction, menu, native) = (nil, nil, nil) }
+        if cancelled === object { cancelled = nil }
     }
 }
 #endif

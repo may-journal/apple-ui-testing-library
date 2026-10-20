@@ -41,3 +41,22 @@ struct BarMenuScreen: View {
         }
     }
 }
+
+/// A "…" Options menu choosing Detailed or Simple, under a line drawn in that choice, so
+/// each choice draws the view around the menu again.
+struct RedrawnMenuScreen: View {
+    @State private var simple = false
+
+    var body: some View {
+        VStack {
+            Text(simple ? "Simple row" : "Detailed row")
+            Menu {
+                Button("Detailed") { simple = false }
+                Button("Simple") { simple = true }
+            } label: {
+                Image(systemName: "ellipsis")
+            }
+            .accessibilityLabel("Options")
+        }
+    }
+}
