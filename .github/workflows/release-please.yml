@@ -38,6 +38,8 @@ jobs:
       # Release Please writes a "## 1.0.0" heading on a first release, which
       # has no compare link, and bold scopes. Demote the headings below the
       # header and strip the bold, as fitness-runner's release-pr step does.
+      # A later release's heading compares the previous tag to the new tag,
+      # which 404s until the PR merges, so point it at the PR's head commit.
       - name: Shape the release PR notes
         id: shape
         if: ${{ steps.release.outputs.pr != '' }}
@@ -47,9 +49,11 @@ jobs:
           PR: ${{ fromJSON(steps.release.outputs.pr || '{}').number }}
         run: |
           body="$(gh pr view "$PR" --json body --jq .body)"
-          shaped="$(printf '%s\n' "$body" | awk '
+          head="$(gh pr view "$PR" --json headRefOid --jq .headRefOid)"
+          shaped="$(printf '%s\n' "$body" | awk -v head="$head" '
             after && first { first = 0; if ($0 != "") print "" }
             { line = $0 }
+            after && head != "" && /^##+ \[.*\/compare\// { sub(/\.\.\.[^)]*\)/, "..." head ")", line) }
             after { sub(/^## /, "### ", line); while (sub(/\*\*/, "", line)) {} }
             { print line }
             $0 == "## Changelog" { after = 1; first = 1 }')"
