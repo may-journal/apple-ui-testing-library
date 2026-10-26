@@ -14,8 +14,6 @@ gestures run in process through the platform's own entry points
 -
 gestures
 
-Source: #70
-
 ## Requirements
 
 - 0011.1

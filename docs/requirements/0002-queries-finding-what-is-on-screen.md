@@ -14,8 +14,6 @@ looks by role, label or text
 -
 looks
 
-Source: #1
-
 ## Requirements
 
 - 0002.1

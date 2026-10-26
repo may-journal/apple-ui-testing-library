@@ -14,8 +14,6 @@ shares checked at their destination
 -
 shares tested
 
-Source: #40
-
 ## Requirements
 
 - 0008.1

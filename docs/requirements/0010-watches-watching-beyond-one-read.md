@@ -14,8 +14,6 @@ watches that end at their set time or their first failure
 -
 watches
 
-Source: #65
-
 ## Requirements
 
 - 0010.1

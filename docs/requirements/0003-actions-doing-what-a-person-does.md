@@ -14,8 +14,6 @@ actions done through an accessibility action
 -
 actions
 
-Source: #1
-
 ## Requirements
 
 - 0003.1

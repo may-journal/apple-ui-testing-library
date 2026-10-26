@@ -14,8 +14,6 @@ tests that show a root view and read its accessibility tree
 -
 tests that show a root view
 
-Source: #1
-
 ## Requirements
 
 - 0001.3

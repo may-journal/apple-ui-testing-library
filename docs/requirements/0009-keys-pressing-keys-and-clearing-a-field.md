@@ -14,8 +14,6 @@ keys and clipboard steps run through the field's own key commands and edit actio
 -
 keys and clipboard steps
 
-Source: #65
-
 ## Requirements
 
 - 0009.1

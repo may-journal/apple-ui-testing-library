@@ -14,8 +14,6 @@ failures that print what VoiceOver reads on screen
 -
 failures
 
-Source: #1
-
 ## Requirements
 
 - 0005.1

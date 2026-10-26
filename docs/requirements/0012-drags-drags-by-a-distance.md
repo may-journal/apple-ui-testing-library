@@ -14,8 +14,6 @@ drags by a distance whose view hears the distance and the speed
 -
 drags by a distance
 
-Source: #83
-
 ## Requirements
 
 - 0012.1

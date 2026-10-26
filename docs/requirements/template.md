@@ -12,7 +12,7 @@ relatedConfigurations: ['../../.fitnessrc.json']
 
 ## Measurement
 
-<!-- Numerator line, a "-" line, denominator line, then "Source:" citing one existing path:line or one #issue. -->
+<!-- Numerator line, a "-" line, denominator line. No "Source:" line. -->
 
 ## Requirements
 
