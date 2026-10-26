@@ -4,6 +4,10 @@ relatedConfigurations: ['../../../.fitnessrc.json']
 
 # User Journey
 
-## Core journey
+## Legend
 
-<!-- One mermaid flowchart of the main path, a legend, and a numbered #, Step, Description, Why table. -->
+<!-- One flowchart sample of each node type the journey uses, with a numbered #, Description, Why table. -->
+
+## Journey
+
+<!-- One mermaid flowchart of the main path, a numbered #, Description, Type, Why table. -->
