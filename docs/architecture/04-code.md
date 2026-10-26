@@ -21,15 +21,15 @@ flowchart TB
         tree["6 Tree"]:::layer
     end
 
-    actions -->|7| queries
-    actions -->|8| waits
-    actions -->|9| reports
-    screen -->|10| reports
-    queries -->|11| tree
-    reports -->|12| tree
-    waits -->|13| tree
-    waits -->|14| reports
-    tree -->|15| screen
+    actions -->|A| queries
+    actions -->|B| waits
+    actions -->|C| reports
+    screen -->|D| reports
+    queries -->|E| tree
+    reports -->|F| tree
+    waits -->|G| tree
+    waits -->|H| reports
+    tree -->|I| screen
 
     classDef layer fill:none,stroke:gray
 ```
@@ -44,15 +44,15 @@ Numbers match the callout table. See [02-containers.md](02-containers.md) and [0
 | 4   | `Waits/`: `Wait.swift`, `Stalls.swift`. | Every wait shares one deadline rule; stalls are timed on the main run loop ([ADR 0010](adr/0010-keys-watches-share-sheet.md)). |
 | 5   | `Reports/`: `ScreenReport.swift`, `Failure.swift`, `SourceLocation.swift`, `Canary.swift`. | Failures read the same everywhere, and name the test's line. |
 | 6   | `Tree/`: `Automation.swift`, `AccessibilityTree.swift`, `Element.swift`, `Timing.swift`, `Trackpad.swift`, then `UIKitTree`, `UIKitActs`, `UIKitMenus`, `UIKitKeys`, `UIKitPointer`, `UIKitPointerDrag`, `UIKitPinch`, `AppKitTree`, `AppKitActs`, `AppKitMenus`, `AppKitKeys`, `AppKitPointer`, `AppKitPointerDrag`, `AppKitPinch`. | The only code that touches accessibility objects, one backend per platform. `Timing` signposts each phase, since a read is the lowest one. |
-| 7   | Actions resolve queries. | An act needs a found element. |
-| 8   | Actions wait after each act. | The next look sees a settled screen. |
-| 9   | Actions report failures. | One failure format. |
-| 10  | `Screen.close()` calls `Canary.check(_:)`. | No test can skip the check. |
-| 11  | Queries read the tree. | Matching works on `Element` values. |
-| 12  | Reports read the tree. | A report shows what VoiceOver reads now. |
-| 13  | Waits read the tree once it settles. | The main run loop goes idle twice, then one read ends a settle. |
-| 14  | A timed-out wait hands the screen to the report. | A timeout shows what was on screen. |
-| 15  | The tree reads the screen's window and feeds its canary. | One window, read through one `HostWindow`. |
+| A   | Actions resolve queries. | An act needs a found element. |
+| B   | Actions wait after each act. | The next look sees a settled screen. |
+| C   | Actions report failures. | One failure format. |
+| D   | `Screen.close()` calls `Canary.check(_:)`. | No test can skip the check. |
+| E   | Queries read the tree. | Matching works on `Element` values. |
+| F   | Reports read the tree. | A report shows what VoiceOver reads now. |
+| G   | Waits read the tree once it settles. | The main run loop goes idle twice, then one read ends a settle. |
+| H   | A timed-out wait hands the screen to the report. | A timeout shows what was on screen. |
+| I   | The tree reads the screen's window and feeds its canary. | One window, read through one `HostWindow`. |
 
 ## States
 

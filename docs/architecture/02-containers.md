@@ -23,16 +23,16 @@ C4Container
     System_Ext(ax, "7 libAccessibility")
     System_Ext(system, "8 Siri and the share sheet")
 
-    Rel(dev, consumer, "9")
-    Rel(dev, host, "10")
-    Rel(dev, hostMac, "11")
-    Rel(runner, host, "12")
-    Rel(runner, hostMac, "13")
-    Rel(runner, system, "14")
-    Rel(host, uikit, "15")
-    Rel(hostMac, uikit, "16")
-    Rel(host, ax, "17")
-    Rel(hostMac, ax, "18")
+    Rel(dev, consumer, "A")
+    Rel(dev, host, "B")
+    Rel(dev, hostMac, "C")
+    Rel(runner, host, "D")
+    Rel(runner, hostMac, "E")
+    Rel(runner, system, "F")
+    Rel(host, uikit, "G")
+    Rel(hostMac, uikit, "H")
+    Rel(host, ax, "I")
+    Rel(hostMac, ax, "J")
 ```
 
 ```mermaid
@@ -58,13 +58,13 @@ Numbers on nodes and arrows match the callout table.
 | 6   | Windows, hosting controllers, and the views under test. | The library draws through public UIKit and AppKit API. |
 | 7   | `/usr/lib/libAccessibility.dylib`, reached with `dlopen`. | Its private `_AXSSetAutomationEnabled` makes SwiftUI build its tree ([ADR 0004](adr/0004-automation-canary.md)). |
 | 8   | System UI outside the app's process, reached on a simulator only. | Hosted actions cannot drive it ([ADR 0008](adr/0008-siri-system-requests.md), [ADR 0009](adr/0009-system-sharing.md)). |
-| 9   | The developer writes tests in their own target. | Tests live beside the app they prove. |
-| 10  | `make requirements` runs the iOS hosted bundle; `make requirements-e2e` runs the system tests. | System tests are opt-in and boot a simulator. |
-| 11  | `make requirements` runs the Mac hosted bundle too. | One API on both platforms. |
-| 12  | The iOS hosted bundle runs in the app's process. The system test runner launches the app from its own process. | Hosted tests share the app's main thread; system tests see what a person sees. |
-| 13  | The Mac hosted bundle runs in the app's process. | The same hosting a Mac consumer uses. |
-| 14  | The system test runner opens Siri and the share sheet through XCTest automation. | Only a separate process can drive system UI. |
-| 15  | The iOS app draws each root in a key window through `UIHostingController`. | The real view hierarchy, in-process ([ADR 0001](adr/0001-in-process-accessibility-tree.md)). |
-| 16  | The Mac app draws each root through `NSHostingController`. | The same rule on macOS. |
-| 17  | The iOS app turns automation on once per process. | Without it the tree comes back empty. |
-| 18  | The Mac app turns automation on the same way. | The same rule on macOS. |
+| A   | The developer writes tests in their own target. | Tests live beside the app they prove. |
+| B   | `make requirements` runs the iOS hosted bundle; `make requirements-e2e` runs the system tests. | System tests are opt-in and boot a simulator. |
+| C   | `make requirements` runs the Mac hosted bundle too. | One API on both platforms. |
+| D   | The iOS hosted bundle runs in the app's process. The system test runner launches the app from its own process. | Hosted tests share the app's main thread; system tests see what a person sees. |
+| E   | The Mac hosted bundle runs in the app's process. | The same hosting a Mac consumer uses. |
+| F   | The system test runner opens Siri and the share sheet through XCTest automation. | Only a separate process can drive system UI. |
+| G   | The iOS app draws each root in a key window through `UIHostingController`. | The real view hierarchy, in-process ([ADR 0001](adr/0001-in-process-accessibility-tree.md)). |
+| H   | The Mac app draws each root through `NSHostingController`. | The same rule on macOS. |
+| I   | The iOS app turns automation on once per process. | Without it the tree comes back empty. |
+| J   | The Mac app turns automation on the same way. | The same rule on macOS. |
