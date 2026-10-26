@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../../.fitnessrc.json']
----
-
 # 0008 — Submit Siri requests through the system
 
 ## Context

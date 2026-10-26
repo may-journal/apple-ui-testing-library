@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # Containers
 
 A container here is an app that runs on its own. The library products and test bundles run inside these apps, so [03-components.md](03-components.md) shows them.

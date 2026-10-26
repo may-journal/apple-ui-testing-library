@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # 00 — Kickoff questions
 
 Product framing for apple-ui-testing-library: Testing Library's guiding principles, on Apple platforms.

@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../../.fitnessrc.json']
----
-
 # 0010 — Keys, watches and the share sheet in process
 
 ## Context

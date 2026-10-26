@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # Workflows
 
 GitHub Actions for this repo, all on the Go [fitness-runner](https://github.com/may-journal/fitness-runner) toolchain. The org-settings job in [may-journal/.github](https://github.com/may-journal/.github) syncs the shared callers here by pull request. Locally the synced hooks run the same suite on commit.

@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../../.fitnessrc.json']
----
-
 # 0001 — Tests read the accessibility tree in-process
 
 ## Context

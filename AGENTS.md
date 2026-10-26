@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['.fitnessrc.json']
----
-
 # apple-ui-testing-library
 
 A Swift package, module `UITestingLibrary`, that tests SwiftUI, UIKit and AppKit apps through the accessibility tree, on iOS and macOS. It brings Testing Library's guiding principles to Apple platforms; see [Platforms](docs/architecture/04-code.md#platforms). See [README.md](README.md) for the pitch.

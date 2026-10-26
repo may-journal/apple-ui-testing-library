@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # 0009 Pressing keys and clearing a field
 
 ## Why

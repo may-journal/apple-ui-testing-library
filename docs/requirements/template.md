@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 <!-- File name is NNNN-prefix-kebab-title.md. NNNN matches the title, is unique here, and is never reused. -->
 
 # NNNN Title

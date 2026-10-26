@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../../.fitnessrc.json']
----
-
 # Code
 
 <!-- Above the first section: one classDiagram of the library's types, a legend, and a numbered #, Description, Why table. -->

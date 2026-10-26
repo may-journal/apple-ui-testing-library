@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../../.fitnessrc.json']
----
-
 # 0003 — Waits poll a condition up to a deadline
 
 ## Context
