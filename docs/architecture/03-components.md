@@ -7,112 +7,135 @@ relatedConfigurations: ['../../.fitnessrc.json']
 This decomposes the apps in [02-containers.md](02-containers.md) into the products and fixtures they run. A test renders a screen, then a `User` finds and acts on what VoiceOver reads there. A system test drives the launched app through a `SystemSession` instead.
 
 ```mermaid
-flowchart TB
-    test["19 Hosted test case"]:::outside
-    sysTest["20 System test case"]:::outside
+C4Component
+    title Apple UI Testing Library
 
-    subgraph lib["UITestingLibrary"]
-        subgraph screen["Screen"]
-            scr["1 Screen"]:::part
-            win["2 HostWindow"]:::part
-        end
-        subgraph tree["Tree"]
-            auto["3 Automation"]:::part
-            walk["4 AccessibilityTree"]:::part
-            elem["5 Element"]:::part
-        end
-        subgraph queries["Queries"]
-            role["6 Role"]:::part
-            query["7 Query"]:::part
-        end
-        subgraph acts["Actions"]
-            user["8 User"]:::part
-        end
-        subgraph waits["Waits"]
-            wait["9 Wait"]:::part
-        end
-        subgraph reports["Reports"]
-            report["10 ScreenReport"]:::part
-            canary["11 Canary"]:::part
-        end
-    end
+    System_Ext(test, "19 Hosted test case")
+    System_Ext(sysTest, "20 System test case")
 
-    subgraph sys["UITestingLibrarySystem"]
-        session["12 SystemSession"]:::part
-        siri["13 Siri"]:::part
-        delivery["14 SharedDelivery"]:::part
-    end
+    Container_Boundary(lib, "23 UITestingLibrary") {
+        Component(scr, "1 Screen", "Swift", "Draws a root view")
+        Component(win, "2 HostWindow", "Swift", "Holds the key window")
+        Component(auto, "3 Automation", "Swift", "Turns automation on")
+        Component(walk, "4 AccessibilityTree", "Swift", "Walks and drives elements")
+        Component(elem, "5 Element", "Swift", "One element as VoiceOver reads it")
+        Component(role, "6 Role", "Swift", "Roles a query names")
+        Component(query, "7 Query", "Swift", "Finds elements")
+        Component(user, "8 User", "Swift", "Acts and looks like a person")
+        Component(wait, "9 Wait", "Swift", "Polls a condition")
+        Component(report, "10 ScreenReport", "Swift", "Prints the screen and failures")
+        Component(canary, "11 Canary", "Swift", "Fails a test that read nothing")
+    }
 
-    subgraph dest["UITestingLibraryShareDestination"]
-        local["15 LocalShareDestination"]:::part
-    end
+    Container_Boundary(sys, "24 UITestingLibrarySystem") {
+        Component(session, "12 SystemSession", "Swift", "Drives the launched app")
+        Component(siri, "13 Siri", "Swift", "Asks Siri")
+        Component(delivery, "14 SharedDelivery", "Swift", "Reads a delivered share")
+    }
 
-    subgraph hostApp["Host app"]
-        app["16 TestHostApp"]:::part
-        fixtures["17 Fixtures"]:::part
-    end
+    Container_Boundary(dest, "25 UITestingLibraryShareDestination") {
+        Component(local, "15 LocalShareDestination", "Swift", "Keeps what a share delivers")
+    }
 
-    manifest["18 Package manifest"]:::part
+    Container_Boundary(hostApp, "26 Host app") {
+        Component(app, "16 TestHostApp", "Swift", "Opens the host window")
+        Component(fixtures, "17 Fixtures", "Swift", "Screens each test renders")
+    }
 
-    ax["21 libAccessibility"]:::outside
-    systemUI["22 Siri and the share sheet"]:::outside
+    Container_Boundary(pkg, "27 Package") {
+        Component(manifest, "18 Package manifest", "Swift", "Declares the products")
+    }
 
-    test -->|A| scr
-    test -->|B| user
-    scr -->|C| win
-    scr -->|D| canary
-    scr -->|E| walk
-    scr -->|F| report
-    win -->|G| scr
-    win -->|H| walk
-    user -->|I| query
-    user -->|J| scr
-    user -->|K| wait
-    user -->|L| walk
-    user -->|M| elem
-    user -->|N| report
-    query -->|O| walk
-    query -->|P| elem
-    query -->|Q| role
-    walk -->|R| auto
-    auto -->|S| walk
-    auto -->|T| ax
-    walk -->|U| elem
-    walk -->|V| scr
-    walk -->|W| win
-    walk -->|X| role
-    elem -->|Y| role
-    wait -->|Z| scr
-    wait -->|AA| walk
-    report -->|BB| walk
-    report -->|CC| elem
-    canary -->|DD| scr
-    canary -->|EE| report
-    sysTest -->|FF| session
-    siri -->|GG| session
-    delivery -->|HH| session
-    sys -->|II| lib
-    session -->|JJ| systemUI
-    app -->|KK| fixtures
-    fixtures -->|LL| local
-    systemUI -->|MM| local
+    System_Ext(ax, "21 libAccessibility")
+    System_Ext(systemUI, "22 Siri and the share sheet")
 
-    classDef part fill:none,stroke:gray
-    classDef outside fill:none,stroke:gray,stroke-dasharray:4
+    Rel(test, scr, "A")
+    Rel(test, user, "B")
+    Rel(scr, win, "C")
+    Rel(scr, canary, "D")
+    Rel(scr, walk, "E")
+    Rel(scr, report, "F")
+    Rel(win, scr, "G")
+    Rel(win, walk, "H")
+    Rel(user, query, "I")
+    Rel(user, scr, "J")
+    Rel(user, wait, "K")
+    Rel(user, walk, "L")
+    Rel(user, elem, "M")
+    Rel(user, report, "N")
+    Rel(query, walk, "O")
+    Rel(query, elem, "P")
+    Rel(query, role, "Q")
+    Rel(walk, auto, "R")
+    Rel(auto, walk, "S")
+    Rel(auto, ax, "T")
+    Rel(walk, elem, "U")
+    Rel(walk, scr, "V")
+    Rel(walk, win, "W")
+    Rel(walk, role, "X")
+    Rel(elem, role, "Y")
+    Rel(wait, scr, "Z")
+    Rel(wait, walk, "AA")
+    Rel(report, walk, "BB")
+    Rel(report, elem, "CC")
+    Rel(canary, scr, "DD")
+    Rel(canary, report, "EE")
+    Rel(sysTest, session, "FF")
+    Rel(siri, session, "GG")
+    Rel(delivery, session, "HH")
+    Rel(delivery, report, "II")
+    Rel(delivery, elem, "JJ")
+    Rel(delivery, query, "KK")
+    Rel(siri, report, "LL")
+    Rel(session, query, "MM")
+    Rel(session, report, "NN")
+    Rel(session, elem, "OO")
+    Rel(session, role, "PP")
+    Rel(session, systemUI, "QQ")
+    Rel(app, fixtures, "RR")
+    Rel(fixtures, local, "SS")
+    Rel(systemUI, local, "TT")
+
+    UpdateElementStyle(test, $bgColor="#64748b", $borderColor="#475569", $fontColor="#ffffff")
+    UpdateElementStyle(sysTest, $bgColor="#64748b", $borderColor="#475569", $fontColor="#ffffff")
+    UpdateElementStyle(ax, $bgColor="#64748b", $borderColor="#475569", $fontColor="#ffffff")
+    UpdateElementStyle(systemUI, $bgColor="#64748b", $borderColor="#475569", $fontColor="#ffffff")
+    UpdateElementStyle(scr, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(win, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(auto, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(walk, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(elem, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(role, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(query, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(user, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(wait, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(report, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(canary, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(session, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(siri, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(delivery, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(local, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(app, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(fixtures, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(manifest, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
 ```
 
 ```mermaid
-flowchart TB
-    subgraph legend["Legend"]
-        part["Component"]:::part
-        outside["Outside the package"]:::outside
-    end
+C4Component
+    title Legend
 
-    classDef part fill:none,stroke:gray
-    classDef outside fill:none,stroke:gray,stroke-dasharray:4
+    Person(p, "Person", "Human or agent actor")
+    Container_Boundary(cb, "Container boundary") {
+        Component(c, "Component", "Tech", "Logical unit")
+    }
+    System_Ext(e, "External", "Outside our boundary")
+
+    UpdateElementStyle(p, $bgColor="#334155", $borderColor="#1e293b", $fontColor="#ffffff")
+    UpdateElementStyle(c, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
+    UpdateElementStyle(e, $bgColor="#64748b", $borderColor="#475569", $fontColor="#ffffff")
 ```
 
-Numbers match the callout table. Containers: [02-containers.md](02-containers.md). Code: [04-code.md](04-code.md).
+Numbers on nodes and letters on arrows match the callout table. Containers: [02-containers.md](02-containers.md). Code: [04-code.md](04-code.md).
 
 | #   | Description | Why |
 | --- | --- | --- |
@@ -138,6 +161,11 @@ Numbers match the callout table. Containers: [02-containers.md](02-containers.md
 | 20  | A test in a UI-test target, such as `Tests/System/`. | System UI needs a runner outside the app. |
 | 21  | Apple's accessibility library, holding the private automation switch. | The only way in-process tests get SwiftUI's tree. |
 | 22  | The system's Siri overlay and share sheet. | Shown on a simulator, outside the app's process. |
+| 23  | The `UITestingLibrary` product, whose components are the folders under it. | The hosted library every consumer imports. |
+| 24  | The optional `UITestingLibrarySystem` product. | It runs in a UI-test target, outside the app's process. |
+| 25  | The optional `UITestingLibraryShareDestination` product. | Test builds add its local share destination. |
+| 26  | The host app that renders each requirement test's screens. | Both host apps share one source folder. |
+| 27  | The package that declares the products. | Consumers import only what their target needs. |
 | A   | The test renders its app root. | One screen per test ([ADR 0005](adr/0005-one-window-per-process.md)). |
 | B   | The test acts and looks through a `User`. | Tests read as a person's steps. |
 | C   | The screen draws into its window. | Window setup stays in one place. |
@@ -172,8 +200,15 @@ Numbers match the callout table. Containers: [02-containers.md](02-containers.md
 | FF  | A system test launches the app through a `SystemSession`. | One session per launched app. |
 | GG  | Siri requests extend the session. | One session drives the app and the system UI. |
 | HH  | Share checks extend the session. | The same deadline and failure rules apply. |
-| II  | The system product uses the library's `Query`, `Role`, `Element` and `Failure` types. | A system test reads like a hosted one. |
-| JJ  | The session opens Siri and the share sheet and reads them. | Only a separate process can drive system UI. |
-| KK  | With the sharing launch argument, the iOS app shows the sharing screen. | A system test opens its screen without tapping through menus. |
-| LL  | The sharing screen adds the local destination to its sheet. | Test builds add it; release builds omit it. |
-| MM  | The share sheet hands the shared items to the local destination. | The destination keeps only what the system delivers. |
+| II  | A delivery check throws the library's `Failure`. | One failure format everywhere. |
+| JJ  | A delivery check reads the library's `Element` values. | One reading of an element on both products. |
+| KK  | A delivery check finds items with the library's `Query`. | A system test reads like a hosted one. |
+| LL  | A Siri check reports at the test's `SourceLocation`. | Every failure names the test's line. |
+| MM  | The system session finds elements with the library's `Query`. | A system test reads like a hosted one. |
+| NN  | The system session throws the library's `Failure`. | One failure format everywhere. |
+| OO  | The system session reads the library's `Element` values. | One reading of an element on both products. |
+| PP  | The system session names roles with the library's `Role`. | The same role names on both products. |
+| QQ  | The session opens Siri and the share sheet and reads them. | Only a separate process can drive system UI. |
+| RR  | With the sharing launch argument, the iOS app shows the sharing screen. | A system test opens its screen without tapping through menus. |
+| SS  | The sharing screen adds the local destination to its sheet. | Test builds add it; release builds omit it. |
+| TT  | The share sheet hands the shared items to the local destination. | The destination keeps only what the system delivers. |
