@@ -6,53 +6,180 @@ relatedConfigurations: ['../../.fitnessrc.json']
 
 This grounds the components in [03-components.md](03-components.md) in source files. Hosted library Swift lives under `Sources/UITestingLibrary/`; optional products have their own folders under `Sources/`.
 
-## Layer dependencies
-
-Each folder depends only on the ones below it. Everything runs on the main actor, as UIKit, AppKit and the tree require.
+Each type sits in its own folder, and a folder depends only on the ones below it. Everything runs on the main actor, as UIKit, AppKit and the tree require.
 
 ```mermaid
-flowchart TB
-    subgraph src["Sources/UITestingLibrary/"]
-        actions["1 Actions"]:::layer
-        screen["2 Screen"]:::layer
-        queries["3 Queries"]:::layer
-        waits["4 Waits"]:::layer
-        reports["5 Reports"]:::layer
-        tree["6 Tree"]:::layer
-    end
+classDiagram
+    class User["1 User"]
+    class Screen["2 Screen"]
+    class ScreenSize["3 ScreenSize"]
+    class Look["4 Look"]
+    class HostWindow["5 HostWindow"]
+    class Query["6 Query"]
+    class Role["7 Role"]
+    class Wait["8 Wait"]
+    class ScreenReport["9 ScreenReport"]
+    class Failure["10 Failure"]
+    class SourceLocation["11 SourceLocation"]
+    class Canary["12 Canary"]
+    class AccessibilityTree["13 AccessibilityTree"]
+    class Element["14 Element"]
+    class Automation["15 Automation"]
+    class Key["16 Key"]
+    class Modifier["17 Modifier"]
+    class ScrollDirection["18 ScrollDirection"]
+    class SwipeDirection["19 SwipeDirection"]
+    class AdjustDirection["20 AdjustDirection"]
+    class PinchDirection["21 PinchDirection"]
+    class DragSpeed["22 DragSpeed"]
 
-    actions -->|A| queries
-    actions -->|B| waits
-    actions -->|C| reports
-    screen -->|D| reports
-    queries -->|E| tree
-    reports -->|F| tree
-    waits -->|G| tree
-    waits -->|H| reports
-    tree -->|I| screen
+    User --> Screen : A
+    User --> Wait : B
+    User --> Element : C
+    User --> SourceLocation : D
+    User --> Failure : E
+    User --> ScreenReport : F
+    User --> AccessibilityTree : G
+    User --> Query : H
+    User --> ScrollDirection : I
+    User --> DragSpeed : J
+    User --> SwipeDirection : K
+    User --> AdjustDirection : L
+    User --> PinchDirection : M
+    User --> Key : N
+    User --> Modifier : O
+    Query --> Role : P
+    Query --> Element : Q
+    Canary --> Screen : R
+    Canary --> SourceLocation : S
+    Canary --> Failure : T
+    Canary --> ScreenReport : U
+    Failure --> ScreenReport : V
+    Failure --> SourceLocation : W
+    ScreenReport --> Element : X
+    ScreenReport --> AccessibilityTree : Y
+    HostWindow --> ScreenSize : Z
+    HostWindow --> Look : AA
+    Screen --> HostWindow : BB
+    Screen --> Canary : CC
+    Screen --> ScreenSize : DD
+    Screen --> Look : EE
+    Screen --> Failure : FF
+    Screen --> ScreenReport : GG
+    Screen --> SourceLocation : HH
+    AccessibilityTree --> Element : II
+    AccessibilityTree --> Screen : JJ
+    AccessibilityTree --> Automation : KK
+    Element --> Role : LL
+    Wait --> Screen : MM
+    Wait --> AccessibilityTree : NN
 
-    classDef layer fill:none,stroke:gray
+    style User fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style Screen fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style ScreenSize fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style Look fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style HostWindow fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style Query fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style Role fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style Wait fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style ScreenReport fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style Failure fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style SourceLocation fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style Canary fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style AccessibilityTree fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style Element fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style Automation fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style Key fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style Modifier fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style ScrollDirection fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style SwipeDirection fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style AdjustDirection fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style PinchDirection fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style DragSpeed fill:#6d28d9,stroke:#4c1d95,color:#ffffff
 ```
 
-Numbers match the callout table. See [02-containers.md](02-containers.md) and [03-components.md](03-components.md).
+```mermaid
+classDiagram
+    class Example {
+        +property
+        +method()
+    }
+    class Parent
+    class Child
+    Parent <|-- Child : inherits
+    Parent --> Child : uses
+
+    style Example fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style Parent fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+    style Child fill:#6d28d9,stroke:#4c1d95,color:#ffffff
+```
+
+Numbers on classes and letters on relationships match the callout table. See [02-containers.md](02-containers.md) and [03-components.md](03-components.md).
 
 | #   | Description | Why |
 | --- | --- | --- |
-| 1   | `Actions/`: `User.swift`, `UserActs.swift`, `UserKeys.swift`, `UserGestures.swift`, `UserDrags.swift`, `UserSees.swift`. | The public verbs a test reads in. |
-| 2   | `Screen/`: `Screen.swift`, `ScreenSize.swift`, `Look.swift`, `HostWindow.swift`. | Drawing stays apart from reading; `HostWindow` holds the platform branch ([ADR 0006](adr/0006-one-api-two-backends.md)). It keeps a Mac's window off every display ([ADR 0011](adr/0011-person-actions-in-process.md)). |
-| 3   | `Queries/`: `Role.swift`, `Query.swift`, `Match.swift`. | Matching rules live in one place. |
-| 4   | `Waits/`: `Wait.swift`, `Stalls.swift`. | Every wait shares one deadline rule; stalls are timed on the main run loop ([ADR 0010](adr/0010-keys-watches-share-sheet.md)). |
-| 5   | `Reports/`: `ScreenReport.swift`, `Failure.swift`, `SourceLocation.swift`, `Canary.swift`. | Failures read the same everywhere, and name the test's line. |
-| 6   | `Tree/`: `Automation.swift`, `AccessibilityTree.swift`, `Element.swift`, `Timing.swift`, `Trackpad.swift`, then `UIKitTree`, `UIKitActs`, `UIKitMenus`, `UIKitKeys`, `UIKitPointer`, `UIKitPointerDrag`, `UIKitPinch`, `AppKitTree`, `AppKitActs`, `AppKitMenus`, `AppKitKeys`, `AppKitPointer`, `AppKitPointerDrag`, `AppKitPinch`. | The only code that touches accessibility objects, one backend per platform. `Timing` signposts each phase, since a read is the lowest one. |
-| A   | Actions resolve queries. | An act needs a found element. |
-| B   | Actions wait after each act. | The next look sees a settled screen. |
-| C   | Actions report failures. | One failure format. |
-| D   | `Screen.close()` calls `Canary.check(_:)`. | No test can skip the check. |
-| E   | Queries read the tree. | Matching works on `Element` values. |
-| F   | Reports read the tree. | A report shows what VoiceOver reads now. |
-| G   | Waits read the tree once it settles. | The main run loop goes idle twice, then one read ends a settle. |
-| H   | A timed-out wait hands the screen to the report. | A timeout shows what was on screen. |
-| I   | The tree reads the screen's window and feeds its canary. | One window, read through one `HostWindow`. |
+| 1   | [`User`](../../Sources/UITestingLibrary/Actions/User.swift) is the public verbs a test reads in. It lives with `UserActs.swift`, `UserKeys.swift`, `UserGestures.swift`, `UserDrags.swift` and `UserSees.swift` in `Actions/`. | The public verbs a test reads in. |
+| 2   | [`Screen`](../../Sources/UITestingLibrary/Screen/Screen.swift) draws a root view and closes it at teardown. | Drawing stays apart from reading. |
+| 3   | [`ScreenSize`](../../Sources/UITestingLibrary/Screen/ScreenSize.swift) is the fixed size a root is drawn at. | A fixed size makes layout the same on any Mac or simulator. |
+| 4   | [`Look`](../../Sources/UITestingLibrary/Screen/Look.swift) is the text size and appearance a root is drawn with. | A test checks a layout in each look a person can choose. |
+| 5   | [`HostWindow`](../../Sources/UITestingLibrary/Screen/HostWindow.swift) holds the platform branch ([ADR 0006](adr/0006-one-api-two-backends.md)). It keeps a Mac's window off every display ([ADR 0011](adr/0011-person-actions-in-process.md)). | One window per process ([ADR 0005](adr/0005-one-window-per-process.md)). |
+| 6   | [`Query`](../../Sources/UITestingLibrary/Queries/Query.swift) matches elements by role and label, by text, or by identifier, with `Match.swift` in `Queries/`. | Matching rules live in one place. |
+| 7   | [`Role`](../../Sources/UITestingLibrary/Queries/Role.swift) is the roles a query names, each mapped to accessibility traits. | A role never matches static text that shares its label ([ADR 0002](adr/0002-query-priority.md)). |
+| 8   | [`Wait`](../../Sources/UITestingLibrary/Waits/Wait.swift) polls a condition until it holds or the deadline passes, with `Stalls.swift` in `Waits/`. | Every wait shares one deadline rule; stalls are timed on the main run loop ([ADR 0010](adr/0010-keys-watches-share-sheet.md)). |
+| 9   | [`ScreenReport`](../../Sources/UITestingLibrary/Reports/ScreenReport.swift) prints what is on and off screen. | A failure shows the screen as a person hears it. |
+| 10  | [`Failure`](../../Sources/UITestingLibrary/Reports/Failure.swift) is the one error every look and act throws. | Failures read the same everywhere. |
+| 11  | [`SourceLocation`](../../Sources/UITestingLibrary/Reports/SourceLocation.swift) is the test line a failure names. | The test fails at its own line. |
+| 12  | [`Canary`](../../Sources/UITestingLibrary/Reports/Canary.swift) fails a test that never read a non-empty tree. | An OS change that empties the tree cannot pass silently. |
+| 13  | [`AccessibilityTree`](../../Sources/UITestingLibrary/Tree/AccessibilityTree.swift) walks the window and drives elements, with `Timing.swift`, `Trackpad.swift` and the `UIKit*` and `AppKit*` backends in `Tree/`. | The only code that touches accessibility objects, one backend per platform. `Timing` signposts each phase, since a read is the lowest one. |
+| 14  | [`Element`](../../Sources/UITestingLibrary/Tree/Element.swift) is what the tree reads of one element. | Queries and reports share one reading. |
+| 15  | [`Automation`](../../Sources/UITestingLibrary/Tree/Automation.swift) turns the process-wide switch on once. | SwiftUI builds its tree only while assistive technology asks ([ADR 0004](adr/0004-automation-canary.md)). |
+| 16  | [`Key`](../../Sources/UITestingLibrary/Tree/AccessibilityTree.swift#L55) is a key a person presses. | A key names what user-event's `keyboard` names. |
+| 17  | [`Modifier`](../../Sources/UITestingLibrary/Tree/AccessibilityTree.swift#L92) is a key held while another is pressed. | A shortcut needs its modifiers. |
+| 18  | [`ScrollDirection`](../../Sources/UITestingLibrary/Tree/AccessibilityTree.swift#L48) is which way a person scrolls. | A scroll names its direction. |
+| 19  | [`SwipeDirection`](../../Sources/UITestingLibrary/Tree/AccessibilityTree.swift#L97) is which way a person swipes a row. | A swipe shows leading or trailing actions. |
+| 20  | [`AdjustDirection`](../../Sources/UITestingLibrary/Tree/AccessibilityTree.swift#L103) is which way a person adjusts a slider or stepper. | An adjust steps a value up or down. |
+| 21  | [`PinchDirection`](../../Sources/UITestingLibrary/Tree/AccessibilityTree.swift#L110) is which way a person pinches. | A pinch zooms in or out. |
+| 22  | [`DragSpeed`](../../Sources/UITestingLibrary/Tree/AccessibilityTree.swift#L124) is how fast a person drags by a distance. | A drag comes to rest or flicks. |
+| A   | `User` uses `Screen`. | The code makes this dependency. |
+| B   | `User` calls `Wait`. | The code makes this dependency. |
+| C   | `User` uses `Element`. | The code makes this dependency. |
+| D   | `User` calls `SourceLocation`. | The code makes this dependency. |
+| E   | `User` calls `Failure`. | The code makes this dependency. |
+| F   | `User` calls `ScreenReport`. | The code makes this dependency. |
+| G   | `User` uses `AccessibilityTree`. | The code makes this dependency. |
+| H   | `User` uses `Query`. | The code makes this dependency. |
+| I   | `User` uses `ScrollDirection`. | The code makes this dependency. |
+| J   | `User` uses `DragSpeed`. | The code makes this dependency. |
+| K   | `User` uses `SwipeDirection`. | The code makes this dependency. |
+| L   | `User` uses `AdjustDirection`. | The code makes this dependency. |
+| M   | `User` uses `PinchDirection`. | The code makes this dependency. |
+| N   | `User` uses `Key`. | The code makes this dependency. |
+| O   | `User` uses `Modifier`. | The code makes this dependency. |
+| P   | `Query` uses `Role`. | The code makes this dependency. |
+| Q   | `Query` uses `Element`. | The code makes this dependency. |
+| R   | `Canary` uses `Screen`. | The code makes this dependency. |
+| S   | `Canary` uses `SourceLocation`. | The code makes this dependency. |
+| T   | `Canary` calls `Failure`. | The code makes this dependency. |
+| U   | `Canary` calls `ScreenReport`. | The code makes this dependency. |
+| V   | `Failure` uses `ScreenReport`. | The code makes this dependency. |
+| W   | `Failure` uses `SourceLocation`. | The code makes this dependency. |
+| X   | `ScreenReport` uses `Element`. | The code makes this dependency. |
+| Y   | `ScreenReport` uses `AccessibilityTree`. | The code makes this dependency. |
+| Z   | `HostWindow` uses `ScreenSize`. | The code makes this dependency. |
+| AA  | `HostWindow` uses `Look`. | The code makes this dependency. |
+| BB  | `Screen` calls `HostWindow`. | The code makes this dependency. |
+| CC  | `Screen` uses `Canary`. | The code makes this dependency. |
+| DD  | `Screen` uses `ScreenSize`. | The code makes this dependency. |
+| EE  | `Screen` uses `Look`. | The code makes this dependency. |
+| FF  | `Screen` calls `Failure`. | The code makes this dependency. |
+| GG  | `Screen` calls `ScreenReport`. | The code makes this dependency. |
+| HH  | `Screen` calls `SourceLocation`. | The code makes this dependency. |
+| II  | `AccessibilityTree` uses `Element`. | The code makes this dependency. |
+| JJ  | `AccessibilityTree` uses `Screen`. | The code makes this dependency. |
+| KK  | `AccessibilityTree` uses `Automation`. | The code makes this dependency. |
+| LL  | `Element` uses `Role`. | The code makes this dependency. |
+| MM  | `Wait` uses `Screen`. | The code makes this dependency. |
+| NN  | `Wait` uses `AccessibilityTree`. | The code makes this dependency. |
 
 ## States
 
