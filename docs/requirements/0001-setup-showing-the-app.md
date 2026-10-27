@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # 0001 Showing the app
 
 ## Why
@@ -13,8 +9,6 @@ I show my app's real root view at a person's text size and appearance. I read it
 tests that show a root view and read its accessibility tree
 -
 tests that show a root view
-
-Source: #1
 
 ## Requirements
 

@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # 0004 Waiting on a condition
 
 ## Why
@@ -13,8 +9,6 @@ My tests wait only as long as the app needs, never a fixed time, so they stay fa
 looks that end when their condition holds or at the deadline
 -
 looks
-
-Source: #1
 
 ## Requirements
 

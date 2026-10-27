@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # 0002 Finding what is on screen
 
 ## Why
@@ -13,8 +9,6 @@ I find elements the way a person does: by role and label first, then by visible 
 looks by role, label or text
 -
 looks
-
-Source: #1
 
 ## Requirements
 

@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # 0008 Reading a system share
 
 ## Why
@@ -13,8 +9,6 @@ I follow a real share to a local destination and check the image and message it 
 shares checked at their destination
 -
 shares tested
-
-Source: #40
 
 ## Requirements
 

@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../.fitnessrc.json']
----
-
 ### 2026.10.18.1150
 
 - Feat: `presses(_:with:)` takes more keys and modifiers, `tabs()` moves focus, and the clipboard steps put it back on close

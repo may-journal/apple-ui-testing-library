@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # 0007 Reading a Siri answer
 
 ## Why
@@ -13,8 +9,6 @@ I ask Siri through the system, so phrase routing and the displayed answer are pa
 Siri answers checked through the system
 -
 Siri answer tests
-
-Source: #39
 
 ## Requirements
 

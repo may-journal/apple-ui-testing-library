@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # 0009 Pressing keys and clearing a field
 
 ## Why
@@ -13,8 +9,6 @@ I press any key with modifiers, run the app's shortcuts, tab between fields, cle
 keys and clipboard steps run through the field's own key commands and edit actions
 -
 keys and clipboard steps
-
-Source: #65
 
 ## Requirements
 

@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../.fitnessrc.json']
----
-
 ### 2026.10.18.1901
 
 - Feat: `drags(query, by: offset, speed: .slow)` drags any element by a distance and lets go

@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # 0005 Reading a failure
 
 ## Why
@@ -13,8 +9,6 @@ When a test fails, I read what a person would have seen then. So I fix the app o
 failures that print what VoiceOver reads on screen
 -
 failures
-
-Source: #1
 
 ## Requirements
 

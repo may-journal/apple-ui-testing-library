@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # 0011 Gestures beyond a tap
 
 ## Why
@@ -13,8 +9,6 @@ I double-tap, hold, swipe, drag, adjust, hover and pinch as a person does, in pr
 gestures run in process through the platform's own entry points
 -
 gestures
-
-Source: #70
 
 ## Requirements
 

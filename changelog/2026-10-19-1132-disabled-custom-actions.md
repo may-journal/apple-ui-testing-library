@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../.fitnessrc.json']
----
-
 ### 2026.10.19.1132
 
 - Fix: choosing an advertised custom action on a disabled control fails before its handler runs and reports the disabled state

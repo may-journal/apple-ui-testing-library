@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # 0006 Reading control state
 
 ## Why
@@ -13,8 +9,6 @@ I can check whether a control is disabled through the library, and a disabled co
 control state checks through the public library
 -
 control state checks
-
-Source: #41
 
 ## Requirements
 

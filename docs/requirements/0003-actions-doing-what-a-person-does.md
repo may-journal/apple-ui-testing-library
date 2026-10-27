@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # 0003 Doing what a person does
 
 ## Why
@@ -13,8 +9,6 @@ I tap controls and menu items, choose, type, scroll and go back through what Voi
 actions done through an accessibility action
 -
 actions
-
-Source: #1
 
 ## Requirements
 

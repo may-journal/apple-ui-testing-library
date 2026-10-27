@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 <!-- File name is NNNN-prefix-kebab-title.md. NNNN matches the title, is unique here, and is never reused. -->
 
 # NNNN Title
@@ -12,7 +8,7 @@ relatedConfigurations: ['../../.fitnessrc.json']
 
 ## Measurement
 
-<!-- Numerator line, a "-" line, denominator line, then "Source:" citing one existing path:line or one #issue. -->
+<!-- Numerator line, a "-" line, denominator line. No "Source:" line. -->
 
 ## Requirements
 

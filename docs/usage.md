@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../.fitnessrc.json']
----
-
 # Usage
 
 How to test an app with `UITestingLibrary`. For supported versions see [Platforms](architecture/04-code.md#platforms).

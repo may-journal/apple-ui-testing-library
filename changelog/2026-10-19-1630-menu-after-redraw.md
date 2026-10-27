@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../.fitnessrc.json']
----
-
 ### 2026.10.19.1630
 
 - Fix: on the iOS app running on a Mac, a SwiftUI `Menu` that just redrew opens when tapped

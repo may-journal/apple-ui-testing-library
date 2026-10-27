@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../.fitnessrc.json']
----
-
 ### 2026.10.26.1001
 
 - Docs: the system context, containers and components views are C4 diagrams in the colors of their level

@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # 0012 Drags by a distance
 
 ## Why
@@ -13,8 +9,6 @@ I drag any element by a distance and let go, slowly or as a flick, in process an
 drags by a distance whose view hears the distance and the speed
 -
 drags by a distance
-
-Source: #83
 
 ## Requirements
 
