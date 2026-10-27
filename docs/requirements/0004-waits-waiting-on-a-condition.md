@@ -10,8 +10,6 @@ looks that end when their condition holds or at the deadline
 -
 looks
 
-Source: #1
-
 ## Requirements
 
 - 0004.1

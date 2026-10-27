@@ -10,8 +10,6 @@ Siri answers checked through the system
 -
 Siri answer tests
 
-Source: #39
-
 ## Requirements
 
 - 0007.1

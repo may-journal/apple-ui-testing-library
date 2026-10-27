@@ -10,8 +10,6 @@ control state checks through the public library
 -
 control state checks
 
-Source: #41
-
 ## Requirements
 
 - 0006.1
