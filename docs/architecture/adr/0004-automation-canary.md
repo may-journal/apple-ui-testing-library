@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../../.fitnessrc.json']
----
-
 # 0004 — Private SPI turns automation on, and a canary guards it
 
 ## Context

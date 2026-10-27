@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../.fitnessrc.json']
----
-
 ### 2026.10.18.0857
 
 - Feat: a `User` presses Enter and End and clears a field, as user-event's `keyboard` and `clear` do, through the field's own key commands

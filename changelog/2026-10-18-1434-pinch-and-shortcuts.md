@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../.fitnessrc.json']
----
-
 ### 2026.10.18.1434
 
 - Feat: `pinches(.in, query)` and `pinches(.out, query)` pinch an element as two fingers on a trackpad do

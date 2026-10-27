@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../.fitnessrc.json']
----
-
 # Architecture
 
 Product and system design for apple-ui-testing-library. The C4 docs below describe the package as built; each acceptance in [docs/requirements](../requirements/) has its test.

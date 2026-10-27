@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../../.fitnessrc.json']
----
-
 # 0011 — Every person action, in process and off screen
 
 ## Context

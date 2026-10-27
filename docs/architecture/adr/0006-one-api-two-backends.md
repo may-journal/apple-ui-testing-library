@@ -1,7 +1,3 @@
----
-relatedConfigurations: ['../../../.fitnessrc.json']
----
-
 # 0006 — One API over two backends, UIKit and AppKit
 
 ## Context
