@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
-# Run the opt-in system requirement tests on a simulator you own, then shut it down.
-# Usage: make requirements-e2e SIMULATOR_ID=<UDID of a shut-down simulator>.
-# Inputs: SIMULATOR_ID and PROJECT, from the Makefile's environment. An already booted
-#   device is refused, since only a successful boot here grants this script its cleanup.
-# Outputs: build products and XCTest results in .build/SystemDerivedData; the exit status
-#   of the run. The simulator is shut down on exit, even after a failure.
-# How it works: docs/architecture/04-code.md, Tests.
+# Runs the opt-in system requirement tests on a simulator you own, using `make requirements-e2e SIMULATOR_ID=<UDID of a shut-down simulator>`.
+# An already booted device is refused, and the simulator is shut down on exit, even after a failure.
 set -euo pipefail
 
 : "${PROJECT:?}"

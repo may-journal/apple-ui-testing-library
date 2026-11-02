@@ -3,9 +3,8 @@ import UIKit
 
 /// Reads the UIKit tree as VoiceOver walks it.
 extension Backend {
-    /// Every element VoiceOver would stop on in the window, depth first. Behind a modal
-    /// view, such as a sheet, nothing counts. The window lays out first, as before a person
-    /// sees it: SwiftUI adds a `Menu`'s control only at the layout after it draws.
+    /// Every element VoiceOver would stop on in the window, depth first, except behind a
+    /// modal view. The window lays out first because SwiftUI adds a `Menu`'s control late.
     static func nodes(in window: HostWindow) -> [Node] {
         if let menu = menuNodes() { return menu }
         window.window.layoutIfNeeded()
@@ -16,8 +15,8 @@ extension Backend {
 
     private static func collect(_ object: NSObject, into found: inout [NSObject]) {
         if isHidden(object) { return }
-        // VoiceOver reads a stepper as two buttons, which a Mac running the iOS app never
-        // presses; it is read as one adjustable control, as AppKit reads its own.
+        // VoiceOver reads a stepper as two buttons, but a Mac never presses them, so it is
+        // read as one adjustable control.
         if object.isAccessibilityElement || object is UIStepper {
             found.append(object)
             return
@@ -28,9 +27,8 @@ extension Backend {
     /// Whether this is an iOS app running on a Mac, asked once, not for every view.
     private static let isiOSAppOnMac = ProcessInfo.processInfo.isiOSAppOnMac
 
-    /// Whether VoiceOver skips the object and all it holds. A Mac running the iOS app draws
-    /// an alert natively, and UIKit hides its own copy then; the copy still holds the title
-    /// and buttons VoiceOver reads and presses, so it counts.
+    /// Whether VoiceOver skips the object and all it holds. A Mac draws an alert natively
+    /// and UIKit hides its copy, which still holds the title and buttons, so it counts.
     private static func isHidden(_ object: NSObject) -> Bool {
         if let view = object as? UIView {
             if isiOSAppOnMac, view.next is UIAlertController {
@@ -47,8 +45,8 @@ extension Backend {
             return listed
         }
         guard let view = object as? UIView else { return [] }
-        // A modal view hides what lies behind it, not what lies in front: a sheet's dimming
-        // view is modal, and the sheet sits above it.
+        // A modal view hides what lies behind it, not in front. A sheet's dimming view is
+        // modal, and the sheet sits above it.
         if let index = view.subviews.lastIndex(where: {
             $0.accessibilityViewIsModal && !isHidden($0)
         }) {

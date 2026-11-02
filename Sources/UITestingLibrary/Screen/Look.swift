@@ -5,7 +5,7 @@ import SwiftUI
 public struct Look: Sendable, Equatable {
     /// The text size, as a person sets it in Display & Text Size.
     public let textSize: DynamicTypeSize?
-    /// Light or dark.
+    /// The appearance, light or dark.
     public let appearance: ColorScheme?
 
     public init(textSize: DynamicTypeSize? = nil, appearance: ColorScheme? = nil) {

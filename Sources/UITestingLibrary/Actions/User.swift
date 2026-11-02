@@ -1,5 +1,5 @@
-/// A person using the app. Every look and act goes through a `User`, waits on a condition
-/// up to its deadline, and fails with what VoiceOver reads (ADR 0003).
+/// A person using the app. Every look and act goes through a `User`, waits up to its
+/// deadline, and fails with what VoiceOver reads (ADR 0003).
 @MainActor
 public struct User {
     /// The screen this user looks at and acts on.

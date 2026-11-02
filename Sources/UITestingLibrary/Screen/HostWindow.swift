@@ -1,8 +1,8 @@
 import SwiftUI
 
 /// The key window the host app lends to a test: a `UIWindow` on iOS, an `NSWindow` on
-/// macOS (ADR 0006). Nothing in it animates, and on a Mac it draws off every display, so a
-/// test never shows on screen or takes focus (ADR 0011).
+/// macOS (ADR 0006). Nothing in it animates, and on a Mac it draws off every display, so
+/// a test never shows or takes focus (ADR 0011).
 @MainActor
 public final class HostWindow {
     /// The size the root view is laid out at, in points.
@@ -84,9 +84,8 @@ public final class HostWindow {
 }
 
 #if canImport(AppKit) && !canImport(UIKit)
-/// A hosting view a test drives without the window server. It takes the first click, since
-/// the app is never frontmost, and it keeps a drag SwiftUI starts in process: the window
-/// server would move it with the person's own pointer (ADR 0011).
+/// A hosting view a test drives without the window server, taking the first click and
+/// keeping a drag in process (ADR 0011).
 private final class HeadlessHostingView<Content: View>: NSHostingView<Content> {
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 
@@ -108,10 +107,9 @@ private final class HeadlessHostingView<Content: View>: NSHostingView<Content> {
     }
 }
 
-/// A window that keeps the test's content size and its place off every display, and that
-/// counts as key without the app coming forward. SwiftUI fits a hosting view's window to
-/// its content as it lays out, whatever its sizing options, which would clip a toolbar's
-/// items into an overflow menu.
+/// A window that keeps the test's content size, stays off every display, and counts as
+/// key. SwiftUI would fit it to its content, which would clip a toolbar's items into an
+/// overflow menu.
 private final class HeadlessWindow: NSWindow {
     private var contentSize: CGSize?
 
@@ -124,8 +122,8 @@ private final class HeadlessWindow: NSWindow {
         contentSize = contentRect.size
     }
 
-    /// Key and main as a person's front window is, so controls, fields and drags answer as
-    /// they do there, while the app stays in the background.
+    /// Key and main as a person's front window is, so controls, fields and drags answer
+    /// as they do there.
     override var isKeyWindow: Bool { true }
     override var isMainWindow: Bool { true }
 
@@ -134,8 +132,8 @@ private final class HeadlessWindow: NSWindow {
         frameRect
     }
 
-    /// Any frame keeps the content size and its place off every display, wherever AppKit
-    /// would cascade or center it; a title bar that grows a toolbar still grows.
+    /// Any frame keeps the content size and its place off every display. A title bar
+    /// that grows a toolbar still grows.
     override func setFrame(_ frameRect: NSRect, display flag: Bool) {
         guard let contentSize else { return super.setFrame(frameRect, display: flag) }
         var fixed = frameRect

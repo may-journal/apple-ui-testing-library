@@ -1,6 +1,5 @@
-# XcodeGen spec for the package's own test hosts: one iOS app and one macOS app, each
-# running a hosted test bundle that depends on the package (docs/architecture/02-containers.md).
-# Run: make generate. The generated UITestingLibrary.xcodeproj is ignored, never hand-edited.
+# XcodeGen spec for the package's own test hosts, an iOS app and a macOS app (docs/architecture/02-containers.md).
+# Run `make generate` to build the ignored UITestingLibrary.xcodeproj, which is never hand-edited.
 name: UITestingLibrary
 options:
   bundleIdPrefix: org.may-journal.ui-testing-library
@@ -14,8 +13,7 @@ settings:
     SWIFT_VERSION: '6.0'
     SWIFT_STRICT_CONCURRENCY: complete
     # Local hosts only: the macOS targets sign ad hoc, which needs no team. The iOS targets
-    # run on this Mac as Designed for iPad, and the iOS 27 SDK refuses ad-hoc signing, so
-    # they use a development team (see targets below).
+    # run as Designed for iPad, and the iOS 27 SDK refuses ad-hoc signing there (see below).
     CODE_SIGN_IDENTITY: '-'
     CODE_SIGN_STYLE: Manual
     DEVELOPMENT_TEAM: ''

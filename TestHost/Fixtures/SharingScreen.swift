@@ -2,7 +2,7 @@
 import SwiftUI
 import UITestingLibraryShareDestination
 
-/// Generic system-share fixture. Mutations alter the delivered outputs for negative proof.
+/// A generic system-share fixture, whose mutations alter the delivered outputs for negative proof.
 struct SharingScreen: View {
     @State private var sharing = false
     @State private var confirming = false

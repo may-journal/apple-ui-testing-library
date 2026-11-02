@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// A long screen, nested deep, as a real app's root is: a counter on top, then rows of
-/// sections, each row a title and a button, most of them drawn off screen.
+/// A long screen, nested deep, as a real app's root is. It has a counter on top, then
+/// rows of sections, most drawn off screen.
 struct LongScreen: View {
     @State private var count = 0
 

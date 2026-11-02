@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
-# Run both requirement suites with code coverage on, then print the library's line coverage.
-# Usage: make requirements-coverage (the Makefile exports the inputs and calls this script).
-# Inputs, all from the Makefile's environment: COVERAGE_DIR, PROFILE_DATA, LIBRARY_SOURCES,
-#   IOS_TEST_BINARY, MAC_TEST_BINARY.
-# Outputs: ios.lcov and mac.lcov in COVERAGE_DIR, then lines, missed and percent covered for
-#   iOS, macOS and both on stdout. A line hit on either platform counts as covered.
-# How it works: docs/architecture/04-code.md, Tests.
+# Prints the library's line coverage from both requirement suites, run with `make requirements-coverage`.
+# The Makefile exports COVERAGE_DIR, PROFILE_DATA, LIBRARY_SOURCES, IOS_TEST_BINARY and MAC_TEST_BINARY, and docs/architecture/04-code.md, Tests, explains the rest.
 set -euo pipefail
 
 : "${COVERAGE_DIR:?}" "${PROFILE_DATA:?}" "${LIBRARY_SOURCES:?}" "${IOS_TEST_BINARY:?}" "${MAC_TEST_BINARY:?}"

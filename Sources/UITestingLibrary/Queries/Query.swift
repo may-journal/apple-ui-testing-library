@@ -1,10 +1,10 @@
 /// How a test names an element, in the priority a person finds it (ADR 0002).
 public enum Query: Sendable, Equatable, CustomStringConvertible {
-    /// A role and its exact label. Comes first.
+    /// A role and its exact label, which comes first.
     case role(Role, String)
-    /// What VoiceOver says: the label, the value, or both. Comes next.
+    /// What VoiceOver says, the label, the value, or both, which comes next.
     case text(String)
-    /// An accessibility identifier. The last resort.
+    /// An accessibility identifier, which is the last resort.
     case identifier(String)
 
     /// A button with this exact label.

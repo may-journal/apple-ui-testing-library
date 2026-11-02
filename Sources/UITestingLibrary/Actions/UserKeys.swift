@@ -1,13 +1,10 @@
 /// Keys and the clipboard, named as user-event's `keyboard`, `tab`, `clear`, `copy`, `cut`
-/// and `paste` are. Each acts in the field being edited, through its own key commands and
-/// edit actions, and waits for the screen to settle after; a key's shortcut answers with or
-/// without one (ADR 0010, ADR 0011).
+/// and `paste` are. Each acts in the field being edited and waits for the screen to
+/// settle (ADR 0010, ADR 0011).
 extension User {
     /// Presses `key` with `modifiers` held, as user-event's `keyboard("{Meta>}3{/Meta}")`
-    /// does: `presses("3", with: [.command])`. A shortcut or app command that answers the
-    /// key runs first, with or without a field being edited. Otherwise the field being
-    /// edited hears it: a character types, Enter submits a one-line field, End and Home move
-    /// to its ends, and Tab moves to the next field.
+    /// does: `presses("3", with: [.command])`. A shortcut that answers the key runs first,
+    /// and otherwise the field hears it as a character, Enter, End, Home or Tab.
     public func presses(
         _ key: Key, with modifiers: Set<Modifier> = [],
         file: StaticString = #filePath, line: UInt = #line
@@ -28,7 +25,7 @@ extension User {
     }
 
     /// Moves focus from the field being edited to the next field, or with `backward` to the
-    /// one before, as user-event's `tab()` and `tab({shift: true})` do.
+    /// previous one, as user-event's `tab()` does.
     public func tabs(
         backward: Bool = false,
         file: StaticString = #filePath, line: UInt = #line
@@ -104,8 +101,8 @@ extension User {
         }
     }
 
-    /// Finds the field `query` names and makes it the one being edited, as a tap into it
-    /// does, failing with `verb` in the message.
+    /// Finds the field `query` names and makes it the one being edited, as a tap does,
+    /// failing with `verb` in the message.
     private func startsEditing(_ query: Query, _ verb: String, _ location: SourceLocation)
         async throws
     {

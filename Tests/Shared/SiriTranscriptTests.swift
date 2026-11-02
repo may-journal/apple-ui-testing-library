@@ -1,7 +1,7 @@
 import Testing
 import UITestingLibrarySystem
 
-/// Transcript policy only. System/SiriTests owns the real Siri routing evidence.
+/// Tests transcript policy only, since System/SiriTests owns the real Siri routing evidence.
 extension UITestingLibraryTests {
     @MainActor
     @Suite struct SiriTranscriptPolicy {

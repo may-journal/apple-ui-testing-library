@@ -32,8 +32,8 @@ extension UITestingLibraryTests {
             let user = User(screen)
             try await user.doesNotSee(.button("Delete"))
             #if os(macOS)
-            // AppKit shows a row's swipe actions only for a trackpad's touches, which no event
-            // made in process carries, so the swipe fails clearly (ADR 0011).
+            // AppKit shows a row's swipe actions only for a trackpad's touches, which no
+            // in-process event carries, so the swipe fails clearly (ADR 0011).
             await #expect(throws: Failure.self) { try await user.swipes(.left, .text("Milk")) }
             #else
             try await user.swipes(.left, .text("Milk"))

@@ -40,10 +40,9 @@ extension User {
         }
     }
 
-    /// Watches the screen for `duration` and fails as soon as anything on screen matches
-    /// `query`. `doesNotSee` returns once the match is gone; this watches the whole time
-    /// (ADR 0010). A screen that only ever read empty fails, since it proved nothing
-    /// (ADR 0004).
+    /// Watches the screen for `duration` and fails as soon as anything matches `query`,
+    /// where `doesNotSee` returns once the match is gone (ADR 0010). A screen that only
+    /// ever read empty fails, because it proved nothing (ADR 0004).
     public func neverSees(
         _ query: Query, for duration: Duration,
         file: StaticString = #filePath, line: UInt = #line
@@ -71,8 +70,7 @@ extension User {
     }
 
     /// Waits until the system share sheet is up over the app. It draws outside the app's
-    /// tree, so this finds that it opened, never what it holds; drive it as System UI in the
-    /// usage guide shows (ADR 0010).
+    /// tree, so this finds only that it opened; the usage guide shows System UI (ADR 0010).
     public func seesShareSheet(
         file: StaticString = #filePath, line: UInt = #line
     ) async throws {
