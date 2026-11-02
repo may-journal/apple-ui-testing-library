@@ -1,8 +1,8 @@
 import Foundation
 import SwiftUI
 
-/// A button that holds the main thread for `stall` before it counts, as slow work on the
-/// main thread does, beside one that counts at once.
+/// A button that holds the main thread for `stall` before it counts, beside one that
+/// counts at once.
 struct FreezeScreen: View {
     let stall: Duration
     @State private var count = 0

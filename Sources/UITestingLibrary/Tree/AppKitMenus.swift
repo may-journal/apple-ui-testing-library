@@ -2,9 +2,8 @@
 import AppKit
 
 /// Reads and drives the menu a control opens, as VoiceOver does once it moves into the
-/// menu. A press opens the menu, which AppKit tracks in its own run loop mode while the main
-/// queue keeps running; while it is open, its items are all a person reads, and a press on
-/// one runs it and closes the menu.
+/// menu. A press opens the menu, and while it is open a press on an item runs it and
+/// closes the menu.
 extension Backend {
     /// The items of the open menu, in order, or nil when no menu is open.
     static func menuNodes() -> [Node]? {
@@ -45,8 +44,8 @@ extension Backend {
         OpenMenu.shared.menu == nil && OpenMenu.shared.tracking != nil
     }
 
-    /// Opens `menu` as a person's hold opens a context menu, without drawing it: its items
-    /// become what a read holds until an item runs or the menu closes.
+    /// Opens `menu` as a hold opens a context menu, without drawing it. Its items become
+    /// what a read holds until an item runs or the menu closes.
     static func holdMenu(_ menu: NSMenu) {
         OpenMenu.watch()
         menu.update()

@@ -1,13 +1,11 @@
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 
-/// Drags an element by a distance as a mouse does: a press, moves and a release, made in
-/// process and handed straight to the test's own window, which sits off every display
-/// (ADR 0011).
+/// Drags an element by a distance as a mouse does, with a press, moves and a release
+/// made in process (ADR 0011).
 extension Backend {
     /// Presses the middle of the element, moves by `offset` at `speed` and lets go. Each event
-    /// is stamped as a mouse at that speed would stamp it, so the view's drag gesture hears
-    /// the speed as well as the distance. Once pressed, every move and the release are sent.
+    /// is stamped as a mouse would stamp it, so the drag gesture hears the speed.
     static func drag(
         _ node: Node, by offset: CGVector, _ speed: DragSpeed, in window: HostWindow
     ) async -> MoveOutcome {
@@ -37,8 +35,8 @@ extension Backend {
         return .moved
     }
 
-    /// Whether a swipe AppKit could not open must fail rather than flick: whether the element
-    /// sits in a list's row, whose swipe actions show only for a trackpad's touches.
+    /// Whether a swipe must fail rather than flick. A list row's swipe actions show only
+    /// for a trackpad's touches.
     static func refusesSwipe(_ node: Node, in window: HostWindow) -> Bool {
         var view = hitView(at: node.element.frame, in: frontWindow(of: window.window))
         while let current = view {

@@ -1,16 +1,12 @@
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 
-/// Presses keys as the keyboard sends them: a key goes to the window's key equivalents
-/// first, so a shortcut answers it, then to the app's menu commands, then to the field
-/// being edited, whose delegate hears its editing command first. Also clears a field and
-/// finds the system share picker over the window.
+/// Presses keys as the keyboard sends them, to shortcuts first, then menu commands, then
+/// the field being edited. It clears a field and finds the share picker over the window.
 extension Backend {
-    /// Presses `key` with `modifiers`, as the keyboard sends it: the window's shortcuts hear
-    /// it first, then the app's menu commands, then the field being edited. Whether one of
-    /// them took it. Enter runs insert newline, which ends a one-line field's editing and
-    /// sends its action; Home and End move to the start and end, as user-event's keys do,
-    /// where a Mac's would scroll.
+    /// Presses `key` with `modifiers`, as the keyboard sends it, and returns whether one
+    /// of the shortcuts, menu commands or the field took it. Enter ends a one-line field's
+    /// editing, and Home and End move to its ends as user-event's keys do.
     static func press(
         _ key: Key, with modifiers: Set<Modifier>, nodes: [Node], in window: HostWindow
     ) -> Bool {
@@ -27,8 +23,8 @@ extension Backend {
         return true
     }
 
-    /// The editing command a key runs, by the modifiers held, where it runs one directly:
-    /// Enter inserts a newline, and Home and End move to the ends, with Shift selecting.
+    /// The editing command a key runs directly, by the modifiers held. Enter inserts a
+    /// newline, and Home and End move to the ends, with Shift selecting.
     private static let commands: [Key: [Set<Modifier>: Selector]] = [
         .enter: [[]: #selector(NSResponder.insertNewline(_:))],
         .end: [
@@ -72,8 +68,8 @@ extension Backend {
         .down: (125, string(NSDownArrowFunctionKey)), .up: (126, string(NSUpArrowFunctionKey)),
     ]
 
-    /// A key's virtual key code and the characters it types: a named key's from the table
-    /// above, and a character's from where it sits on the US keyboard.
+    /// A key's virtual key code and the characters it types. A named key's come from the
+    /// table above, and a character's from the US keyboard.
     private static func codeAndCharacters(of key: Key) -> (UInt16, String)? {
         guard case .character(let character) = key else { return keys[key] }
         let code = usKeyboard[Character(character.lowercased())]
@@ -134,9 +130,8 @@ extension Backend {
         frontWindow(of: window.window).firstResponder as? NSTextView
     }
 
-    /// Whether the system share picker is up over the window. It opens in a popover window
-    /// of its own, whose controller shows the share sheet from another process; AppKit names
-    /// no public type for it, so the controller's class name tells it (ADR 0010).
+    /// Whether the system share picker is up over the window. AppKit names no public type
+    /// for it, so the controller's class name tells it (ADR 0010).
     static func isSharing(over window: HostWindow) -> Bool {
         NSApp.windows.contains { shown in
             guard shown.isVisible, let controller = shown.contentViewController else {

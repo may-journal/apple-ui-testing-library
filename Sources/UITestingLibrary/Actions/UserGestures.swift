@@ -24,8 +24,8 @@ extension User {
         }
     }
 
-    /// Presses and holds the element `query` finds, which opens its context menu: while it
-    /// is open, a read holds only the menu's items, as for a tapped menu (0003.7).
+    /// Presses and holds the element `query` finds, which opens its context menu. While it
+    /// is open, a read holds only the menu's items (0003.7).
     public func longPresses(
         _ query: Query,
         file: StaticString = #filePath, line: UInt = #line
@@ -41,9 +41,8 @@ extension User {
         }
     }
 
-    /// Swipes the element `query` finds. A list row shows its swipe actions: left shows the
-    /// trailing ones, right the leading ones. Any other element is flicked 100 points left
-    /// or right, as `drags(_:by:speed:)` flicks it.
+    /// Swipes the element `query` finds, where a list row shows its swipe actions. Any
+    /// other element is flicked 100 points, as `drags(_:by:speed:)` flicks it.
     public func swipes(
         _ direction: SwipeDirection, _ query: Query,
         file: StaticString = #filePath, line: UInt = #line
@@ -87,8 +86,8 @@ extension User {
         }
     }
 
-    /// Steps the slider or stepper `query` finds up or down by one, as VoiceOver's swipe up
-    /// and down does, and waits for its value to change.
+    /// Steps the slider or stepper `query` finds up or down by one, as VoiceOver does,
+    /// and waits for its value to change.
     public func adjusts(
         _ direction: AdjustDirection, _ query: Query,
         file: StaticString = #filePath, line: UInt = #line

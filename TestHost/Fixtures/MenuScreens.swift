@@ -15,8 +15,8 @@ struct MenuScreen: View {
     }
 }
 
-/// A navigation stack with the Add menu in its content and a More menu in its navigation bar,
-/// holding Export and Print, and a line saying which ran.
+/// A navigation stack with an Add menu in its content, a More menu in its bar, and a
+/// line saying which item ran.
 struct BarMenuScreen: View {
     @State private var chosen = "Nothing chosen"
 
@@ -43,7 +43,7 @@ struct BarMenuScreen: View {
 }
 
 /// A "…" Options menu choosing Detailed or Simple, under a line drawn in that choice, so
-/// each choice draws the view around the menu again.
+/// each choice redraws the view.
 struct RedrawnMenuScreen: View {
     @State private var simple = false
 

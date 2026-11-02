@@ -2,16 +2,14 @@ import CoreGraphics
 import Foundation
 import ObjectiveC
 
-/// A trackpad's magnify event, made as Quartz makes one, for a Mac app and for the iOS app
-/// running on a Mac alike. AppKit makes gesture events only from Quartz's, and Quartz names
-/// neither a gesture event's fields nor how to place one in a window, so its functions are
-/// looked up by name and its fields given by number. Each event is checked to read back as
-/// a magnify at its point, so a change fails the pinch, never passes it (ADR 0011).
+/// A trackpad's magnify event, made as Quartz makes one, for a Mac app and the iOS app on
+/// a Mac. Quartz functions are looked up by name, and each event is checked to read back
+/// as a magnify (ADR 0011).
 @MainActor
 enum Trackpad {
     /// A magnify event scaling by `amount` at `point` in the window numbered `number`, whose
-    /// points count up from its bottom, `height` points below its top. Nil where the app
-    /// runs on no Mac, or Quartz no longer makes the event as named here.
+    /// points count up from its bottom. Nil where the app runs on no Mac, or Quartz no
+    /// longer makes the event.
     static func magnify(
         by amount: Double, _ phase: GesturePhase, at point: CGPoint,
         inWindow number: Int, height: CGFloat

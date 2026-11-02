@@ -40,7 +40,7 @@ public struct SiriFailure: Error, CustomStringConvertible {
     }
 }
 
-/// A captured transcript. Validation alone does not prove Siri ran an app intent.
+/// A captured transcript, where validation alone does not prove Siri ran an app intent.
 public struct SiriTranscript: Sendable {
     public let phrase: String
     public let observed: [String]
@@ -73,8 +73,7 @@ public struct SiriTranscript: Sendable {
 
 extension SystemSession {
     /// Sends recognized speech through Siri, then waits for the expected visible answer.
-    /// This needs an iOS UI test runner, with Siri enabled and the app's shortcuts installed.
-    /// It checks the displayed transcript; it does not record synthesized audio.
+    /// This needs an iOS UI test runner with Siri and the app's shortcuts installed.
     public func askSiri(
         _ phrase: String, expecting answer: String,
         file: StaticString = #filePath, line: UInt = #line

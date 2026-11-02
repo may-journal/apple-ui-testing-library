@@ -4,10 +4,9 @@ import CoreGraphics
 /// its element, sends the pointer's events in process, and waits for the screen to settle
 /// after (ADR 0011).
 extension User {
-    /// Drags the element `query` finds by `offset` and lets go: from its middle, right and
-    /// down by the offset's points, as SwiftUI counts them. Its drag gesture hears the speed
-    /// too: a slow drag comes to rest before letting go, and a flick lets go while moving
-    /// fast. It needs a pointer, so on iOS it runs where the app runs on a Mac.
+    /// Drags the element `query` finds from its middle by `offset` and lets go, while its
+    /// drag gesture hears the speed. A slow drag rests before letting go, a flick lets go
+    /// moving fast, and iOS needs the app on a Mac.
     public func drags(
         _ query: Query, by offset: CGVector, speed: DragSpeed,
         file: StaticString = #filePath, line: UInt = #line

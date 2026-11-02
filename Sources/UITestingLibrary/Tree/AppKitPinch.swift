@@ -1,8 +1,8 @@
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 
-/// Pinches as two fingers on a trackpad do: a magnify gesture's events, made in process and
-/// handed straight to the test's own window, which sits off every display (ADR 0011).
+/// Pinches as two fingers on a trackpad do, with magnify events made in process and handed
+/// to the test's own window (ADR 0011).
 extension Backend {
     /// Whether the window is ready for a pinch. AppKit routes the events to the window
     /// wherever it sits, so it stays off every display and is always ready.
@@ -10,9 +10,8 @@ extension Backend {
         true
     }
 
-    /// Pinches the middle of the element in or out: a began, a few changed and an ended
-    /// magnify event, a run loop turn apart. Whether the element is drawn and the events
-    /// could be made.
+    /// Pinches the middle of the element in or out with a began, a few changed and an ended
+    /// magnify event. Returns whether the element is drawn and the events could be made.
     static func pinch(_ direction: PinchDirection, _ node: Node, in window: HostWindow) async
         -> Bool
     {
