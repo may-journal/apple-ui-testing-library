@@ -5,8 +5,7 @@ import UIKit
 /// keyboard, a three-finger scroll, and the two-finger scrub that goes back.
 extension Backend {
     /// Opens the menu of the control under the element, activates the element, or presses
-    /// the control under it when it answers no activation of its own, such as a navigation
-    /// bar's Back; whether anything happened.
+    /// the control under it, such as a Back button. Returns whether anything happened.
     static func activate(_ node: Node, in window: HostWindow) -> Bool {
         guard node.element.isEnabled else { return false }
         guard let object = node.object as? NSObject else { return false }
@@ -18,9 +17,7 @@ extension Backend {
     }
 
     /// Presses the alert button the element shows, as a click on the Mac's native alert
-    /// does. A Mac running the iOS app draws the alert itself, so UIKit's hidden copy answers
-    /// no activation; the alert runs the button's handler as it closes. A disabled button
-    /// presses nothing, as for a person.
+    /// does. A disabled button presses nothing, as for a person.
     private static func pressesAlertButton(_ object: NSObject) -> Bool {
         var responder = object as? UIResponder
         while let current = responder, !(current is UIAlertController) { responder = current.next }

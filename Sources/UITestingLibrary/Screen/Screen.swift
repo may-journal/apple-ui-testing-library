@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// A root view drawn in a key window of the host app. One screen is open at a time;
-/// rendering another closes it (ADR 0005). Closing runs the canary (ADR 0004).
+/// A root view drawn in a key window of the host app. Rendering another screen closes it,
+/// and closing runs the canary (ADR 0005, ADR 0004).
 @MainActor
 public final class Screen {
     /// The window the root view is drawn in.

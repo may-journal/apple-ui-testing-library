@@ -56,8 +56,8 @@ final class Idle {
     private var observer: CFRunLoopObserver?
     private var timer: Timer?
 
-    /// Suspends until the main run loop is about to sleep, after every observer that draws,
-    /// or until a pause passes, if the run loop never rests.
+    /// Suspends until the main run loop is about to sleep, after every drawing observer,
+    /// or until a pause passes.
     static func next() async {
         let idle = Idle()
         await withCheckedContinuation { done in

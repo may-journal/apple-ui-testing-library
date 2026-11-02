@@ -2,13 +2,12 @@
 import UIKit
 
 /// Reads and drives the menu a control opens, as VoiceOver does once it moves into the
-/// menu. A tap opens the menu through the control's context menu interaction; while it is
-/// open, its items are all a person reads, and a tap on one runs it and closes the menu.
+/// menu. A tap opens the menu through the control's context menu interaction, and a tap
+/// on an item runs it and closes the menu.
 extension Backend {
-    /// Remembers the menu interaction of the control under the element, if it has one, so
-    /// the next read can ask for the menu it opens. A control whose primary action is its
-    /// menu, such as a navigation bar's menu button, opens it here: its own activation runs
-    /// nothing. A disabled control opens nothing. Whether this opened the menu.
+    /// Remembers the menu interaction of the control under the element, so the next read
+    /// can ask for its menu. A disabled control opens nothing, and the result says whether
+    /// this opened the menu.
     static func opensMenu(under object: NSObject, in window: UIWindow) -> Bool {
         let point = window.convert(object.accessibilityActivationPoint, from: nil)
         var view = window.hitTest(point, with: nil)
@@ -66,8 +65,8 @@ extension Backend {
     /// that comes before the cancelled menu's tracking ends, so every act settles after it.
     static var isMenuClosing: Bool { OpenMenu.shared.isClosing }
 
-    /// Opens `menu` as a person's hold opens a context menu, without drawing it: its items
-    /// become what a read holds until an item runs or the menu closes.
+    /// Opens `menu` as a hold opens a context menu, without drawing it. Its items become
+    /// what a read holds until an item runs or the menu closes.
     static func holdMenu(_ menu: UIMenu) {
         OpenMenu.shared.hold(menu)
     }
@@ -78,14 +77,9 @@ extension Backend {
     }
 }
 
-/// The menu a tapped control opened. UIKit answers the visible menu once: on a Mac running
-/// the iOS app, asking again finds nothing and can close the Mac's menu. So the menu is
-/// asked for until it answers, then kept until it closes.
-///
-/// That Mac draws the menu itself and tracks it in its own run loop mode, while the main
-/// queue keeps running. Closing UIKit's menu leaves the Mac's tracking, so it is cancelled
-/// by name, as a click outside would; a person closing it ends the menu here too. On iOS
-/// itself the Mac's notifications never post.
+/// The menu a tapped control opened, kept until it closes because asking again on a Mac
+/// can close it. A Mac tracks the menu in its own run loop mode, so closing it cancels
+/// that tracking by name.
 @MainActor
 private final class OpenMenu: NSObject {
     static let shared = OpenMenu()

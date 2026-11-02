@@ -2,12 +2,11 @@
 import UIKit
 
 /// Drags in UIKit through the drag and drop interactions under the element and the target,
-/// as their delegates hear a person's drag, in sessions that never leave the process.
+/// as their delegates hear a person's drag.
 extension Backend {
-    /// Drags the element onto `target`, as a person's touch and hold, move and lift do: the
-    /// drag interaction under the element gives the items it would lift there, and the drop
-    /// interaction under the target hears them arrive and drop, through their delegates, in
-    /// sessions that never leave the process.
+    /// Drags the element onto `target`, as a touch and hold, move and lift do. The drag
+    /// interaction gives the items it would lift, and the drop interaction under the target
+    /// hears them drop.
     static func drag(_ node: Node, onto target: Node, in window: HostWindow) async -> DragOutcome {
         guard let from = node.object as? NSObject, let onto = target.object as? NSObject else {
             return .noDrag
@@ -75,8 +74,8 @@ extension Backend {
     }
 }
 
-/// The parts of a drag a drag and drop delegate reads: where it is, what it carries, and
-/// that it stays in this app.
+/// The parts of a drag a delegate reads: where it is, what it carries, and that it
+/// stays in this app.
 private class Session: NSObject {
     let point: CGPoint
     let window: UIWindow

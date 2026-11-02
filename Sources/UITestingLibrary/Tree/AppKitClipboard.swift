@@ -1,8 +1,8 @@
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 
-/// Drives the clipboard in the AppKit field being edited, as its Edit menu items do: each
-/// command goes up the responder chain from the field.
+/// Drives the clipboard in the AppKit field being edited, as its Edit menu does, sending
+/// each command up the responder chain.
 extension Backend {
     /// Runs the clipboard command in the field being edited; whether a responder took it.
     static func edit(_ command: EditCommand, in window: HostWindow) -> Bool {
@@ -25,8 +25,8 @@ extension Backend {
     }
 }
 
-/// The general pasteboard as it was before a test's first clipboard step, put back as the
-/// screen closes, so a test never leaves the person's clipboard changed.
+/// The general pasteboard from before a test's first clipboard step, put back as the
+/// screen closes, so a test never changes the clipboard.
 @MainActor
 enum Clipboard {
     private static var kept: [NSPasteboardItem]?

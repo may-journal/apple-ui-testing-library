@@ -92,8 +92,8 @@ struct FieldScreen: View {
             TextField("Item", text: $item).focused($editing)
             Text("Typed: \(item)")
         }
-        // SwiftUI on the Mac drops a focus set while the field first appears, so the focus
-        // waits one turn of the main queue, as a Mac app's own code does.
+        // SwiftUI on the Mac drops a focus set as the field first appears, so the focus
+        // waits one turn of the main queue.
         .onAppear { DispatchQueue.main.async { editing = true } }
     }
 }

@@ -44,17 +44,17 @@ public struct AccessibilityTree {
     public var onScreen: [Element] { nodes.filter(\.isOnScreen).map(\.element) }
 }
 
-/// Which way a person scrolls: down shows what lies below, up what lies above.
+/// The direction a person scrolls: down shows what lies below, up what lies above.
 public enum ScrollDirection: Sendable, Equatable {
     case down
     case up
 }
 
-/// A key a person presses, as user-event's `keyboard` names them: `{Enter}` and `{End}` by
-/// name, and any other key by the character it types, such as `"3"`.
+/// A key a person presses, named as user-event names it. `{Enter}` and `{End}` go by
+/// name, and any other key by the character it types.
 public enum Key: Sendable, Hashable, CaseIterable, ExpressibleByExtendedGraphemeClusterLiteral {
-    /// The key that types `character`, such as `"3"` or `"k"`: in a field, it types the
-    /// character; with Command, it runs the app's shortcut for it.
+    /// The key that types `character`, such as `"3"`. In a field it types the
+    /// character, and with Command it runs the app's shortcut.
     case character(Character)
     /// Enter, the Return key: submits a one-line field, or starts a new line in a field of many.
     case enter
@@ -69,8 +69,8 @@ public enum Key: Sendable, Hashable, CaseIterable, ExpressibleByExtendedGrapheme
     case tab
     /// Delete, the Backspace key: deletes the character before the cursor, or the selection.
     case delete
-    /// The arrow keys: move the cursor a character left or right, or to the start or end of
-    /// a one-line field for up and down. With Shift they select as they move.
+    /// The arrow keys move the cursor a character, or to an end of a one-line field.
+    /// With Shift they select as they move.
     case left, right, up, down
 
     /// The keys named beyond the characters they type.
@@ -93,44 +93,41 @@ public enum Modifier: Sendable, Hashable, CaseIterable {
     case command, shift, option, control
 }
 
-/// Which way a person swipes a row: left shows its trailing actions, right its leading ones.
+/// The direction a person swipes a row: left shows trailing actions, right leading ones.
 public enum SwipeDirection: Sendable, Equatable {
     case left
     case right
 }
 
-/// Which way a person adjusts a slider or stepper: up steps its value up, down steps it down.
+/// The direction a person adjusts a slider or stepper: up raises its value, down lowers it.
 public enum AdjustDirection: Sendable, Equatable {
     case up
     case down
 }
 
-/// Which way a person pinches: in draws two fingers together, which zooms out; out spreads
-/// them apart, which zooms in.
+/// The direction a person pinches: in draws two fingers together to zoom out; out spreads
+/// them apart to zoom in.
 public enum PinchDirection: Sendable, Equatable {
     case `in`
     case out
 
-    /// A trackpad's magnify events for the pinch, each with how much it scales by: a began,
-    /// five steps that shrink to half or grow by half, and an ended.
+    /// A trackpad's magnify events for the pinch: a began, five steps that shrink
+    /// to half or grow by half, and an ended.
     var events: [(GesturePhase, Double)] {
         let step = self == .in ? -0.1 : 0.1
         return [(.began, 0)] + Array(repeating: (.changed, step), count: 5) + [(.ended, 0)]
     }
 }
 
-/// How fast a person drags an element by a distance: slowly, coming to rest before letting
-/// go, or as a flick, letting go while still moving fast.
+/// How fast a person drags an element: slowly, resting before letting go,
+/// or as a flick, letting go while still moving fast.
 public enum DragSpeed: Sendable, Equatable {
     case slow
     case flick
 
-    /// The drag's moves after the press, each as how far along the offset it is and how many
-    /// seconds after the press its event is stamped. The release comes with the last. A slow
-    /// drag moves as a mouse reports, 60 times a second; a flick covers the offset in a few
-    /// quick moves. A slow drag's last move goes nowhere, 0.2 seconds on: a still sample, which
-    /// a drag gesture reads as a rest. The iOS app on a Mac stamps each touch as it arrives,
-    /// so there that still sample alone tells a slow drag from a flick.
+    /// The drag's moves after the press, each with its progress along the offset and its
+    /// seconds after the press. A slow drag moves 60 times a second and ends with a still
+    /// sample that a drag gesture reads as a rest.
     var moves: [(progress: CGFloat, time: TimeInterval)] {
         let count = self == .slow ? 30 : 4
         let interval = self == .slow ? 1.0 / 60 : 0.008

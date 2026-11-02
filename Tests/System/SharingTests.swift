@@ -2,8 +2,8 @@ import UITestingLibrary
 import UITestingLibrarySystem
 import XCTest
 
-/// Requirement 0008: system sharing, read from the destination's received bytes. Also 0005.6
-/// and 0006.4, which a system session proves.
+/// Requirement 0008: system sharing, read from the destination's received bytes. A system
+/// session also proves 0005.6 and 0006.4.
 @MainActor
 final class SharingTests: XCTestCase {
     private var session: SystemSession!

@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
-# Run both requirement suites, then print time per host and phase from the library's signposts.
-# Usage: make requirements-timing (the Makefile calls this script).
-# Inputs: config/timing-phases.json, which names each phase by its code. The signposts come
-#   from the unified log since the run began.
-# Outputs: a table on stdout with one row per host and phase: count, total ms and mean ms.
-#   Exits with the status of the test run, and prints the table even after a failing test.
-# How it works: docs/architecture/04-code.md, Tests.
+# Prints time per host and phase from the library's signposts, run with `make requirements-timing`.
+# It names each phase from config/timing-phases.json, and docs/architecture/04-code.md, Tests, explains the rest.
 set -uo pipefail
 
 here="$(cd "$(dirname "$0")" && pwd)"

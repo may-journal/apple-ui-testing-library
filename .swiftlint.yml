@@ -1,6 +1,5 @@
-# SwiftLint, run by the fitness `swiftlint` check as `swiftlint lint --strict`.
-# Lines wrap with `make format`, which runs swift-format with .swift-format.
-# Thresholds: complexity 5, file and type length 200, function body 40, line length 100.
+# The fitness `swiftlint` check runs `swiftlint lint --strict`, and `make format` wraps lines.
+# Thresholds are complexity 5, file and type length 200, function body 40, line length 100.
 
 included:
   - Sources

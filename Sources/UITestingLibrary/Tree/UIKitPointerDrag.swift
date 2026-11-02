@@ -1,14 +1,11 @@
 #if canImport(UIKit)
 import UIKit
 
-/// Drags an element by a distance as a Mac's mouse does, where the iOS app runs on a Mac: the
-/// scene's input view takes a press, moves and a release made in process, which UIKit hears
-/// as a touch that moves and lifts. The window stays off every display (ADR 0011).
+/// Drags an element by a distance as a Mac's mouse does, where the iOS app runs on a Mac.
+/// The scene's input view takes a press, moves and a release made in process (ADR 0011).
 extension Backend {
-    /// Presses the middle of the element, moves by `offset` at `speed` and lets go. UIKit
-    /// stamps each touch as it arrives, so the view's drag gesture hears a slow drag by its
-    /// still last move, and a flick by letting go mid-move. Once pressed, every move and the
-    /// release are sent, so no touch stays down.
+    /// Presses the middle of the element, moves by `offset` at `speed` and lets go. A slow
+    /// drag ends on a still move, and a flick lets go mid-move.
     static func drag(
         _ node: Node, by offset: CGVector, _ speed: DragSpeed, in window: HostWindow
     ) async -> MoveOutcome {
@@ -39,10 +36,8 @@ extension Backend {
 }
 
 extension MacWindow {
-    /// Hands a press, move or release at `point` straight to the scene's input view, the owner
-    /// of its tracking area, as a key window does. The window is never key, since the app
-    /// never comes forward, so it would keep a lone press to make itself key, and the scene
-    /// would hear no touch. Whether the input view and event were found.
+    /// Hands a press, move or release at `point` straight to the scene's input view, as a
+    /// key window does. The window is never key, so it would keep a lone press for itself.
     func press(_ type: Mouse, at point: CGPoint) -> Bool {
         guard let view = trackingArea?.value(forKey: "owner") as? NSObject,
             let event = mouse(type, at: point, clicks: 1)

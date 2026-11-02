@@ -79,8 +79,8 @@ struct AdjustScreen: View {
 }
 
 extension View {
-    /// Names a control for VoiceOver on a Mac, which reads a slider's or stepper's visible
-    /// label as text apart from it; iOS names the control by its label already.
+    /// Names a control for VoiceOver on a Mac, which reads a slider's visible label as
+    /// separate text. iOS names the control by its label already.
     func namedOnMac(_ name: String) -> some View {
         #if canImport(UIKit)
         self
@@ -123,8 +123,8 @@ struct PinchScreen: View {
     }
 }
 
-/// A card that reports, as its drag gesture ends, how far it moved and whether it was flicked:
-/// let go while still moving fast, so its predicted end lies well past where it stopped.
+/// A card that reports, as its drag gesture ends, how far it moved and whether it was
+/// flicked. A flick lets go while still moving fast, past where it stopped.
 struct DragByScreen: View {
     @State private var report = "Not dragged"
 

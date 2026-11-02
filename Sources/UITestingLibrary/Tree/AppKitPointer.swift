@@ -1,11 +1,9 @@
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 
-/// Drives AppKit with the pointer events a mouse or trackpad sends, built in process and
-/// handed straight to the test's own window, which sits off every display: clicks, hovers
-/// and drags (ADR 0011). VoiceOver's own entry points come first where AppKit has them:
-/// increment and decrement adjust a control, and a view's context menu opens as a press
-/// and hold does.
+/// Drives AppKit with pointer events built in process and handed to the test's own window,
+/// for clicks, hovers and drags (ADR 0011). VoiceOver's own entry points come first where
+/// AppKit has them.
 extension Backend {
     /// A place for the window off every display: past the right and top edges of them all.
     static var offScreenOrigin: CGPoint {
@@ -34,9 +32,8 @@ extension Backend {
         return true
     }
 
-    /// Opens the context menu of the view under the element, as a press and hold or a
-    /// secondary click does, without drawing it: the view answers its menu for that click,
-    /// and its items become what a read holds. Whether the view offers one.
+    /// Opens the context menu of the view under the element without drawing it, so its
+    /// items become what a read holds. Returns whether the view offers one.
     static func longPress(_ node: Node, in window: HostWindow) -> Bool {
         let front = frontWindow(of: window.window)
         guard let point = middle(of: node),

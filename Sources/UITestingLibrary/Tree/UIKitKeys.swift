@@ -1,16 +1,11 @@
 #if canImport(UIKit)
 import UIKit
 
-/// Presses keys as a hardware keyboard sends them: a key command up the responder chain,
-/// from the field being edited or else the view on top, answers a key first, as a shortcut
-/// does; otherwise the field edits as the key does. Also clears a field and finds the
-/// system share sheet presented over the window.
+/// Presses keys as a hardware keyboard sends them, so a key command up the responder chain
+/// answers first and otherwise the field edits. It clears a field and finds the share sheet.
 extension Backend {
-    /// Presses `key` with `modifiers`; whether a key command or the field being edited took
-    /// it. A character types in the field. Enter submits a one-line field, as the field
-    /// hears the key: its delegate first, then its end-on-exit action. A field of many lines
-    /// takes a new line instead. Tab moves to the next field in reading order, or the one
-    /// before with Shift.
+    /// Presses `key` with `modifiers` and returns whether a key command or the field took
+    /// it. Tab moves to the next field, or the one before with Shift.
     static func press(
         _ key: Key, with modifiers: Set<Modifier>, nodes: [Node], in window: HostWindow
     ) -> Bool {
@@ -51,8 +46,8 @@ extension Backend {
         .right: { field, shift, _ in move(field, by: 1, extending: shift) },
     ]
 
-    /// Runs the key command a responder from `first` up offers for the key, as the keyboard
-    /// does before a field hears it; whether one did.
+    /// Runs the key command a responder from `first` up offers, as the keyboard does before
+    /// a field hears it. Returns whether one did.
     private static func runsKeyCommand(
         _ key: Key, _ modifiers: Set<Modifier>, from first: UIResponder
     ) -> Bool {
@@ -75,8 +70,8 @@ extension Backend {
         return false
     }
 
-    /// The input a key names a key command by: a character's own, lowercased as a key command
-    /// lists it, or a named key's from the table below.
+    /// The input a key names a key command by. A character's own is lowercased as a key
+    /// command lists it, and a named key's comes from the table below.
     private static func input(of key: Key) -> String? {
         guard case .character(let character) = key else { return inputs[key] }
         return character.lowercased()
@@ -157,8 +152,8 @@ extension Backend {
         input.offset(from: input.beginningOfDocument, to: input.endOfDocument)
     }
 
-    /// Whether the system share sheet is up over the window: an activity view controller
-    /// presented there, alone or inside the sheet that holds it. It draws outside the app,
+    /// Whether the system share sheet is up over the window, as an activity view controller
+    /// presented there or inside its sheet. It draws outside the app,
     /// so only its controller is seen, never its contents.
     static func isSharing(over window: HostWindow) -> Bool {
         let windows = window.window.windowScene?.windows ?? [window.window]

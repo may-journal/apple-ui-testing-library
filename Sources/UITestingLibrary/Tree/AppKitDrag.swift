@@ -1,14 +1,12 @@
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 
-/// Drags in AppKit without the window server: the press and moves go to the test's window,
-/// the hosting view keeps the drag SwiftUI begins, and the view under the target hears it
-/// through its dragging destination methods (ADR 0011).
+/// Drags in AppKit without the window server. The test's window gets the press and moves,
+/// and the view under the target hears the drag (ADR 0011).
 extension Backend {
-    /// Drags the element onto `target`, as a press, a move and a release do. The press and
-    /// moves go to the window, so SwiftUI begins its drag; the window keeps the drag in
-    /// process, and the view under the target hears it arrive and drop through its dragging
-    /// destination methods, as the window server would call them (ADR 0011).
+    /// Drags the element onto `target`, as a press, a move and a release do. The window
+    /// keeps the drag in process, and the view under the target hears it through its
+    /// dragging destination methods (ADR 0011).
     static func drag(_ node: Node, onto target: Node, in window: HostWindow) async -> DragOutcome {
         let front = frontWindow(of: window.window)
         guard let start = middle(of: node), let end = middle(of: target) else {
@@ -78,8 +76,8 @@ extension Backend {
     }
 }
 
-/// What a dragging destination reads about a drag that never left the process: where it is,
-/// what it carries on a pasteboard of its own, and that it may copy or move.
+/// What a dragging destination reads about an in-process drag: where it is, what it
+/// carries, and that it may copy or move.
 private final class DraggingInfo: NSObject, NSDraggingInfo {
     private let window: NSWindow
     private let location: CGPoint

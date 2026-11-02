@@ -18,8 +18,8 @@ extension Backend {
         }
     }
 
-    /// The parts of the window a person reads, each with the frame it draws in: the toolbar
-    /// SwiftUI puts a navigation stack's items in, then the content below it.
+    /// The parts of the window a person reads, each with its frame. They are the toolbar
+    /// holding a navigation stack's items, then the content below it.
     private static func areas(of window: NSWindow) -> [(root: AnyObject, area: CGRect)] {
         let toolbars = (window.accessibilityChildren() ?? []).compactMap { $0 as? NSView }
             .filter { $0.accessibilityRole() == .toolbar }
@@ -56,9 +56,8 @@ extension Backend {
         for child in children { collect(child, in: area, of: window, into: &found) }
     }
 
-    /// What the object holds, as VoiceOver asks: through the accessibility protocol, or for
-    /// an element that answers only AppKit's older attribute protocol, such as a list's row
-    /// and cell, through its children attribute.
+    /// What the object holds, as VoiceOver asks, through the accessibility protocol. An
+    /// element with only AppKit's older attribute protocol answers through its children.
     private static func children(of object: AnyObject) -> [AnyObject] {
         if let listed = object.accessibilityChildren?(), !listed.isEmpty {
             return listed.map { $0 as AnyObject }
@@ -81,8 +80,8 @@ extension Backend {
         return !roles.contains(.text) || !isOnScreen(frame(of: object, in: window), in: area)
     }
 
-    /// Whether the object is a group with nothing in it, nothing to say and nothing to offer,
-    /// such as a hosting view whose root exposes nothing. VoiceOver never stops on one.
+    /// Whether the object is a group with nothing in it to say or offer, such as a hosting
+    /// view whose root exposes nothing. VoiceOver never stops on one.
     private static func isEmptyGroup(_ object: AnyObject) -> Bool {
         text(of: object, "accessibilityRole") == NSAccessibility.Role.group.rawValue
             && text(of: object, "accessibilityLabel") == nil

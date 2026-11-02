@@ -1,8 +1,8 @@
 import Foundation
 
 /// Times how long the main thread goes without answering, as a frozen screen feels to a
-/// person. A timer on the main run loop asks to fire every few milliseconds; a fire that
-/// comes late means the main thread was busy for the gap.
+/// person. A timer on the main run loop fires every few milliseconds, and a late fire
+/// means the main thread was busy.
 @MainActor
 final class Stalls {
     /// How often the timer asks to fire.
@@ -21,7 +21,7 @@ final class Stalls {
         return stalls
     }
 
-    /// Stops timing. The longest the main thread went without answering.
+    /// Stops timing and returns the longest the main thread went without answering.
     func longest() -> Duration {
         tick()
         timer?.invalidate()

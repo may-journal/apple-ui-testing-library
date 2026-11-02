@@ -2,9 +2,8 @@
 import ObjectiveC
 import UIKit
 
-/// The Mac window a scene draws in, when the iOS app runs on a Mac: AppKit is in the
-/// process then, and its window takes mouse events made in process, as the mouse sends
-/// them. UIKit names no public bridge to it, so it is reached by name (ADR 0011).
+/// The Mac window a scene draws in, when the iOS app runs on a Mac, taking mouse events
+/// made in process. UIKit names no public bridge to it, so it is reached by name (ADR 0011).
 @MainActor
 struct MacWindow {
     private let window: NSObject
@@ -49,9 +48,8 @@ struct MacWindow {
                 : CGPoint(x: all.maxX + 10_000, y: all.maxY + 10_000))
     }
 
-    /// Moves the window onto the first display, see-through and passing every click of the
-    /// person's own through, for a hover: the scene hears the pointer only where a display
-    /// shows it. Nothing shows, and the next screen moves it off again (ADR 0011).
+    /// Moves the window onto the first display, see-through and passing every click through,
+    /// for a hover. The next screen moves it off again (ADR 0011).
     func moveOnScreenUnseen() {
         guard isOffScreen, let display = Self.displays.first else { return }
         hide()
@@ -94,8 +92,8 @@ struct MacWindow {
         }
     }
 
-    /// The middle of `frame`, in a scene window's points, as a point in the Mac window,
-    /// which draws the scene scaled and counts up from the bottom.
+    /// The middle of `frame` as a point in the Mac window, which draws the scene scaled
+    /// and counts up from the bottom.
     func point(for frame: CGRect, in scene: UIWindow) -> CGPoint {
         let bounds = (content.value(forKey: "frame") as? CGRect) ?? .zero
         let width = scene.windowScene?.coordinateSpace.bounds.width ?? bounds.width

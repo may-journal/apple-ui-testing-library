@@ -2,11 +2,8 @@
 import ObjectiveC
 import UIKit
 
-/// Drives UIKit beyond a tap. VoiceOver's own entry points come first: increment and
-/// decrement adjust a control, and a view's context menu interaction and its drag and drop
-/// interactions answer as they do for a person, through their delegates. A double tap and
-/// a hover need the pointer: a Mac running the iOS app sends its mouse events in process to
-/// the scene's window, which sits off every display (ADR 0011).
+/// Drives UIKit beyond a tap, with VoiceOver's own entry points first. A double tap and a
+/// hover need the pointer, which a Mac running the iOS app sends in process (ADR 0011).
 extension Backend {
     /// Moves the scene's Mac window off every display, so nothing a test draws shows on
     /// screen. An iPhone or iPad has no other place to draw, so there it stays.
@@ -20,9 +17,8 @@ extension Backend {
         MacWindow.current?.isOffScreen ?? false
     }
 
-    /// Clicks the middle of the element twice, as a double click on a Mac sends, which the
-    /// iOS app hears as a double tap. Whether the app runs on a Mac, where events can be made
-    /// in process.
+    /// Clicks the middle of the element twice, which the iOS app hears as a double tap.
+    /// Returns whether the app runs on a Mac, where events can be made in process.
     static func doubleTap(_ node: Node, in window: HostWindow) async -> Bool {
         guard let mac = MacWindow.current else { return false }
         let point = mac.point(for: node.element.frame, in: window.window)
@@ -37,9 +33,8 @@ extension Backend {
         return true
     }
 
-    /// Opens the context menu of the view under the element, as a press and hold does,
-    /// without drawing it: the view's context menu interaction gives the menu it would show
-    /// there, and its items become what a read holds. Whether the view offers one.
+    /// Opens the context menu of the view under the element without drawing it, so its
+    /// items become what a read holds. Returns whether the view offers one.
     static func longPress(_ node: Node, in window: HostWindow) -> Bool {
         guard let object = node.object as? NSObject else { return false }
         let point = window.window.convert(object.accessibilityActivationPoint, from: nil)
