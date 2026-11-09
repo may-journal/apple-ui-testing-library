@@ -118,17 +118,17 @@ Numbers on classes and letters on relationships match the callout table. See [02
 | 2   | [`Screen`](../../Sources/UITestingLibrary/Screen/Screen.swift) draws a root view and closes it at teardown. | Drawing stays apart from reading. |
 | 3   | [`ScreenSize`](../../Sources/UITestingLibrary/Screen/ScreenSize.swift) is the fixed size a root is drawn at. | A fixed size makes layout the same on any Mac or simulator. |
 | 4   | [`Look`](../../Sources/UITestingLibrary/Screen/Look.swift) is the text size and appearance a root is drawn with. | A test checks a layout in each look a person can choose. |
-| 5   | [`HostWindow`](../../Sources/UITestingLibrary/Screen/HostWindow.swift) holds the platform branch ([ADR 0006](adr/0006-one-api-two-backends.md)). It keeps a Mac's window off every display ([ADR 0011](adr/0011-person-actions-in-process.md)). | One window per process ([ADR 0005](adr/0005-one-window-per-process.md)). |
+| 5   | [`HostWindow`](../../Sources/UITestingLibrary/Screen/HostWindow.swift) holds the platform branch ([ADR 0006](https://github.com/may-journal/apple-ui-testing-library/issues/127)). It keeps a Mac's window off every display ([ADR 0011](https://github.com/may-journal/apple-ui-testing-library/issues/132)). | One window per process ([ADR 0005](https://github.com/may-journal/apple-ui-testing-library/issues/126)). |
 | 6   | [`Query`](../../Sources/UITestingLibrary/Queries/Query.swift) matches elements by role and label, by text, or by identifier, with `Match.swift` in `Queries/`. | Matching rules live in one place. |
-| 7   | [`Role`](../../Sources/UITestingLibrary/Queries/Role.swift) is the roles a query names, each mapped to accessibility traits. | A role never matches static text that shares its label ([ADR 0002](adr/0002-query-priority.md)). |
-| 8   | [`Wait`](../../Sources/UITestingLibrary/Waits/Wait.swift) polls a condition until it holds or the deadline passes, with `Stalls.swift` in `Waits/`. | Every wait shares one deadline rule; stalls are timed on the main run loop ([ADR 0010](adr/0010-keys-watches-share-sheet.md)). |
+| 7   | [`Role`](../../Sources/UITestingLibrary/Queries/Role.swift) is the roles a query names, each mapped to accessibility traits. | A role never matches static text that shares its label ([ADR 0002](https://github.com/may-journal/apple-ui-testing-library/issues/123)). |
+| 8   | [`Wait`](../../Sources/UITestingLibrary/Waits/Wait.swift) polls a condition until it holds or the deadline passes, with `Stalls.swift` in `Waits/`. | Every wait shares one deadline rule; stalls are timed on the main run loop ([ADR 0010](https://github.com/may-journal/apple-ui-testing-library/issues/131)). |
 | 9   | [`ScreenReport`](../../Sources/UITestingLibrary/Reports/ScreenReport.swift) prints what is on and off screen. | A failure shows the screen as a person hears it. |
 | 10  | [`Failure`](../../Sources/UITestingLibrary/Reports/Failure.swift) is the one error every look and act throws. | Failures read the same everywhere. |
 | 11  | [`SourceLocation`](../../Sources/UITestingLibrary/Reports/SourceLocation.swift) is the test line a failure names. | The test fails at its own line. |
 | 12  | [`Canary`](../../Sources/UITestingLibrary/Reports/Canary.swift) fails a test that never read a non-empty tree. | An OS change that empties the tree cannot pass silently. |
 | 13  | [`AccessibilityTree`](../../Sources/UITestingLibrary/Tree/AccessibilityTree.swift) walks the window and drives elements, with `Timing.swift`, `Trackpad.swift` and the `UIKit*` and `AppKit*` backends in `Tree/`. | The only code that touches accessibility objects, one backend per platform. `Timing` signposts each phase, since a read is the lowest one. |
 | 14  | [`Element`](../../Sources/UITestingLibrary/Tree/Element.swift) is what the tree reads of one element. | Queries and reports share one reading. |
-| 15  | [`Automation`](../../Sources/UITestingLibrary/Tree/Automation.swift) turns the process-wide switch on once. | SwiftUI builds its tree only while assistive technology asks ([ADR 0004](adr/0004-automation-canary.md)). |
+| 15  | [`Automation`](../../Sources/UITestingLibrary/Tree/Automation.swift) turns the process-wide switch on once. | SwiftUI builds its tree only while assistive technology asks ([ADR 0004](https://github.com/may-journal/apple-ui-testing-library/issues/125)). |
 | 16  | [`Key`](../../Sources/UITestingLibrary/Tree/AccessibilityTree.swift#L55) is a key a person presses. | A key names what user-event's `keyboard` names. |
 | 17  | [`Modifier`](../../Sources/UITestingLibrary/Tree/AccessibilityTree.swift#L92) is a key held while another is pressed. | A shortcut needs its modifiers. |
 | 18  | [`ScrollDirection`](../../Sources/UITestingLibrary/Tree/AccessibilityTree.swift#L48) is which way a person scrolls. | A scroll names its direction. |
@@ -198,9 +198,9 @@ Numbers on classes and letters on relationships match the callout table. See [02
 
 ## Platforms
 
-The optional `UITestingLibrarySystem` product runs in an iOS UI-test target through XCTest. `SystemSession` uses the same `Query` and `Failure` types. Siri failures distinguish setup, indeterminate text, and forbidden text in a verified answer ([ADR 0008](adr/0008-siri-system-requests.md)).
+The optional `UITestingLibrarySystem` product runs in an iOS UI-test target through XCTest. `SystemSession` uses the same `Query` and `Failure` types. Siri failures distinguish setup, indeterminate text, and forbidden text in a verified answer ([ADR 0008](https://github.com/may-journal/apple-ui-testing-library/issues/129)).
 
-The separate UIKit product `UITestingLibraryShareDestination` adds a local activity in test builds. It exports delivered images and messages, which the driver reads and checks with Vision ([ADR 0009](adr/0009-system-sharing.md)).
+The separate UIKit product `UITestingLibraryShareDestination` adds a local activity in test builds. It exports delivered images and messages, which the driver reads and checks with Vision ([ADR 0009](https://github.com/may-journal/apple-ui-testing-library/issues/130)).
 
 One Swift package, iOS 26 and macOS 26 and later, Swift 6 with complete strict concurrency, built with Xcode 27.
 
