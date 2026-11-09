@@ -95,13 +95,13 @@ Numbers on nodes and letters on arrows match the callout table; the code is in [
 | 4   | The three types a test names: the user, the wait, and the screen. | A test reads as a person's steps. |
 | 5   | The actions folder: `User` taps, opens menus, chooses custom actions, scrolls, goes back, types, presses keys, uses the clipboard, and drags, holds, swipes, adjusts, hovers and pinches. | Every act is a VoiceOver entry point, so an unreachable control fails. |
 | 6   | The wait and the screen, which a user also calls. | A user waits for what it looks for on the screen it was given. |
-| 7   | The waits folder polls a condition until it holds or the deadline passes, or for a set time, and times main-thread stalls. | No sleeps; a slow machine only takes longer ([ADR 0003](adr/0003-condition-waits.md)). |
-| 8   | The screen folder: `Screen.render(size:look:content:)` draws a root view in a key window at a fixed size, text size and appearance, and closes it at teardown. | A fixed size and size class make layout the same on any Mac or simulator ([ADR 0006](adr/0006-one-api-two-backends.md)). |
+| 7   | The waits folder polls a condition until it holds or the deadline passes, or for a set time, and times main-thread stalls. | No sleeps; a slow machine only takes longer ([ADR 0003](https://github.com/may-journal/apple-ui-testing-library/issues/124)). |
+| 8   | The screen folder: `Screen.render(size:look:content:)` draws a root view in a key window at a fixed size, text size and appearance, and closes it at teardown. | A fixed size and size class make layout the same on any Mac or simulator ([ADR 0006](https://github.com/may-journal/apple-ui-testing-library/issues/127)). |
 | 9   | What the calls stand on: reading the tree and reporting it. | A test never names these directly. |
-| 10  | The tree and queries folders: automation on, a depth-first walk as VoiceOver moves, each element, its role, and queries by role and label, text, or identifier. | Only what a person can reach counts, and one priority keeps tests on what a person perceives ([ADR 0002](adr/0002-query-priority.md), [ADR 0007](adr/0007-control-state.md)). |
-| 11  | The reports folder prints what is on and off screen, places failures at the test's line, and fails a test that never read a non-empty tree. | An OS change that empties the tree cannot pass silently ([ADR 0004](adr/0004-automation-canary.md)). |
+| 10  | The tree and queries folders: automation on, a depth-first walk as VoiceOver moves, each element, its role, and queries by role and label, text, or identifier. | Only what a person can reach counts, and one priority keeps tests on what a person perceives ([ADR 0002](https://github.com/may-journal/apple-ui-testing-library/issues/123), [ADR 0007](https://github.com/may-journal/apple-ui-testing-library/issues/128)). |
+| 11  | The reports folder prints what is on and off screen, places failures at the test's line, and fails a test that never read a non-empty tree. | An OS change that empties the tree cannot pass silently ([ADR 0004](https://github.com/may-journal/apple-ui-testing-library/issues/125)). |
 | 12  | The optional `UITestingLibrarySystem` product. | It runs in a UI-test target, outside the app's process. |
-| 13  | `SystemSession` launches the app and finds, taps, scrolls and reads through XCTest automation; `Siri` and `SharedDelivery` build on it. | A UI-test target reaches system UI the hosted tree cannot ([ADR 0008](adr/0008-siri-system-requests.md), [ADR 0009](adr/0009-system-sharing.md)). |
+| 13  | `SystemSession` launches the app and finds, taps, scrolls and reads through XCTest automation; `Siri` and `SharedDelivery` build on it. | A UI-test target reaches system UI the hosted tree cannot ([ADR 0008](https://github.com/may-journal/apple-ui-testing-library/issues/129), [ADR 0009](https://github.com/may-journal/apple-ui-testing-library/issues/130)). |
 | 14  | The optional `UITestingLibraryShareDestination` product. | Test builds add its local share destination. |
 | 15  | A local `UIActivity` that exports the images and messages it receives. | No message reaches a contact. |
 | 16  | The package that declares the products. | Consumers import only what their target needs. |
@@ -110,7 +110,7 @@ Numbers on nodes and letters on arrows match the callout table; the code is in [
 | 19  | The host app's window and the fixture screens each requirement test renders, plus the Siri intent and the sharing screen. | Tests prove behavior against real SwiftUI screens. |
 | 20  | Apple's accessibility library, holding the private automation switch. | The only way in-process tests get SwiftUI's tree. |
 | 21  | The system's Siri overlay and share sheet. | Shown on a simulator, outside the app's process. |
-| A   | The test renders its app root, then acts, looks and waits. | One screen per test ([ADR 0005](adr/0005-one-window-per-process.md)). |
+| A   | The test renders its app root, then acts, looks and waits. | One screen per test ([ADR 0005](https://github.com/may-journal/apple-ui-testing-library/issues/126)). |
 | B   | A system test opens a session on the launched app. | System tests see what a person sees. |
 | C   | A user waits on conditions and reads its screen. | Every act happens on one rendered screen. |
 | D   | A wait polls the screen, as [Wait](../../Sources/UITestingLibrary/Waits/Wait.swift#L42) does. | A wait reads the same tree the user acts on. |

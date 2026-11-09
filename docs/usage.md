@@ -24,7 +24,7 @@ With a checked-in Xcode project, choose File > Add Package Dependencies and ente
 
 ## Render and close a screen
 
-`Screen.render` draws a root view in a window of the app's own. `close()` hides it and runs the canary check ([ADR 0004](architecture/adr/0004-automation-canary.md)). Pass `size: .pad` for an iPad layout. Rendering a second screen closes the first ([ADR 0005](architecture/adr/0005-one-window-per-process.md)).
+`Screen.render` draws a root view in a window of the app's own. `close()` hides it and runs the canary check ([ADR 0004](https://github.com/may-journal/apple-ui-testing-library/issues/125)). Pass `size: .pad` for an iPad layout. Rendering a second screen closes the first ([ADR 0005](https://github.com/may-journal/apple-ui-testing-library/issues/126)).
 
 ```swift
 let screen = try Screen.render { AppRoot() }
@@ -45,7 +45,7 @@ The root reads the text size and appearance from its environment, as on a device
 
 ## Queries
 
-A `Query` names an element. Pick the first kind that fits ([ADR 0002](architecture/adr/0002-query-priority.md)). A look or act needs exactly one match on screen.
+A `Query` names an element. Pick the first kind that fits ([ADR 0002](https://github.com/may-journal/apple-ui-testing-library/issues/123)). A look or act needs exactly one match on screen.
 
 | Query | Finds |
 | ----- | ----- |
@@ -97,7 +97,7 @@ let save = try await user.sees(.button("Save"))
 
 ## Keys
 
-Keys follow [user-event](https://testing-library.com/docs/user-event/intro)'s `keyboard`, `tab`, `clear` and clipboard calls, through the field's own key commands and edit actions ([0009](requirements/0009-keys-pressing-keys-and-clearing-a-field.md), [ADR 0011](architecture/adr/0011-person-actions-in-process.md)). A shortcut that answers a key runs first. A Mac selects a one-line field's words as it gains focus, so press End before typing to add to them.
+Keys follow [user-event](https://testing-library.com/docs/user-event/intro)'s `keyboard`, `tab`, `clear` and clipboard calls, through the field's own key commands and edit actions ([0009](requirements/0009-keys-pressing-keys-and-clearing-a-field.md), [ADR 0011](https://github.com/may-journal/apple-ui-testing-library/issues/132)). A shortcut that answers a key runs first. A Mac selects a one-line field's words as it gains focus, so press End before typing to add to them.
 
 ```swift
 try await user.presses(.enter)               // keyboard("{Enter}"): submits a one-line field
@@ -122,7 +122,7 @@ try await user.pastes()
 
 ## Gestures
 
-Gestures beyond a tap run in process, each through the platform's own entry point ([0011](requirements/0011-gestures-gestures-beyond-a-tap.md), [ADR 0011](architecture/adr/0011-person-actions-in-process.md)). `drags(_:by:speed:)` drags from the element's middle, right and down by the offset's points ([0012](requirements/0012-drags-drags-by-a-distance.md)). A slow drag comes to rest before letting go, and a flick lets go mid-move.
+Gestures beyond a tap run in process, each through the platform's own entry point ([0011](requirements/0011-gestures-gestures-beyond-a-tap.md), [ADR 0011](https://github.com/may-journal/apple-ui-testing-library/issues/132)). `drags(_:by:speed:)` drags from the element's middle, right and down by the offset's points ([0012](requirements/0012-drags-drags-by-a-distance.md)). A slow drag comes to rest before letting go, and a flick lets go mid-move.
 
 ```swift
 try await user.doubleTaps(.text("Photo"))    // dblClick(element): one double tap
@@ -144,7 +144,7 @@ On a Mac the test window sits off every display, and the app never comes forward
 
 ## Waits
 
-Every look and act polls until its condition holds or the deadline passes ([ADR 0003](architecture/adr/0003-condition-waits.md)). The default deadline is five seconds. Set one per user:
+Every look and act polls until its condition holds or the deadline passes ([ADR 0003](https://github.com/may-journal/apple-ui-testing-library/issues/124)). The default deadline is five seconds. Set one per user:
 
 ```swift
 let user = User(screen, deadline: .seconds(3))
@@ -159,7 +159,7 @@ let spoken = await user.reads().map(\.spoken)
 #expect(spoken.contains("Milk"))
 ```
 
-Two watches run for a set time instead ([0010](requirements/0010-watches-watching-beyond-one-read.md), [ADR 0010](architecture/adr/0010-keys-watches-share-sheet.md)). `neverSees(_:for:)` fails as soon as its query matches. `doesNotSee` returns once the match is gone. `staysResponsive(under:)` fails if the main thread stalls that long during its action, naming the longest stall.
+Two watches run for a set time instead ([0010](requirements/0010-watches-watching-beyond-one-read.md), [ADR 0010](https://github.com/may-journal/apple-ui-testing-library/issues/131)). `neverSees(_:for:)` fails as soon as its query matches. `doesNotSee` returns once the match is gone. `staysResponsive(under:)` fails if the main thread stalls that long during its action, naming the longest stall.
 
 ```swift
 try await user.neverSees(.button("Retry"), for: .seconds(2))
@@ -170,7 +170,7 @@ try await user.staysResponsive(under: .milliseconds(500)) {
 
 ## Serialize the suite
 
-Only one screen is open at a time, so Swift Testing suites that render must not run in parallel ([ADR 0005](architecture/adr/0005-one-window-per-process.md)). Nest them under one serialized parent. Mark every test and suite `@MainActor`.
+Only one screen is open at a time, so Swift Testing suites that render must not run in parallel ([ADR 0005](https://github.com/may-journal/apple-ui-testing-library/issues/126)). Nest them under one serialized parent. Mark every test and suite `@MainActor`.
 
 ```swift
 @Suite(.serialized)
@@ -234,7 +234,7 @@ try session.dismissShare()
 
 The app's test build must link the UIKit-only `UITestingLibraryShareDestination` product and add `LocalShareDestination()` to `UIActivityViewController`'s `applicationActivities`. Inject that destination at the share sheet seam; keep the app's real share action and rendering. Release builds omit the local destination.
 
-UIKit delivers resolved items to the activity; the driver decodes its received PNG bytes and strings after a bounded wait. Vision reads those pixels, and `check` requires one image, an exact message, required phrases, and no forbidden phrases. Failures include recognized words; list every other match to prove absence ([ADR 0009](architecture/adr/0009-system-sharing.md)).
+UIKit delivers resolved items to the activity; the driver decodes its received PNG bytes and strings after a bounded wait. Vision reads those pixels, and `check` requires one image, an exact message, required phrases, and no forbidden phrases. Failures include recognized words; list every other match to prove absence ([ADR 0009](https://github.com/may-journal/apple-ui-testing-library/issues/130)).
 
 | Concern | Support |
 | ------- | ------- |
@@ -262,4 +262,4 @@ try answer.excludes("Casey drew Morgan")
 
 The service submits recognized speech, runs system phrase routing, and reads Siri's visible transcript without recording audio. Empty text throws a setup failure; unexpected nonempty text throws an indeterminate failure. That text may come from setup, network errors, routing, or the app; it proves no intent ran. Each failure carries the phrase, observed text and test line.
 
-Run Siri tests on a prepared iOS device; activation itself can fail the test before a transcript is read. A response failure means forbidden text appeared after the expected answer was verified. `SiriTranscript.expecting` checks captured text only; see [ADR 0008](architecture/adr/0008-siri-system-requests.md).
+Run Siri tests on a prepared iOS device; activation itself can fail the test before a transcript is read. A response failure means forbidden text appeared after the expected answer was verified. `SiriTranscript.expecting` checks captured text only; see [ADR 0008](https://github.com/may-journal/apple-ui-testing-library/issues/129).
