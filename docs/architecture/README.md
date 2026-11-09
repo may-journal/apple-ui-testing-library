@@ -5,11 +5,11 @@ Product and system design for apple-ui-testing-library. The C4 docs below descri
 ## Principles
 
 1. Tests resemble the way the app is used. They read what VoiceOver reads and act through what VoiceOver offers.
-1. Hosted tests run in-process from the real root view ([ADR 0001](adr/0001-in-process-accessibility-tree.md)); optional system tests launch the app ([ADR 0009](adr/0009-system-sharing.md)).
-1. Queries follow one priority: role and label, then visible text, then identifier ([ADR 0002](adr/0002-query-priority.md)).
-1. Every wait is a condition with a deadline, and nothing animates ([ADR 0003](adr/0003-condition-waits.md)).
-1. A test that reads an empty tree fails loudly ([ADR 0004](adr/0004-automation-canary.md)).
-1. One API runs over two backends, UIKit on iOS and AppKit on macOS ([ADR 0006](adr/0006-one-api-two-backends.md)).
+1. Hosted tests run in-process from the real root view ([ADR 0001](https://github.com/may-journal/apple-ui-testing-library/issues/122)); optional system tests launch the app ([ADR 0009](https://github.com/may-journal/apple-ui-testing-library/issues/130)).
+1. Queries follow one priority: role and label, then visible text, then identifier ([ADR 0002](https://github.com/may-journal/apple-ui-testing-library/issues/123)).
+1. Every wait is a condition with a deadline, and nothing animates ([ADR 0003](https://github.com/may-journal/apple-ui-testing-library/issues/124)).
+1. A test that reads an empty tree fails loudly ([ADR 0004](https://github.com/may-journal/apple-ui-testing-library/issues/125)).
+1. One API runs over two backends, UIKit on iOS and AppKit on macOS ([ADR 0006](https://github.com/may-journal/apple-ui-testing-library/issues/127)).
 
 ## Start here
 
@@ -31,12 +31,12 @@ Architecture decision records live in [adr/](adr/). A record is rewritten in pla
 
 | ADR | Decision |
 | --- | --- |
-| [0001](adr/0001-in-process-accessibility-tree.md) | Hosted tests read the accessibility tree in-process. |
-| [0002](adr/0002-query-priority.md) | Queries go by role and label first, visible text next, identifier last. |
-| [0003](adr/0003-condition-waits.md) | Waits poll a condition up to a deadline; nothing sleeps and nothing animates. |
-| [0004](adr/0004-automation-canary.md) | Private SPI turns automation on, and a canary fails any test that read nothing. |
-| [0005](adr/0005-one-window-per-process.md) | Tests run serialized, one key window per process. |
-| [0006](adr/0006-one-api-two-backends.md) | One API over two backends: UIKit on iOS, AppKit on macOS, each reading its own tree. |
-| [0007](adr/0007-control-state.md) | Elements report whether their control is enabled. |
-| [0008](adr/0008-siri-system-requests.md) | Optional system sessions submit Siri phrases and check the visible transcript. |
-| [0009](adr/0009-system-sharing.md) | Optional system sessions follow real shares into a local destination and check received image bytes. |
+| [0001](https://github.com/may-journal/apple-ui-testing-library/issues/122) | Hosted tests read the accessibility tree in-process. |
+| [0002](https://github.com/may-journal/apple-ui-testing-library/issues/123) | Queries go by role and label first, visible text next, identifier last. |
+| [0003](https://github.com/may-journal/apple-ui-testing-library/issues/124) | Waits poll a condition up to a deadline; nothing sleeps and nothing animates. |
+| [0004](https://github.com/may-journal/apple-ui-testing-library/issues/125) | Private SPI turns automation on, and a canary fails any test that read nothing. |
+| [0005](https://github.com/may-journal/apple-ui-testing-library/issues/126) | Tests run serialized, one key window per process. |
+| [0006](https://github.com/may-journal/apple-ui-testing-library/issues/127) | One API over two backends: UIKit on iOS, AppKit on macOS, each reading its own tree. |
+| [0007](https://github.com/may-journal/apple-ui-testing-library/issues/128) | Elements report whether their control is enabled. |
+| [0008](https://github.com/may-journal/apple-ui-testing-library/issues/129) | Optional system sessions submit Siri phrases and check the visible transcript. |
+| [0009](https://github.com/may-journal/apple-ui-testing-library/issues/130) | Optional system sessions follow real shares into a local destination and check received image bytes. |
