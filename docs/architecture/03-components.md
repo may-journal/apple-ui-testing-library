@@ -74,13 +74,11 @@ C4Component
 C4Component
     title Legend
 
-    Person(p, "Person", "Human or agent actor")
     Container_Boundary(cb, "Container boundary") {
         Component(c, "Component", "Tech", "Logical unit")
     }
     System_Ext(e, "External", "Outside our boundary")
 
-    UpdateElementStyle(p, $bgColor="#334155", $borderColor="#1e293b", $fontColor="#ffffff")
     UpdateElementStyle(c, $bgColor="#b45309", $borderColor="#92400e", $fontColor="#ffffff")
     UpdateElementStyle(e, $bgColor="#64748b", $borderColor="#475569", $fontColor="#ffffff")
 ```
