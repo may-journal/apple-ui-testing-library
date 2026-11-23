@@ -93,7 +93,7 @@ let save = try await user.sees(.button("Save"))
 #expect(save.isEnabled)
 ```
 
-`goesBack()` passes only once what is read on screen changes. On the Mac, SwiftUI drops a focus set in `onAppear`, so set it one main-queue turn later.
+`scrolls` fails at once when nothing on the settled screen scrolls. Wait for late content with `sees` before you scroll. `goesBack()` passes only once what is read on screen changes. On the Mac, SwiftUI drops a focus set in `onAppear`, so set it one main-queue turn later.
 
 ## Keys
 

@@ -32,3 +32,7 @@ looks
     - Given Developer has a long screen that each act redraws
         - When I tap, choose and look ten times
             - Then all ten finish within 1.5 seconds
+- 0004.6
+    - Given Developer has a screen with nothing to scroll
+        - When I scroll
+            - Then the scroll fails at once, well before the deadline
