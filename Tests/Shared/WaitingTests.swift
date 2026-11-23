@@ -58,5 +58,15 @@ extension UITestingLibraryTests {
             #expect(ContinuousClock.now - started < .milliseconds(1500))
             try screen.close()
         }
+
+        @Test func test0004_6() async throws {
+            let screen = try Screen.render { Message(text: "Fits the screen") }
+            let started = ContinuousClock.now
+            await #expect(throws: Failure.self) {
+                try await User(screen, deadline: .seconds(5)).scrolls(.down)
+            }
+            #expect(ContinuousClock.now - started < .seconds(2))
+            try screen.close()
+        }
     }
 }

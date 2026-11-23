@@ -63,7 +63,8 @@ extension User {
         }
     }
 
-    /// Scrolls the page in front by most of a screen, as a three-finger swipe does.
+    /// Scrolls the page in front by most of a screen, as a three-finger swipe does. It
+    /// fails at once when nothing on the settled screen scrolls.
     public func scrolls(
         _ direction: ScrollDirection,
         file: StaticString = #filePath, line: UInt = #line
@@ -71,9 +72,11 @@ extension User {
         async throws
     {
         try await Timing.measure(.scrolls) {
-            let scrolled = await wait.until {
-                Backend.scroll(
-                    direction, nodes: AccessibilityTree.current(screen).nodes, in: screen.window)
+            var scrolled = Backend.scroll(
+                direction, nodes: AccessibilityTree.current(screen).nodes, in: screen.window)
+            if !scrolled {
+                let settled = await wait.settle(screen)
+                scrolled = Backend.scroll(direction, nodes: settled.nodes, in: screen.window)
             }
             guard scrolled else {
                 throw failure("Nothing on screen scrolls", SourceLocation(file: file, line: line))
