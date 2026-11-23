@@ -21,20 +21,22 @@ extension Backend {
         let items = liftDelegate.dragInteraction(lift, itemsForBeginning: dragging)
         guard !items.isEmpty else { return .noDrag }
         dragging.items = items
+        // A list reorders a row only for a drag it heard begin.
+        liftDelegate.dragInteraction?(lift, sessionWillBegin: dragging)
         defer { liftDelegate.dragInteraction?(lift, session: dragging, didEndWith: .copy) }
         _ = source
-        return drop(items, at: end, in: window.window)
+        return drop(dragging, at: end, in: window.window)
     }
 
-    /// Drops `items` on the drop interaction under `end`, as its delegate hears a drag arrive,
-    /// hover and land; whether it took them.
-    private static func drop(_ items: [UIDragItem], at end: CGPoint, in window: UIWindow)
+    /// Drops what `dragging` carries on the drop interaction under `end`, as its delegate hears
+    /// a drag arrive, hover and land. It says whether the drop took them.
+    private static func drop(_ dragging: DragSession, at end: CGPoint, in window: UIWindow)
         -> DragOutcome
     {
         guard let (drop, _) = interaction(UIDropInteraction.self, at: end, in: window),
             let dropDelegate = drop.delegate
         else { return .refused }
-        let dropping = DropSession(at: end, in: window, items: items)
+        let dropping = DropSession(from: dragging, at: end, in: window)
         guard dropDelegate.dropInteraction?(drop, canHandle: dropping) != false else {
             return .refused
         }
@@ -109,7 +111,15 @@ private final class DragSession: Session, UIDragSession {
 }
 
 private final class DropSession: Session, UIDropSession {
-    var localDragSession: (any UIDragSession)? { nil }
+    /// The drag these items came from. A list reorders a row only for a drag it began.
+    let local: DragSession
+    var localDragSession: (any UIDragSession)? { local }
+
+    init(from local: DragSession, at point: CGPoint, in window: UIWindow) {
+        self.local = local
+        super.init(at: point, in: window, items: local.items)
+    }
+
     var progressIndicatorStyle: UIDropSessionProgressIndicatorStyle = .none
     let progress = Progress(totalUnitCount: 1)
 
