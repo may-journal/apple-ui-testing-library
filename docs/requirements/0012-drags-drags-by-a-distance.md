@@ -12,11 +12,11 @@ drags by a distance
 
 ## Requirements
 
-- 0012.1
-    - Given Developer has a view that reports its drag distance
-        - When I drag it slowly by a set offset and let go
-            - Then it reports that offset
-- 0012.2
-    - Given Developer has a view that tells a flick from a slow drag
-        - When I flick it a short way
-            - Then it reports a flick
+1. Reports a drag distance
+   1. GIVEN Developer has a view that reports its drag distance
+      1. WHEN I drag it slowly by a set offset and let go
+         1. THEN it reports that offset
+2. Reports a flick
+   1. GIVEN Developer has a view that tells a flick from a slow drag
+      1. WHEN I flick it a short way
+         1. THEN it reports a flick

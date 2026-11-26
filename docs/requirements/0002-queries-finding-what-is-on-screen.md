@@ -12,23 +12,23 @@ looks
 
 ## Requirements
 
-- 0002.1
-    - Given Developer has a button and plain text sharing a label
-        - When I look for a button by that label
-            - Then I get the button
-- 0002.2
-    - Given Developer has text on screen
-        - When I look for it
-            - Then I get the element saying it
-- 0002.3
-    - Given Developer has one element VoiceOver calls selected
-        - When I look for the selected one
-            - Then I get it
-- 0002.4
-    - Given Developer has an element scrolled off screen
-        - When I look for it
-            - Then I find nothing
-- 0002.5
-    - Given Developer has two elements sharing a label
-        - When I look by identifier
-            - Then I get the one with that identifier
+1. Finds a button by label
+   1. GIVEN Developer has a button and plain text sharing a label
+      1. WHEN I look for a button by that label
+         1. THEN I get the button
+2. Finds text
+   1. GIVEN Developer has text on screen
+      1. WHEN I look for it
+         1. THEN I get the element saying it
+3. Finds the selected element
+   1. GIVEN Developer has one element VoiceOver calls selected
+      1. WHEN I look for the selected one
+         1. THEN I get it
+4. Misses an element off screen
+   1. GIVEN Developer has an element scrolled off screen
+      1. WHEN I look for it
+         1. THEN I find nothing
+5. Finds by identifier
+   1. GIVEN Developer has two elements sharing a label
+      1. WHEN I look by identifier
+         1. THEN I get the one with that identifier

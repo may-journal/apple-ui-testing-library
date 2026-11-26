@@ -12,35 +12,39 @@ keys and clipboard steps
 
 ## Requirements
 
-- 0009.1
-    - Given Developer has a one-line field being edited
-        - When I press Enter
-            - Then the field submits what it holds
-- 0009.2
-    - Given Developer has a field holding text
-        - When I clear the field
-            - Then the field reads empty
-- 0009.3
-    - Given Developer has a field with its words selected
-        - When I press End and type
-            - Then the typed text follows the words
-- 0009.4
-    - Given Developer has a field in a view with a Cmd+Return shortcut
-        - When I press Enter with Command
-            - Then the shortcut runs, and the field holds no new line
-- 0009.5
-    - Given Developer has a form of two fields, the first being edited
-        - When I tab, then tab backward
-            - Then focus moves to the second field, then back
-- 0009.6
-    - Given Developer has a field holding text
-        - When I select all, copy, and paste into an empty field
-            - Then both fields hold the text
-- 0009.7
-    - Given Developer has a field holding text
-        - When I select all and cut
-            - Then the field reads empty, and pasting brings the text back
-- 0009.8
-    - Given Developer has a view with a Cmd+3 shortcut and no field focused
-        - When I press 3 with Command
-            - Then the shortcut runs
+1. Submits on Enter
+   1. GIVEN Developer has a one-line field being edited
+      1. WHEN I press Enter
+         1. THEN the field submits what it holds
+2. Clears a field
+   1. GIVEN Developer has a field holding text
+      1. WHEN I clear the field
+         1. THEN the field reads empty
+3. Types after End
+   1. GIVEN Developer has a field with its words selected
+      1. WHEN I press End and type
+         1. THEN the typed text follows the words
+4. Runs a shortcut
+   1. GIVEN Developer has a field in a view with a Cmd+Return shortcut
+      1. WHEN I press Enter with Command
+         1. THEN the shortcut runs
+         2. THEN the field holds no new line
+5. Tabs between fields
+   1. GIVEN Developer has a form of two fields
+   2. GIVEN the first being edited
+      1. WHEN I tab and then tab backward
+         1. THEN focus moves to the second field
+         2. THEN then back
+6. Copies and pastes
+   1. GIVEN Developer has a field holding text
+      1. WHEN I select all and copy and paste into an empty field
+         1. THEN both fields hold the text
+7. Cuts
+   1. GIVEN Developer has a field holding text
+      1. WHEN I select all and cut
+         1. THEN the field reads empty
+         2. THEN pasting brings the text back
+8. Runs a shortcut with no field
+   1. GIVEN Developer has a view with a Cmd+3 shortcut and no field focused
+      1. WHEN I press 3 with Command
+         1. THEN the shortcut runs
