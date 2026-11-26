@@ -12,35 +12,36 @@ shares tested
 
 ## Requirements
 
-- 0008.1
-    - Given Developer has an image and message
-        - When I share through system UI
-            - Then the local destination receives both
-- 0008.2
-    - Given Developer has a received card
-        - When I read its image
-            - Then it names only the chosen match
-- 0008.3
-    - Given Developer has the wrong image
-        - When I check the delivery
-            - Then the check fails despite the right message
-- 0008.4
-    - Given Developer has the wrong message
-        - When I check the delivery
-            - Then the check fails despite the right image
-- 0008.5
-    - Given Developer has an image with another match
-        - When I check the delivery
-            - Then the check names the unwanted match
-- 0008.7
-    - Given Developer has an open share sheet
-        - When I cancel
-            - Then the source screen returns
-- 0008.8
-    - Given Developer has a share button below the screen
-        - When I scroll down
-            - Then I can tap it
-- 0008.9
-    - Given Developer has a delivery with a missing or unreadable image
-        - When I check the delivery
-            - Then failure shows my line and received message
+1. Delivers image and message
+   1. GIVEN Developer has an image and message
+      1. WHEN I share through system UI
+         1. THEN the local destination receives both
+2. Names the chosen match
+   1. GIVEN Developer has a received card
+      1. WHEN I read its image
+         1. THEN it names only the chosen match
+3. Fails a wrong image
+   1. GIVEN Developer has the wrong image
+      1. WHEN I check the delivery
+         1. THEN the check fails despite the right message
+4. Fails a wrong message
+   1. GIVEN Developer has the wrong message
+      1. WHEN I check the delivery
+         1. THEN the check fails despite the right image
+5. Names an unwanted match
+   1. GIVEN Developer has an image with another match
+      1. WHEN I check the delivery
+         1. THEN the check names the unwanted match
+6. Removed in 2026.11.26.1140: the original acceptance was dropped before the numbered form
+7. Cancels a share
+   1. GIVEN Developer has an open share sheet
+      1. WHEN I cancel
+         1. THEN the source screen returns
+8. Scrolls to a share button
+   1. GIVEN Developer has a share button below the screen
+      1. WHEN I scroll down
+         1. THEN I can tap it
+9. Shows a missing image
+   1. GIVEN Developer has a delivery with a missing or unreadable image
+      1. WHEN I check the delivery
+         1. THEN failure shows my line and received message

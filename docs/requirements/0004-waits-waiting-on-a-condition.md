@@ -12,23 +12,23 @@ looks
 
 ## Requirements
 
-- 0004.1
-    - Given Developer has an element that appears later
-        - When I look for it
-            - Then the look passes before the deadline
-- 0004.2
-    - Given Developer has an element that never appears
-        - When I look for it
-            - Then the look fails at the deadline I set
-- 0004.3
-    - Given Developer has an element that leaves later
-        - When I look for it to be gone
-            - Then the look passes before the deadline
-- 0004.4
-    - Given Developer has a button that redraws the screen
-        - When I tap it
-            - Then my next look reads the redrawn screen
-- 0004.5
-    - Given Developer has a long screen that each act redraws
-        - When I tap, choose and look ten times
-            - Then all ten finish within 1.5 seconds
+1. Passes when an element appears
+   1. GIVEN Developer has an element that appears later
+      1. WHEN I look for it
+         1. THEN the look passes before the deadline
+2. Fails at the deadline
+   1. GIVEN Developer has an element that never appears
+      1. WHEN I look for it
+         1. THEN the look fails at the deadline I set
+3. Passes when an element leaves
+   1. GIVEN Developer has an element that leaves later
+      1. WHEN I look for it to be gone
+         1. THEN the look passes before the deadline
+4. Reads the redrawn screen
+   1. GIVEN Developer has a button that redraws the screen
+      1. WHEN I tap it
+         1. THEN my next look reads the redrawn screen
+5. Stays fast
+   1. GIVEN Developer has a long screen that each act redraws
+      1. WHEN I tap and choose and look ten times
+         1. THEN all ten finish within 1.5 seconds

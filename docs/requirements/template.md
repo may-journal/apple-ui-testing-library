@@ -8,10 +8,10 @@
 
 ## Measurement
 
-<!-- Numerator line, a "-" line, denominator line. No "Source:" line. -->
+<!-- Numerator line, a "-" line, denominator line, each separated by a blank line. No "Source:" line. -->
 
 ## Requirements
 
-<!-- One to eight IDs, each the title ID plus ".N", never reused. -->
-<!-- Each ID nests one Given, one When, and one Then, each one level deeper. About 15 words in all. -->
+<!-- One to eight numbered acceptances, each named, never reused; item N is NNNN.N. -->
+<!-- Each acceptance nests numbered GIVEN, WHEN and THEN items in caps, each one level deeper. About 15 words in all. -->
 <!-- Exactly one Swift test named testNNNN_N owns each ID, and drives the library as a consumer would. -->

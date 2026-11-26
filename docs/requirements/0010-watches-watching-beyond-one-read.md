@@ -12,15 +12,15 @@ watches
 
 ## Requirements
 
-- 0010.1
-    - Given Developer has an element that appears later
-        - When I watch that it never appears
-            - Then the watch fails once it appears
-- 0010.2
-    - Given Developer has a button that holds the main thread
-        - When I tap it under a stall limit
-            - Then the check fails naming the longest stall
-- 0010.3
-    - Given Developer has a button that opens the share sheet
-        - When I tap it and look for the sheet
-            - Then the look passes in process
+1. Fails a watch that sees an element
+   1. GIVEN Developer has an element that appears later
+      1. WHEN I watch that it never appears
+         1. THEN the watch fails once it appears
+2. Names the longest stall
+   1. GIVEN Developer has a button that holds the main thread
+      1. WHEN I tap it under a stall limit
+         1. THEN the check fails naming the longest stall
+3. Finds the share sheet
+   1. GIVEN Developer has a button that opens the share sheet
+      1. WHEN I tap it and look for the sheet
+         1. THEN the look passes in process
