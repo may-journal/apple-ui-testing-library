@@ -12,6 +12,6 @@
 
 ## Requirements
 
-<!-- One to eight numbered acceptances, each named, never reused; item N is NNNN.N. -->
+<!-- One to eight numbered acceptances, each named, never reused; item N is NNNN.N. A dropped ID reads "N. Removed in <version>: <reason>" and still counts. -->
 <!-- Each acceptance nests numbered GIVEN, WHEN and THEN items in caps, each one level deeper. About 15 words in all. -->
 <!-- Exactly one Swift test named testNNNN_N owns each ID, and drives the library as a consumer would. -->
