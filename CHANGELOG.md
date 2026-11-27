@@ -2,6 +2,13 @@
 
 ## Changes
 
+## [1.7.3](https://github.com/may-journal/apple-ui-testing-library/compare/v1.7.2...v1.7.3) (2026-11-27)
+
+
+### Bug Fixes
+
+* **requirements:** pass the newest Gherkin rules ([#152](https://github.com/may-journal/apple-ui-testing-library/issues/152)) ([d5be6ec](https://github.com/may-journal/apple-ui-testing-library/commit/d5be6ec1c9ef80d67e5f5258d5ca40823cfce784))
+
 ## [1.7.2](https://github.com/may-journal/apple-ui-testing-library/compare/v1.7.1...v1.7.2) (2026-10-25)
 
 
