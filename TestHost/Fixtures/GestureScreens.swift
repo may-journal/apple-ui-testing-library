@@ -63,6 +63,24 @@ struct DragScreen: View {
     }
 }
 
+#if canImport(UIKit)
+/// A list in edit mode whose rows a person reorders by their handles.
+struct ReorderScreen: View {
+    @State private var items = ["Eggs", "Milk", "Bread"]
+
+    var body: some View {
+        VStack {
+            Text("Order: \(items.joined(separator: ", "))")
+            List {
+                ForEach(items, id: \.self) { Text($0) }
+                    .onMove { items.move(fromOffsets: $0, toOffset: $1) }
+            }
+            .environment(\.editMode, .constant(.active))
+        }
+    }
+}
+#endif
+
 /// A volume slider at 5 and a servings stepper at 3, each stepping by one.
 struct AdjustScreen: View {
     @State private var volume = 5.0

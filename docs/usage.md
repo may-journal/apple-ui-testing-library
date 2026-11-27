@@ -130,6 +130,7 @@ try await user.longPresses(.text("Note"))    // opens its context menu
 try await user.taps(.button("Delete"))       // runs a menu item
 try await user.swipes(.left, .text("Milk"))  // shows a row's trailing swipe actions
 try await user.drags(.text("Milk"), to: .text("Basket"))
+try await user.drags(.button("Reorder Eggs"), to: .button("Reorder Bread"))  // iOS: moves a list row in edit mode
 try await user.adjusts(.up, .role(.adjustable, "Volume"))  // or .down
 try await user.hovers(.text("Card"))         // hover(element)
 try await user.unhovers(.text("Card"))       // unhover(element)
