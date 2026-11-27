@@ -56,6 +56,7 @@ extension UITestingLibraryTests {
                 try await user.doesNotSee(.text("Row 1.\(count)"))
             }
             #expect(ContinuousClock.now - started < .milliseconds(1500))
+            #expect(await user.reads().map(\.spoken).contains("Count: 10"))
             try screen.close()
         }
     }

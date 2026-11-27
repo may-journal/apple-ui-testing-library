@@ -26,25 +26,30 @@ gestures
       1. WHEN I swipe it left
          1. THEN its actions show
 4. Drags to a target
-   1. GIVEN Developer has an item and a drop target
+   1. GIVEN Developer has an item
+   2. GIVEN a drop target
       1. WHEN I drag the item onto the target
          1. THEN the target holds the item
 5. Adjusts
-   1. GIVEN Developer has a slider and a stepper
-      1. WHEN I adjust each up and then down
+   1. GIVEN Developer has a slider
+   2. GIVEN a stepper
+      1. WHEN I raise each
          1. THEN each value steps up one
-         2. THEN then back
+      2. WHEN I lower each
+         1. THEN each value steps back down one
 6. Hovers
    1. GIVEN Developer has a view that shows a hover state
-      1. WHEN I hover over it and then leave
+      1. WHEN I hover over it
          1. THEN the hover state shows
-         2. THEN then clears
+      2. WHEN I leave it
+         1. THEN the hover state clears
 7. Stays off every display
    1. GIVEN Developer has a root view shown on a Mac
       1. WHEN I act on it
          1. THEN its window stays off every display
 8. Pinches
    1. GIVEN Developer has a view that counts pinches by direction
-      1. WHEN I pinch in on it and then pinch out
+      1. WHEN I pinch in on it
          1. THEN it counts one pinch in
-         2. THEN then one pinch out
+      2. WHEN I spread it out
+         1. THEN it counts one pinch out

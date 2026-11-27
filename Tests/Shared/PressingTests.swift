@@ -30,6 +30,7 @@ extension UITestingLibraryTests {
             let user = User(screen)
             try await user.sees(.text("Typed: Milk"))
             try await user.presses(.end)
+            try await user.sees(.text("Typed: Milk"))
             try await user.types(" bread")
             try await user.sees(.text("Typed: Milk bread"))
             try screen.close()

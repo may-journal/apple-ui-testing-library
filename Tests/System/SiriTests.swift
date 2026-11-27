@@ -33,6 +33,7 @@ final class SiriTests: XCTestCase {
             XCTAssertEqual(failure.kind, .indeterminate)
             XCTAssertEqual(failure.phrase, phrase)
             XCTAssertTrue(failure.observed.contains("Morgan drew Casey."))
+            XCTAssertEqual(failure.location.filePath, #filePath)
             XCTAssertEqual(failure.location.line, line)
         }
     }

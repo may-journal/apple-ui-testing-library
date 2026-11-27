@@ -14,6 +14,7 @@ extension UITestingLibraryTests {
             let user = User(screen)
             try await user.drags(.text("Card"), by: CGVector(dx: 120, dy: 40), speed: .slow)
             try await user.sees(.text("Dragged 120, 40"))
+            try await user.doesNotSee(.text("Flicked 120, 40"))
             #expect(screen.window.isOffScreen)
             try screen.close()
         }

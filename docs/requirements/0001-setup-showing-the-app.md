@@ -39,16 +39,19 @@ tests that show a root view
          1. THEN all ten reads finish within 800 ms
 8. Reads phone then iPad layouts
    1. GIVEN Developer has a root view that lays out differently on iPad
-      1. WHEN I show it at phone width and then at iPad width
+      1. WHEN I show it at each width
          1. THEN I read its phone layout
-         2. THEN then its iPad layout
+         2. THEN I read its iPad layout
 9. Reads stacked text
-   1. GIVEN Developer has a name and price that stack at accessibility text sizes
+   1. GIVEN Developer has a name
+   2. GIVEN a price
+   3. GIVEN both stack at accessibility text sizes
       1. WHEN I show them at one
-         1. THEN I read the name and price stacked
-         2. THEN both on screen
+         1. THEN I read the name stacked
+         2. THEN I read the price stacked
+         3. THEN both on screen
 10. Reads dark then light
     1. GIVEN Developer has a root view that follows the appearance
-       1. WHEN I show it in dark and then in light
+       1. WHEN I show it in each appearance
           1. THEN I read its dark look
-          2. THEN then its light look
+          2. THEN I read its light look

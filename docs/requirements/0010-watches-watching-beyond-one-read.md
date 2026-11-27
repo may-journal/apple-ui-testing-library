@@ -22,5 +22,5 @@ watches
          1. THEN the check fails naming the longest stall
 3. Finds the share sheet
    1. GIVEN Developer has a button that opens the share sheet
-      1. WHEN I tap it and look for the sheet
+      1. WHEN I tap it while looking for the sheet
          1. THEN the look passes in process

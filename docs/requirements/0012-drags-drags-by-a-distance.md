@@ -14,7 +14,7 @@ drags by a distance
 
 1. Reports a drag distance
    1. GIVEN Developer has a view that reports its drag distance
-      1. WHEN I drag it slowly by a set offset and let go
+      1. WHEN I drop it after a slow drag by a set offset
          1. THEN it reports that offset
 2. Reports a flick
    1. GIVEN Developer has a view that tells a flick from a slow drag

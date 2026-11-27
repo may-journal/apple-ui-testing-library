@@ -36,4 +36,5 @@ failures
 6. Names my line in a system session
    1. GIVEN Developer has a control absent from a system session
       1. WHEN I look for it
-         1. THEN the failure names my line and lists the screen
+         1. THEN the failure names my line
+         2. THEN the failure lists the screen

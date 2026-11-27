@@ -13,7 +13,8 @@ looks
 ## Requirements
 
 1. Finds a button by label
-   1. GIVEN Developer has a button and plain text sharing a label
+   1. GIVEN Developer has a button
+   2. GIVEN plain text sharing its label
       1. WHEN I look for a button by that label
          1. THEN I get the button
 2. Finds text

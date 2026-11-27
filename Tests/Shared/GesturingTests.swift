@@ -69,6 +69,7 @@ extension UITestingLibraryTests {
             let user = User(screen)
             try await user.sees(.text("Card at rest"))
             try await user.hovers(.text("Card"))
+            try await user.doesNotSee(.text("Card at rest"))
             try await user.sees(.text("Card hovered"))
             try await user.unhovers(.text("Card"))
             try await user.sees(.text("Card at rest"))

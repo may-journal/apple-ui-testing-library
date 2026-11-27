@@ -13,14 +13,16 @@ Siri answer tests
 ## Requirements
 
 1. Answers only the caller
-   1. GIVEN Developer has three people and a caller
+   1. GIVEN Developer has three people
+   2. GIVEN a caller
       1. WHEN I ask Siri for their match
          1. THEN only the caller's answer appears
 2. Shows a wrong match
    1. GIVEN Developer has an app returning a wrong match
       1. WHEN I ask Siri for my match
          1. THEN failure shows phrase
-         2. THEN answer and test line
+         2. THEN failure shows the answer
+         3. THEN failure shows my test line
 3. Keeps the origin indeterminate
    1. GIVEN Developer has nonempty unverified Siri text
       1. WHEN I check the captured transcript

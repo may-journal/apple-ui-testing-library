@@ -80,6 +80,7 @@ final class SharingTests: XCTestCase {
             try session.sees(.button("Absent destination"), file: "DeliveryTests.swift", line: line)
         ) {
             guard let failure = $0 as? Failure else { return XCTFail("Expected Failure") }
+            XCTAssertEqual(failure.location.filePath, "DeliveryTests.swift")
             XCTAssertEqual(failure.location.line, line)
             XCTAssertTrue(failure.description.contains("Share Alex"))
         }
