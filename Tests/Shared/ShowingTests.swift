@@ -53,6 +53,9 @@ extension UITestingLibraryTests {
             let user = User(screen)
             let name = try await user.sees(.text("Oat milk"))
             let price = try await user.sees(.text("$3.49"))
+            let read = await user.reads().map(\.spoken)
+            #expect(read.contains("Oat milk"))
+            #expect(read.contains("$3.49"))
             let apart = abs(price.frame.midY - name.frame.midY)
             #expect(
                 apart >= name.frame.height, "price beside the name: \(price.frame), \(name.frame)")

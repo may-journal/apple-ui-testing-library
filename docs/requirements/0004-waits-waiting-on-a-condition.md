@@ -30,5 +30,5 @@ looks
          1. THEN my next look reads the redrawn screen
 5. Stays fast
    1. GIVEN Developer has a long screen that each act redraws
-      1. WHEN I tap and choose and look ten times
+      1. WHEN I run ten rounds of acting
          1. THEN all ten finish within 1.5 seconds

@@ -13,7 +13,8 @@ shares tested
 ## Requirements
 
 1. Delivers image and message
-   1. GIVEN Developer has an image and message
+   1. GIVEN Developer has an image
+   2. GIVEN a message
       1. WHEN I share through system UI
          1. THEN the local destination receives both
 2. Names the chosen match
@@ -44,4 +45,5 @@ shares tested
 9. Shows a missing image
    1. GIVEN Developer has a delivery with a missing or unreadable image
       1. WHEN I check the delivery
-         1. THEN failure shows my line and received message
+         1. THEN failure shows my line
+         2. THEN failure shows the received message

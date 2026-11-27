@@ -38,7 +38,8 @@ extension UITestingLibraryTests {
         @Test func test0010_3() async throws {
             let screen = try Screen.render { ShareScreen() }
             let user = User(screen, deadline: .seconds(1))
-            await #expect(throws: Failure.self) { try await user.seesShareSheet() }
+            let failure = await #expect(throws: Failure.self) { try await user.seesShareSheet() }
+            #expect(failure?.message.contains("Expected the share sheet") == true)
             try await user.taps(.button("Share"))
             try await user.seesShareSheet()
             try screen.close()

@@ -34,14 +34,17 @@ actions
          1. THEN the view behind returns
 6. Answers an alert
    1. GIVEN Developer has an alert or a confirmation dialog over the screen
-      1. WHEN I read it and tap one of its buttons
+      1. WHEN I read it
          1. THEN I hear its title
-         2. THEN that button's action runs
+      2. WHEN I tap one of its buttons
+         1. THEN that button's action runs
 7. Taps a menu item
    1. GIVEN Developer has a control or a navigation bar button that opens a menu
-      1. WHEN I tap it and read the menu and tap an item and even after an item redrew the view
+   2. GIVEN an item that redraws the view
+      1. WHEN I open the menu
          1. THEN I hear each item
-         2. THEN that item's action runs
+      2. WHEN I tap an item
+         1. THEN that item's action runs
 8. Closes a menu
    1. GIVEN Developer has a control's menu open
       1. WHEN I go back

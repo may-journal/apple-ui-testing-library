@@ -54,6 +54,7 @@ extension UITestingLibraryTests {
             let screen = try Screen.render { DeleteScreen() }
             let user = User(screen)
             try await user.taps(.button("Delete"))
+            #expect(await user.reads().map(\.spoken).contains("Delete the draft?"))
             try await user.sees(.text("Delete the draft?"))
             try await user.taps(.button("Delete draft"))
             try await user.sees(.text("Draft deleted"))

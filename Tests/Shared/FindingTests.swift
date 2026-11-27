@@ -9,8 +9,11 @@ extension UITestingLibraryTests {
     @Suite struct Finding {
         @Test func test0002_1() async throws {
             let screen = try Screen.render { SharedLabelScreen() }
-            let found = try await User(screen).sees(.button("Save"))
+            let user = User(screen)
+            let found = try await user.sees(.button("Save"))
             #expect(found.has(.button))
+            try await user.taps(.button("Save"))
+            try await user.sees(.text("Saved"))
             try screen.close()
         }
 

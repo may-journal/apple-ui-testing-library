@@ -22,7 +22,8 @@ keys and clipboard steps
          1. THEN the field reads empty
 3. Types after End
    1. GIVEN Developer has a field with its words selected
-      1. WHEN I press End and type
+   2. GIVEN End pressed
+      1. WHEN I type
          1. THEN the typed text follows the words
 4. Runs a shortcut
    1. GIVEN Developer has a field in a view with a Cmd+Return shortcut
@@ -32,19 +33,24 @@ keys and clipboard steps
 5. Tabs between fields
    1. GIVEN Developer has a form of two fields
    2. GIVEN the first being edited
-      1. WHEN I tab and then tab backward
+      1. WHEN I tab
          1. THEN focus moves to the second field
-         2. THEN then back
+      2. WHEN I step backward with Shift
+         1. THEN focus moves back to the first field
 6. Copies and pastes
    1. GIVEN Developer has a field holding text
-      1. WHEN I select all and copy and paste into an empty field
+   2. GIVEN all of it selected
+   3. GIVEN an empty field
+      1. WHEN I copy-paste it into the empty field
          1. THEN both fields hold the text
 7. Cuts
    1. GIVEN Developer has a field holding text
-      1. WHEN I select all and cut
+   2. GIVEN all of it selected
+      1. WHEN I cut
          1. THEN the field reads empty
          2. THEN pasting brings the text back
 8. Runs a shortcut with no field
-   1. GIVEN Developer has a view with a Cmd+3 shortcut and no field focused
+   1. GIVEN Developer has a view with a Cmd+3 shortcut
+   2. GIVEN no field focused
       1. WHEN I press 3 with Command
          1. THEN the shortcut runs
